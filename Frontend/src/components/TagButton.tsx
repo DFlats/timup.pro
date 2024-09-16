@@ -13,10 +13,10 @@ export default function TagButton({ tag, type, onClick }: TagProps) {
     const handleClick = onClick ? () => onClick(tag) : () => undefined;
 
     return (
-        <div
-            className={`rounded-full p-1 px-4 m-2 text-white ${color}`}
+        <button
+            className={`btn rounded-full p-1 px-4 m-2 text-white ${color}`}
             onClick={() => handleClick()}>
             {tag.tagValue}
-        </div>
+        </button>
     );
 }
