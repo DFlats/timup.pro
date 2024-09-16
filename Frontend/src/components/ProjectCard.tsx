@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { Project } from "../api/types";
-import Tag from "./Tag";
+import TagButton from "./Tag";
 
 interface Props {
     project: Project
@@ -10,7 +10,7 @@ interface Props {
 export default function ProjectCard({ project }: Props) {
     const skillTags =
         project.description.tags
-            ? project.description.tags.map(tag => <Tag key={0} tagText={tag.tagValue} type='skill' />)
+            ? project.description.tags.map(tag => <TagButton key={0} tag={tag} type='skill' />)
             : null;
 
     return (

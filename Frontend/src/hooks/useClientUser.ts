@@ -1,12 +1,15 @@
 import { useUser } from "@clerk/clerk-react";
-import { useQuery } from "@tanstack/react-query";
-import { User } from "../api/types";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Tag, User } from "../api/types";
 
 export default function useClientUser() {
     const { user } = useUser();
+    const queryClient = useQueryClient();
+
+    const queryKey = ['clientUser'];
 
     const clientUserQuery = useQuery({
-        queryKey: ["clientUser"],
+        queryKey,
         queryFn: async () => {
             if (!user) return;
 
@@ -23,9 +26,23 @@ export default function useClientUser() {
             return clientUser;
         },
         enabled: !!user
-    })
+    });
+
+    const getTags = () => {
+        return clientUserQuery.data?.tags ?? [] as Tag[]
+    }
+
+    const addTag = (tag: Tag) => {
+        queryClient.setQueryData(queryKey, [...getTags(), tag])
+    };
+
+    const removeTag = (tag: Tag) => {
+        queryClient.setQueryData(queryKey, getTags().filter(t => t.tagValue != tag.tagValue));
+    }
 
     return {
-        clientUser: clientUserQuery.data
+        clientUser: clientUserQuery.data,
+        addTag,
+        removeTag
     }
 }

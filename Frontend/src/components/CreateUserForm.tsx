@@ -1,27 +1,44 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { SubmitHandler, useForm } from "react-hook-form"
+import useClientUser from '../hooks/useClientUser';
+import TagButton from "./Tag";
 
 type Inputs = {
-    skillTag: string,
-    interestTag: string,
+    skillTagValue: string,
 }
 
 export default function CreateUserForm() {
+    const { clientUser, addTag, removeTag } = useClientUser();
+
+    if (!clientUser) return;
+
     const {
         register,
         handleSubmit,
     } = useForm<Inputs>();
 
-    const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => console.log(data);
+    const onSubmit: SubmitHandler<Inputs> = ({ skillTagValue }: Inputs) =>
+        addTag({
+            id: 0,
+            tagValue: skillTagValue,
+        });
+
+    const tagButtons = clientUser.tags?.map((tag, i) =>
+        <TagButton
+            key={i}
+            tag={tag}
+            onClick={(tag) => { removeTag(tag) }}
+            type='skill'
+        />);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-row">
-                {skillTags}
+                {tagButtons}
             </div>
-            <input type='text' {...register('skillTag')} />
-            <input type='text' {...register('interestTag')} />
+            <input type='text' {...register('skillTagValue')} />
+            <button type='submit'>Add Skill</button>
         </form>
     );
 }
