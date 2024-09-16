@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Backend.Models
-{
+namespace Backend.Models;
     public class Description
     {
         [Key]
@@ -14,4 +9,3 @@ namespace Backend.Models
         [Required]
         public string Text {get; set;} = null!;
     }
-}
