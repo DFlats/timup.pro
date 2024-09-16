@@ -14,7 +14,7 @@ export default function TagButton({ tag, type, onClick }: TagProps) {
 
     return (
         <button
-            className={`btn rounded-full p-1 px-4 m-2 text-white ${color}`}
+            className={`btn rounded-full m-2 text-white ${color}`}
             onClick={() => handleClick()}>
             {tag.tagValue}
         </button>
