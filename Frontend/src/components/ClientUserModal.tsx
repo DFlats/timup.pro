@@ -5,6 +5,8 @@ import useClientUser from "../hooks/useClientUser";
 export default function ClientUserModal() {
     const { clientUser } = useClientUser();
 
+    if (!clientUser) return;
+
     return (
         <>
             <dialog id={import.meta.env.VITE_CLIENT_USER_MODAL_ID} className="modal">
