@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import useClientUser from "../hooks/useClientUser";
-import CreateUserForm from "./CreateUserForm";
+import ClientUserForm from "./ClientUserForm";
 
 export default function ClientUserModal() {
     const { clientUser } = useClientUser();
@@ -14,8 +14,11 @@ export default function ClientUserModal() {
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">{clientUser.name}</h3>
                     <p className="py-4">Press ESC key or click the button below to close</p>
-                    <CreateUserForm />
+                    <ClientUserForm />
                 </div>
+                <form method="dialog" className="modal-backdrop">
+                    <button>close</button>
+                </form>
             </dialog>
         </>
     );

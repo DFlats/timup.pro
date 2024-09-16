@@ -29,11 +29,22 @@ export default function useClientUser() {
     });
 
     const getTags = () => {
+        console.log(clientUserQuery.data?.tags ?? [] as Tag[]);
         return clientUserQuery.data?.tags ?? [] as Tag[]
     }
 
     const addTag = (tag: Tag) => {
-        queryClient.setQueryData(queryKey, [...getTags(), tag])
+        const clientUser = clientUserQuery.data;
+
+        if (!clientUser) return;
+
+        const newClientUser: User = {
+            ...clientUser,
+            tags: [...getTags(), tag]
+        };
+
+        console.log(newClientUser);
+        queryClient.setQueryData(queryKey, newClientUser);
     };
 
     const removeTag = (tag: Tag) => {

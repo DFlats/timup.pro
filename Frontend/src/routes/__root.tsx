@@ -3,6 +3,7 @@ import { createRootRoute, Navigate, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import Dashboard from '../components/Dashboard'
 import { ClerkProvider } from '@clerk/clerk-react'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 export const Route = createRootRoute({
     component: () => (
@@ -14,6 +15,7 @@ export const Route = createRootRoute({
                     <Outlet />
                 </div>
                 <TanStackRouterDevtools />
+                <ReactQueryDevtools />
             </ClerkProvider>
         </>
     ),

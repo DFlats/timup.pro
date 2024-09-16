@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton, SignOutButton } from "@clerk/clerk-react";
 import ClientUserModal from "./ClientUserModal";
 import useClientUserModal from "../hooks/useClientUserModal";
 
@@ -19,7 +19,9 @@ export default function Dashboard() {
                 </div>
             </SignedOut>
             <SignedIn>
-                <UserButton />
+                <SignOutButton>
+                    <button className='btn'>Sign Out</button>
+                </SignOutButton>
                 <button className="btn mx-4" onClick={openClientUserModal}>
                     Profile
                 </button>
