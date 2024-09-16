@@ -10,9 +10,6 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     public DbSet<User> Tags { get; set; }
     public DbSet<User> Descriptions { get; set; }
 
-
-
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Project>()
@@ -21,6 +18,11 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             .HasForeignKey(p => p.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
 
+    }
+
+    internal List<Project> GetAllProjects()
+    {
+        return [.. Projects];
     }
 }
 
