@@ -20,7 +20,7 @@ public class DbSeeder()
             .RuleFor(p => p.Title, f => f.Lorem.Sentance())
             .RuleFor(p => p.Author, f => userFaker.Generate())
             .RuleFor(p => p.AuthorId, (f, p) => authorId)
-            .RuleFor(p => p.Collaborators, f => userFaker.Generate(3))
+            // .RuleFor(p => p.Collaborators, f => userFaker.Generate(3))
             .RuleFor(p => p.Description, f => descriptionFaker.Generate())
             .RuleFor(p => p.Progress, f => new Progress());
 

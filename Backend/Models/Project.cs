@@ -8,9 +8,9 @@ public class Project
     [Required]
     public string Title { get; set; } = null!;
     [Required]
-    public User Author { get; init; } = null!;
+    public User Author { get; set; } = null!;
     [Required]
-    public string AuthorId { get; init; } = null!;
+    public string AuthorId { get; set; } = null!;
     [Required]
     public List<User> Collaborators { get; } = [];
     [Required]

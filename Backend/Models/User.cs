@@ -8,7 +8,7 @@ namespace Backend.Models;
     public class User
     {
         [Key, Required]
-        public string ClerkId {get; init;} = null!;
+        public string ClerkId {get; set;} = null!;
         [Required]
         public string Name {get; set;} = null!;
         [Required]
