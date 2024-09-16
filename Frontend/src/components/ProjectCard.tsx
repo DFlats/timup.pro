@@ -17,8 +17,8 @@ export default function ProjectCard({ project }: Props) {
         <div className="m-4 card bg-base-100 image-full w-96 shadow-xl">
             <figure>
                 <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes" />
+                    src="https://storage.googleapis.com/pod_public/1300/141876.jpg"
+                    alt="Floating Island" />
             </figure>
             <div className="card-body">
                 <h2 className="card-title">{project.title}</h2>
@@ -27,7 +27,6 @@ export default function ProjectCard({ project }: Props) {
                     {skillTags}
                 </div>
                 <div className="card-actions justify-end">
-                    <button className="btn btn-primary">Buy Now</button>
                 </div>
             </div>
         </div>

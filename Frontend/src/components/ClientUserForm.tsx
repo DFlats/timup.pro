@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import useClientUser from '../hooks/useClientUser';
 import TagButton from "./TagButton";
 
-
 export default function ClientUserForm() {
     const { clientUser, addTag, removeTag } = useClientUser();
     const inputSkillRef = useRef<HTMLInputElement>(null);
