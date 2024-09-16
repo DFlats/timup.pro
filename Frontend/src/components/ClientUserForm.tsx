@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import useClientUser from '../hooks/useClientUser';
-import TagButton from "./Tag";
+import TagButton from "./TagButton";
 
 
 export default function ClientUserForm() {
@@ -29,12 +29,14 @@ export default function ClientUserForm() {
             type='skill'
         />);
 
-    return (<>
-        <div className="flex flex-row">
+    return (<div className='py-4'>
+        <h2 className="text-lg text-bold">Your skills</h2>
+        <hr />
+        <div className="flex flex-row w-full">
             {tagButtons}
         </div>
         <input ref={inputSkillRef} type='text' placeholder="New skill" className="input input-bordered w-full max-w-xs" />
-        <button onClick={handleAddTag}>Add Skill</button>
-    </>
+        <button className='btn m-4' onClick={handleAddTag}>Add Skill</button>
+    </div>
     );
 }
