@@ -7,6 +7,9 @@ interface Props {
 }
 
 export default function ProjectCard({ project }: Props) {
+    project.
+    const skillTags = project.skillTags ? project.skillTags
+
     return (
         <div className="card bg-base-100 image-full w-96 shadow-xl">
             <figure>

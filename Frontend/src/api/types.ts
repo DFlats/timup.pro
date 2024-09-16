@@ -20,15 +20,15 @@ export type Tag = {
     id: number,
     tagValue: string,
     projects?: Project[]
-}
+};
 
 export type Progress = {
     id: number,
     isCompleted: boolean
-}
+};
 
 export type Description = {
     id: number,
     tags?: Tag[],
     text: string
-}
+};

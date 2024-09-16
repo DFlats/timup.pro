@@ -1,28 +1,16 @@
-export type Project = {
-    title: string,
-    description: string,
-    skillTags: string[],
-    interestTags: string[],
-    users: string[]
-};
+import { Project } from "../api/types"
 
 export default function useProjects() {
-    const projects: Project[] = [
+    const projects: Project[] = Array(5).fill(
         {
+            id: 0,
             title: "Book Club",
-            description: "We meet and discuss heavy literature",
-            skillTags: ["Reading", "Debate"],
-            interestTags: ["Literature", "Socializing"],
-            users: []
-        },
-        {
-            title: "World Takeover",
-            description: "A political party aiming for world domination",
-            skillTags: ["Debate", "Oratory"],
-            interestTags: ["Politics"],
-            users: []
-        },
-    ]
+            description: { id: 0, text: "We meet and discuss heavy literature" },
+            author: { clerkId: '0', name: "Benjamin Buttons", email: "Arbe@fjksl.com" },
+            authorId: '0',
+            collaborators: [],
+            progress: { id: 0, isCompleted: false }
+        });
 
     return {
         projects
