@@ -27,8 +27,10 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
 
     internal bool PopulateProjects(int count=10)
     {
-        var seededProjects = DbSeeder.GenerateProjects(count);
+        var (seededProjects, seededUser) = DbSeeder.GenerateProjects(count);
+        Users.Add(seededUser);
         Projects.AddRange(seededProjects);
+
         SaveChanges();
 
         return false;
