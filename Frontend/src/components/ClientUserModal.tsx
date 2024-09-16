@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import useClientUser from "../hooks/useClientUser";
+import CreateUserForm from "./CreateUserForm";
 
 export default function ClientUserModal() {
     const { clientUser } = useClientUser();
@@ -11,14 +12,9 @@ export default function ClientUserModal() {
         <>
             <dialog id={import.meta.env.VITE_CLIENT_USER_MODAL_ID} className="modal">
                 <div className="modal-box">
-                    <h3 className="font-bold text-lg">ClientUserModal</h3>
+                    <h3 className="font-bold text-lg">{clientUser.name}</h3>
                     <p className="py-4">Press ESC key or click the button below to close</p>
-                    <div className="modal-action">
-                        <form method="dialog">
-                            {/* if there is a button in form, it will close the modal */}
-                            <button className="btn">Close</button>
-                        </form>
-                    </div>
+                    <CreateUserForm />
                 </div>
             </dialog>
         </>

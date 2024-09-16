@@ -2,13 +2,10 @@
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import ClientUserModal from "./ClientUserModal";
+import useClientUserModal from "../hooks/useClientUserModal";
 
 export default function Dashboard() {
-    const openClientUserModal = () => {
-        const modal = document.getElementById(import.meta.env.VITE_CLIENT_USER_MODAL_ID) as HTMLDialogElement;
-        if (!modal) return;
-        modal.showModal();
-    }
+    const { openClientUserModal } = useClientUserModal();
 
     return (
         <div className="p-4 w-screen bg-slate-400 items-center justify-center">
