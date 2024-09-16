@@ -25,10 +25,11 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return [.. Projects];
     }
 
-    internal bool PopulateProjects()
+    internal bool PopulateProjects(int count=10)
     {
-
-        
+        var seededProjects = DbSeeder.GenerateProjects(count);
+        Projects.AddRange(seededProjects);
+        SaveChanges();
 
         return false;
     }
