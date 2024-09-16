@@ -19,7 +19,6 @@ public class DbSeeder()
         var fakedUser = userFaker.Generate();
 
         var projectFaker = new Faker<Project>()
-            .RuleFor(p => p.Id, f => f.Random.Number(1, 10000))
             .RuleFor(p => p.Title, f => f.Lorem.Sentance())
             .RuleFor(p => p.Author, f => fakedUser)
             .RuleFor(p => p.AuthorId, (f, p) => authorId)
