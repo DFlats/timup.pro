@@ -7,6 +7,7 @@ import TagButton from "./TagButton";
 export default function ClientUserForm() {
     const { clientUser, addTag, removeTag } = useClientUser();
     const inputSkillRef = useRef<HTMLInputElement>(null);
+    const addSkillRef = useRef<HTMLButtonElement>(null);
 
     if (!clientUser) return;
 
@@ -14,10 +15,13 @@ export default function ClientUserForm() {
         const value = inputSkillRef!.current?.value;
         if (!value) return;
 
-        return addTag({
+        addTag({
             id: 0,
             tagValue: value,
         });
+
+        inputSkillRef.current.value = '';
+        inputSkillRef.current.focus();
     }
 
     const tagButtons = clientUser.tags?.map((tag, i) =>
@@ -31,11 +35,11 @@ export default function ClientUserForm() {
     return (<div className='py-4'>
         <h2 className="text-lg text-bold">Your skills</h2>
         <hr />
-        <div className="flex flex-row w-full">
+        <div className="flex flex-row w-full flex-wrap">
             {tagButtons}
         </div>
         <input ref={inputSkillRef} type='text' placeholder="New skill" className="input input-bordered w-full max-w-xs" />
-        <button className='btn m-4' onClick={handleAddTag}>Add Skill</button>
+        <button ref={addSkillRef} className='btn m-4' onClick={handleAddTag}>Add Skill</button>
     </div>
     );
 }
