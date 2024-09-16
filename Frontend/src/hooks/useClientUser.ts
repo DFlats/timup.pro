@@ -25,6 +25,7 @@ export default function useClientUser() {
 
             return clientUser;
         },
+        staleTime: Infinity,
         enabled: !!user
     });
 
