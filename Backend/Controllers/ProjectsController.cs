@@ -13,4 +13,10 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     {
         return Ok(db.GetAllProjects());
     }
+
+    [HttpPost]
+    public IActionResult PopulateProjects()
+    {
+        return Ok(db.PopulateProjects());
+    }
 }

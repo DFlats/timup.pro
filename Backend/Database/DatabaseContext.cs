@@ -24,5 +24,13 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     {
         return [.. Projects];
     }
+
+    internal bool PopulateProjects()
+    {
+
+        
+
+        return false;
+    }
 }
 
