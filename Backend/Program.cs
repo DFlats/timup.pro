@@ -1,10 +1,8 @@
-using NSwag.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Backend.Database;
 using Backend.Hubs;
 
-const string applicationTitle = "TemplateApi";
+const string applicationTitle = "TeamUp";
 const string version = "v1";
 
 var builder = WebApplication.CreateBuilder(args);
