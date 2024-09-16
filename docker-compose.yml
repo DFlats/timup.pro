@@ -1,6 +1,6 @@
 services:
   sql-server-db:
-    container_name: template-sql-server-db
+    container_name: teamup-sql-server
     image: mcr.microsoft.com/azure-sql-edge:latest
     ports:
       - '1433:1433'
