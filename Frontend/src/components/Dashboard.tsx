@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 
-import { SignedOut, SignInButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 export default function Dashboard() {
     return (
@@ -14,6 +14,9 @@ export default function Dashboard() {
                     </SignInButton>
                 </div>
             </SignedOut>
+            <SignedIn>
+                <UserButton />
+            </SignedIn>
         </div>
     );
 }
