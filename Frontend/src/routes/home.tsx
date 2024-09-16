@@ -7,8 +7,8 @@ export const Route = createFileRoute('/home')({
 })
 
 function Home() {
-  return (<>
+  return (
     <ProjectFeed />
-  </>);
+  );
 }
 
