@@ -1,6 +1,5 @@
 using System.Net;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Backend.Tests.UnitTests;
 

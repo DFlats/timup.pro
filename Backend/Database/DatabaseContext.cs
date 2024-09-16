@@ -42,4 +42,3 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         }
     }
 }
-
