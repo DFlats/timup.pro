@@ -6,8 +6,8 @@ export default function ProjectFeed() {
     const { projects } = useProjects();
 
     return (
-        <>
+        <div className='flex flex-row flex-wrap'>
             {projects && projects.map(project => <ProjectCard key={project.title} project={project} />)}
-        </>
+        </div>
     );
 }

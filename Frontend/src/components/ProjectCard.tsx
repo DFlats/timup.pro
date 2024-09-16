@@ -14,7 +14,7 @@ export default function ProjectCard({ project }: Props) {
             : null;
 
     return (
-        <div className="card bg-base-100 image-full w-96 shadow-xl">
+        <div className="m-4 card bg-base-100 image-full w-96 shadow-xl">
             <figure>
                 <img
                     src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
@@ -23,7 +23,9 @@ export default function ProjectCard({ project }: Props) {
             <div className="card-body">
                 <h2 className="card-title">{project.title}</h2>
                 <p>{project.description.text}</p>
-                {skillTags}
+                <div className="flex flex-row">
+                    {skillTags}
+                </div>
                 <div className="card-actions justify-end">
                     <button className="btn btn-primary">Buy Now</button>
                 </div>
