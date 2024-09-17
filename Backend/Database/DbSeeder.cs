@@ -33,12 +33,13 @@ public class DbSeeder()
             var tagFake2r = new Faker<Tag>()
                 .RuleFor(t => t.TagValue, v => tags[index2]);
 
-            List<Tag> fakedTags = [tagFaker.Generate(), tagFake2r.Generate()];
+            List<Tag> fakedInterestTags = [tagFaker.Generate()];
+            List<Tag> fakedSkillTags = [tagFake2r.Generate()];
 
             var descriptionFaker = new Faker<Description>()
                 .RuleFor(d => d.Text, f => f.Lorem.Paragraph())
-                .RuleFor(d => d.Tags, T => fakedTags);
-
+                .RuleFor(d => d.SkillTags, f => fakedSkillTags)
+                .RuleFor(d => d.InterestTags, f => fakedInterestTags);
 
             var fakedUser = userFaker.Generate();
 
@@ -52,7 +53,8 @@ public class DbSeeder()
 
             _projects.Add(projectFaker.Generate());
             _users.Add(fakedUser);
-            _tags.AddRange(fakedTags);
+            _tags.AddRange(fakedInterestTags);
+            _tags.AddRange(fakedSkillTags);
         }
 
         return (_projects, _users, _tags);
