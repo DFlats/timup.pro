@@ -8,21 +8,19 @@ export default function Dashboard() {
     const { openClientUserModal } = useClientUserModal();
 
     return (
-        <div className="p-4 w-screen bg-slate-400 items-center justify-center">
+        <div className="flex items-center justify-center">
             <SignedOut>
-                <div className="ml-auto">
-                    <SignInButton mode='modal'>
-                        <button className="btn">
-                            Sign In
-                        </button>
-                    </SignInButton>
-                </div>
+                <SignInButton mode='modal'>
+                    <button className="btn text-3xl">
+                        Sign In
+                    </button>
+                </SignInButton>
             </SignedOut>
             <SignedIn>
                 <SignOutButton>
-                    <button className='btn'>Sign Out</button>
+                    <button className='btn text-3xl'>Sign Out</button>
                 </SignOutButton>
-                <button className="btn mx-4" onClick={openClientUserModal}>
+                <button className="btn text-3xl" onClick={openClientUserModal}>
                     Profile
                 </button>
                 <ClientUserModal />
