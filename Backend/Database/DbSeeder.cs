@@ -29,11 +29,11 @@ public class DbSeeder()
 
             var tagFaker = new Faker<Tag>()
                 .RuleFor(t => t.TagValue, v => tags[index1])
-                .RuleFor(t => t.TagType, v => TagType.Skill);
+                .RuleFor(t => t.IsSkill, v => true);
 
             var tagFake2r = new Faker<Tag>()
                 .RuleFor(t => t.TagValue, v => tags[index2])
-                .RuleFor(t => t.TagType, v => TagType.Interest);
+                .RuleFor(t => t.IsSkill, v => false);
 
             List<Tag> fakedTags = [tagFaker.Generate(), tagFake2r.Generate()];
 

@@ -5,7 +5,7 @@
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialV11 : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -92,7 +92,7 @@ namespace Backend.Migrations
                     TagValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DescriptionId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TagType = table.Column<int>(type: "int", nullable: false)
+                    IsSkill = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

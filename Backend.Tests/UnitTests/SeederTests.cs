@@ -26,7 +26,7 @@ public class SeederTests
     {
         var projects = DbSeeder.GenerateProjects(1);
 
-        projects.Item1[0].Description.Tags.Where(t => t.TagType == Models.TagType.Skill).Count().Should().Be(1);
+        projects.Item1[0].Description.Tags.Where(t => t.IsSkill == true).Count().Should().Be(1);
     }
 
     [Fact]
@@ -34,6 +34,15 @@ public class SeederTests
     {
         var projects = DbSeeder.GenerateProjects(1);
 
-        projects.Item1[0].Description.Tags.Where(t => t.TagType == Models.TagType.Interest).Count().Should().Be(1);
+        projects.Item1[0].Description.Tags.Where(t => t.IsSkill == false).Count().Should().Be(1);
+    }
+
+    [Fact]
+    public void Seeded_Should_Have_Both_InterestAndSkillTag()
+    {
+        var projects = DbSeeder.GenerateProjects(3);
+
+        projects.Item1[0].Description.Tags.Where(t => t.IsSkill == true).Count().Should().Be(1);
+        projects.Item1[0].Description.Tags.Where(t => t.IsSkill == false).Count().Should().Be(1);
     }
 }

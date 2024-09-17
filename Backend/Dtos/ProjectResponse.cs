@@ -8,8 +8,8 @@ public record ProjectResponse(int Id, string Title, string AuthorName, string Au
     {
 
         var collaborators = project.Collaborators.Select(c => (c.Name, c.ClerkId)).ToArray();
-        var skillTags = project.Description.Tags.Where(t => t.TagType == TagType.Skill).Select(t => t.TagValue).ToArray();
-        var interestTags = project.Description.Tags.Where(t => t.TagType == TagType.Interest).Select(t => t.TagValue).ToArray();
+        var skillTags = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+        var interestTags = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
 
         return new ProjectResponse(
             project.Id,

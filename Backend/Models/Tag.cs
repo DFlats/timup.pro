@@ -11,14 +11,7 @@ public class Tag
     public int? DescriptionId { get; set; }
     public string? UserId { get; set; }
 
-    public TagType TagType { get; set; }
+    public bool IsSkill { get; set; } = false;
 
     // public List<Project> Projects { get; } = [];
-}
-
-
-public enum TagType
-{
-    Skill,
-    Interest
 }

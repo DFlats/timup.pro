@@ -99,8 +99,8 @@ namespace Backend.Migrations
                     b.Property<int?>("DescriptionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TagType")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsSkill")
+                        .HasColumnType("bit");
 
                     b.Property<string>("TagValue")
                         .IsRequired()
@@ -116,8 +116,6 @@ namespace Backend.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Tags");
-
-                    b.HasDiscriminator<int>("TagType").HasValue(1);
                 });
 
             modelBuilder.Entity("Backend.Models.User", b =>

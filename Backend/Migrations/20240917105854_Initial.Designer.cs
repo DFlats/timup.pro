@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240917102257_InitialV11")]
-    partial class InitialV11
+    [Migration("20240917105854_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,8 +102,8 @@ namespace Backend.Migrations
                     b.Property<int?>("DescriptionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TagType")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsSkill")
+                        .HasColumnType("bit");
 
                     b.Property<string>("TagValue")
                         .IsRequired()
@@ -119,8 +119,6 @@ namespace Backend.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Tags");
-
-                    b.HasDiscriminator<int>("TagType").HasValue(1);
                 });
 
             modelBuilder.Entity("Backend.Models.User", b =>

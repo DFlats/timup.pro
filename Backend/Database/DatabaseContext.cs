@@ -30,11 +30,6 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             .WithOne()
             .HasForeignKey(t => t.UserId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Tag>()
-            .HasDiscriminator(t => t.TagType)
-            .HasValue<Tag>(TagType.Skill)
-            .HasValue<Tag>(TagType.Interest);
     }
 
     internal List<ProjectResponse> GetAllProjects()
