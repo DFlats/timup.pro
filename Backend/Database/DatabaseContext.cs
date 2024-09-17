@@ -96,7 +96,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
         if (user is null) return false;
 
-        var tag = user.Tags.FirstOrDefault(t => t.TagValue == tagToRemove.TagName);
+        var tag = user.Tags.FirstOrDefault(t => t.TagValue == tagToRemove.TagName && t.IsSkill == tagToRemove.IsSkill);
         if(tag != null)
         {
             user.Tags.Remove(tag);

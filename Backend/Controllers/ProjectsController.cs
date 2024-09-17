@@ -8,15 +8,11 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class ProjectsController(DatabaseContext db) : ControllerBase
 {
-    [HttpGet]
-    public List<ProjectResponse> GetAllProjects()
-    {
-        return db.GetAllProjects();
-    }
 
-    [HttpGet]
-    public List<ProjectResponse> GetProjectsByFilter(ProjectFilter filter)
+    [HttpGet()]
+    public List<ProjectResponse> GetProjectsByFilter(ProjectFilter? filter)
     {
+        if(filter is null) return db.GetAllProjects();
         return db.GetProjectsByFilter(filter);
     }
 
