@@ -17,5 +17,16 @@ namespace Backend.Controllers
             if(user is null ) return NotFound("User not found");
             return user;
         }
+
+        [HttpPost("{id}")]
+        public IActionResult AddTagToUser(string id, TagRequest tagToAdd)
+        {
+            var success = db.AddTagToUser(id, tagToAdd);
+            if(success) {
+                db.SaveChanges();
+                return Ok();
+            }
+            return NotFound();
+        }
     }
 }

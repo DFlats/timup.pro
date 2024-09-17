@@ -67,7 +67,27 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         .Include(u => u.Projects)
         .Include(u => u.Tags)
         .FirstOrDefault(u => u.ClerkId == id);
-        if(user is null) return null;
-        return (UserResponse) user;
+        if (user is null) return null;
+        return (UserResponse)user;
+    }
+
+    internal bool AddTagToUser(string id, TagRequest tagToAdd)
+    {
+        var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
+        if(user is null) return false;
+    
+        if (user.Tags.FirstOrDefault(t => t.TagValue == tagToAdd.TagName) == null)
+        {
+            Tag newTag = new Tag
+            {
+                TagValue = tagToAdd.TagName,
+                IsSkill = tagToAdd.IsSkill,
+                UserId = id
+            };
+            Tags.Add(newTag);
+            user.Tags.Add(newTag);
+            return true;
+        }
+        return true;
     }
 }
