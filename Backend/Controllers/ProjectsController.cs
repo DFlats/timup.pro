@@ -1,6 +1,5 @@
 using Backend.Database;
 using Backend.Dtos;
-using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -10,9 +9,9 @@ namespace Backend.Controllers;
 public class ProjectsController(DatabaseContext db) : ControllerBase
 {
     [HttpGet]
-    public ActionResult<List<ProjectResponse>> GetAllProjects()
+    public List<ProjectResponse> GetAllProjects()
     {
-        return Ok(db.GetAllProjects());
+        return db.GetAllProjects();
     }
 
     [HttpPost]
