@@ -7,8 +7,14 @@ export default function UserGallery() {
     const { users } = useUsers();
 
     return (
-        <div className="flex flex-col">
-            {users.map(user => <UserCard key={user.clerkId} user={user} />)}
-        </div>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Skills</th>
+                    </tr>
+                </thead>
+                {users.map(user => <UserCard key={user.clerkId} user={user} />)}
+            </table>
     )
 }
