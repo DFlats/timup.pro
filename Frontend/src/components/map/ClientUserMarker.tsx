@@ -1,54 +1,43 @@
-import { MapProps, Map } from '@vis.gl/react-google-maps';
-
-import useClientUser from '../../hooks/useClientUser';
-import useRemoteUsers from '../hooks/useRemoteUsers';
-import useMeetings from '../hooks/useMeetings';
-
-import RemoteUserMarker, { RemoteUserMarkerProps } from './RemoteUserMarker';
-import ClientUserMarker from './ClientUserMarker';
-import Direction from './Direction';
-
-import { UserLocation } from '../types/types';
-import ConfirmedMeetingMarker from './ConfirmedMeetingMarker';
-import SuccessfulMeetingModal from './SuccessfulMeetingModal';
+import { AdvancedMarker, AdvancedMarkerProps, Pin, PinProps } from "@vis.gl/react-google-maps";
+import useClientUser from "../../hooks/useClientUser";
 
 /* eslint-disable react/react-in-jsx-scope */
 
-export default function ClientMap() {
-    const { clientUser } = useClientUser();
-    const { remoteUserLocations } = useRemoteUsers();
-    useMeetings();
+export default function ClientUserMarker() {
+    const { clientUser, setLocation } = useClientUser();
 
-    if (!clientUser) {
-        console.log("clientUser is undefined");
-        return <p>Getting client user</p>
+    if (!clientUser)
+        return <></>
+
+    const advancedMarkerProps: AdvancedMarkerProps = {
+        position: clientUser.location,
+        onDragEnd: (e: google.maps.MapMouseEvent) => {
+            if (!e.latLng) return;
+            setLocation({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+        },
+        zIndex: 1
     }
 
-    const mapProps: MapProps = {
-        defaultCenter: clientUser.location,
-        defaultZoom: 14,
-        gestureHandling: 'greedy',
-        disableDefaultUI: true,
-        mapId: import.meta.env.VITE_GOOGLE_MAP_ID,
+    const glyph = document.createElement("img");
+    if (clientUser.imageUrl) {
+        glyph.src = clientUser.imageUrl;
+        glyph.style.width = '35px';
+        glyph.style.height = '35px';
+        glyph.classList.add("rounded-full")
     }
 
-    const remoteUserMarkerProps = (location: UserLocation) => {
-        return {
-            remoteLocation: location,
-        } as RemoteUserMarkerProps;
+
+    const pinProps: PinProps = {
+        background: '#44AA44',
+        glyphColor: '#AAA',
+        borderColor: '#444444',
+        scale: 1.5,
+        glyph: glyph
     }
 
     return (
-        <>
-            <Map {...mapProps} className="w-full flex-auto">
-                {remoteUserLocations && remoteUserLocations.map(userLocation =>
-                    <RemoteUserMarker key={userLocation.user.id} {...remoteUserMarkerProps(userLocation)} />)
-                }
-                <ConfirmedMeetingMarker />
-                <ClientUserMarker />
-                <Direction />
-            </Map>
-            <SuccessfulMeetingModal />
-        </>
+        <AdvancedMarker {...advancedMarkerProps}>
+            <Pin {...pinProps} />
+        </AdvancedMarker>
     );
 }

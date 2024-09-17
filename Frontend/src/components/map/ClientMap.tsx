@@ -1,23 +1,13 @@
 import { MapProps, Map } from '@vis.gl/react-google-maps';
 
 import useClientUser from '../../hooks/useClientUser';
-import useRemoteUsers from '../hooks/useRemoteUsers';
-import useMeetings from '../hooks/useMeetings';
 
-import RemoteUserMarker, { RemoteUserMarkerProps } from './RemoteUserMarker';
 import ClientUserMarker from './ClientUserMarker';
-import Direction from './Direction';
-
-import { UserLocation } from '../types/types';
-import ConfirmedMeetingMarker from './ConfirmedMeetingMarker';
-import SuccessfulMeetingModal from './SuccessfulMeetingModal';
 
 /* eslint-disable react/react-in-jsx-scope */
 
 export default function ClientMap() {
     const { clientUser } = useClientUser();
-    const { remoteUserLocations } = useRemoteUsers();
-    useMeetings();
 
     if (!clientUser) {
         console.log("clientUser is undefined");
@@ -29,26 +19,14 @@ export default function ClientMap() {
         defaultZoom: 14,
         gestureHandling: 'greedy',
         disableDefaultUI: true,
-        mapId: import.meta.env.VITE_GOOGLE_MAP_ID,
-    }
-
-    const remoteUserMarkerProps = (location: UserLocation) => {
-        return {
-            remoteLocation: location,
-        } as RemoteUserMarkerProps;
+        mapId: import.meta.env.VITE_GOOGLE_MAPS_ID,
     }
 
     return (
         <>
             <Map {...mapProps} className="w-full flex-auto">
-                {remoteUserLocations && remoteUserLocations.map(userLocation =>
-                    <RemoteUserMarker key={userLocation.user.id} {...remoteUserMarkerProps(userLocation)} />)
-                }
-                <ConfirmedMeetingMarker />
                 <ClientUserMarker />
-                <Direction />
             </Map>
-            <SuccessfulMeetingModal />
         </>
     );
 }

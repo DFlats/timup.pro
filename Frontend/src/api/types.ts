@@ -14,7 +14,8 @@ export type User = {
     email: string,
     projects?: Project[],
     tags?: Tag[],
-    location?: google.maps.LatLngLiteral
+    location?: google.maps.LatLngLiteral,
+    imageUrl?: string
 };
 
 export type Tag = {

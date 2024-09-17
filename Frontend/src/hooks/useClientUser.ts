@@ -1,6 +1,7 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tag, User } from "../api/types";
+import defaultLocation from '../utilities/defaultLocation';
 
 export default function useClientUser() {
     const { user } = useUser();
@@ -21,7 +22,7 @@ export default function useClientUser() {
                 email: user.primaryEmailAddress?.toString() ?? 'no$@email.com',
                 projects: [],
                 tags: [],
-                location: { lat: }
+                location: defaultLocation()
             }
 
             return clientUser;
@@ -30,8 +31,17 @@ export default function useClientUser() {
         enabled: !!user
     });
 
+    const setLocation = (location: google.maps.LatLngLiteral) => {
+        const clientUser = clientUserQuery.data;
+        if (!clientUser) return;
+
+        queryClient.setQueryData(queryKey, {
+            ...clientUser,
+            location
+        });
+    }
+
     const getTags = () => {
-        console.log(clientUserQuery.data?.tags ?? [] as Tag[]);
         return clientUserQuery.data?.tags ?? [] as Tag[]
     }
 
@@ -58,6 +68,7 @@ export default function useClientUser() {
     return {
         clientUser: clientUserQuery.data,
         addTag,
-        removeTag
+        removeTag,
+        setLocation
     }
 }
