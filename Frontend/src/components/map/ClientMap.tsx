@@ -1,4 +1,4 @@
-import { MapProps, Map } from '@vis.gl/react-google-maps';
+import { MapProps, Map, APIProvider } from '@vis.gl/react-google-maps';
 
 import useClientUser from '../../hooks/useClientUser';
 
@@ -23,10 +23,10 @@ export default function ClientMap() {
     }
 
     return (
-        <>
+        <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
             <Map {...mapProps} className="w-full flex-auto">
                 <ClientUserMarker />
             </Map>
-        </>
+        </APIProvider>
     );
 }
