@@ -2,7 +2,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import ProjectFeed from '../components/ProjectFeed';
 
-export const Route = createFileRoute('/home')({
+export const Route = createFileRoute('/')({
   component: Home
 })
 
