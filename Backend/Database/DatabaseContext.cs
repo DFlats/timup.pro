@@ -8,8 +8,8 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     public DbSet<User> Users { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Progress> Progresses { get; set; }
-    public DbSet<User> Tags { get; set; }
-    public DbSet<User> Descriptions { get; set; }
+    public DbSet<Tag> Tags { get; set; }
+    public DbSet<Description> Descriptions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,6 +25,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     {
         return [.. Projects.Include(p => p.Author)
                             .Include(p => p.Description)
+                            .ThenInclude(d => d.Tags)
                             .Select(p => (ProjectResponse) p)];
     }
 
@@ -32,9 +33,11 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     {
         try
         {
-            var (seededProjects, seededUser) = DbSeeder.GenerateProjects(count);
+            var (seededProjects, seededUser, seededTags) = DbSeeder.GenerateProjects(count);
+
             Users.Add(seededUser);
             Projects.AddRange(seededProjects);
+            Tags.AddRange(seededTags);
 
             SaveChanges();
             return true;

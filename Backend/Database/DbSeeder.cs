@@ -6,8 +6,8 @@ namespace Backend.Database;
 
 public class DbSeeder()
 {
-    static string[] tags = ["Data", "Art", "C#", "Tim", "JS", "Java"];
-    public static (List<Project>, User) GenerateProjects(int count)
+    static readonly string[] tags = ["Data", "Art", "C#", "Tim", "JS", "Java"];
+    public static (List<Project>, User, List<Tag>) GenerateProjects(int count)
     {
         var authorId = Guid.NewGuid().ToString();
         var userFaker = new Faker<User>()
@@ -21,11 +21,11 @@ public class DbSeeder()
         var tagFaker = new Faker<Tag>()
         .RuleFor(t => t.TagValue, v => tags[index]);
 
-        List<Tag> fakerTags = [tagFaker.Generate(), tagFaker.Generate()];
-        
+        List<Tag> fakedTags = [tagFaker.Generate(), tagFaker.Generate()];
+
         var descriptionFaker = new Faker<Description>()
             .RuleFor(d => d.Text, f => f.Lorem.Paragraph())
-            .RuleFor(d => d.Tags, T => fakerTags);
+            .RuleFor(d => d.Tags, T => fakedTags);
 
 
         var fakedUser = userFaker.Generate();
@@ -38,6 +38,6 @@ public class DbSeeder()
             .RuleFor(p => p.Description, f => descriptionFaker.Generate())
             .RuleFor(p => p.Progress, f => new Progress());
 
-        return (projectFaker.Generate(count).ToList(), fakedUser);
+        return (projectFaker.Generate(count).ToList(), fakedUser, fakedTags);
     }
 }
