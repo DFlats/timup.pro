@@ -58,4 +58,49 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             return false;
         }
     }
+
+    internal List<ProjectResponse> GetProjectsByFilter(ProjectFilter filter)
+    {
+        var filterByInterestTags = filter.InterestTags is not null;
+
+        var projects = Projects
+            .Include(p => p.Author)
+            .Include(p => p.Description)
+            .ThenInclude(p => p.Tags)
+            .ToList();
+
+        List<Project> FilterProjectsByTags(List<Project> projects, List<string> tagStrings, bool isSkill)
+        {
+            var tags = tagStrings
+                .Select(t => new Tag()
+                {
+                    Id = 0,
+                    TagValue = t,
+                    IsSkill = isSkill
+                })
+                .ToList();
+
+            var projectsFilteredByTags = new List<Project>();
+
+            foreach (var project in projects)
+            {
+                var projectSkillTags = project.Description.Tags.Where(tag => tag.IsSkill);
+
+                if (projectSkillTags.Intersect(tags).Count() > 0)
+                {
+                    projectsFilteredByTags.Add(project);
+                }
+            }
+
+            return projectsFilteredByTags.ToList();
+        }
+
+        if (filter.SkillTags is not null)
+        {
+            projects = FilterProjectsByTags(projects, filter.SkillTags, true);
+        }
+
+        return projects
+            .Select(p => (ProjectResponse)p).ToList();
+    }
 }
