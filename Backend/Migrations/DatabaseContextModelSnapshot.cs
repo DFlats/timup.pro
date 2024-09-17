@@ -104,13 +104,23 @@ namespace Backend.Migrations
                     b.Property<int?>("DescriptionId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DescriptionId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("TagValue")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DescriptionId");
+
+                    b.HasIndex("DescriptionId1");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tags");
                 });
@@ -172,8 +182,16 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Tag", b =>
                 {
                     b.HasOne("Backend.Models.Description", null)
-                        .WithMany("Tags")
+                        .WithMany("InterestTags")
                         .HasForeignKey("DescriptionId");
+
+                    b.HasOne("Backend.Models.Description", null)
+                        .WithMany("SkillTags")
+                        .HasForeignKey("DescriptionId1");
+
+                    b.HasOne("Backend.Models.User", null)
+                        .WithMany("InterestTags")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Backend.Models.User", b =>
@@ -185,7 +203,9 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Description", b =>
                 {
-                    b.Navigation("Tags");
+                    b.Navigation("InterestTags");
+
+                    b.Navigation("SkillTags");
                 });
 
             modelBuilder.Entity("Backend.Models.Project", b =>
@@ -200,6 +220,8 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.User", b =>
                 {
+                    b.Navigation("InterestTags");
+
                     b.Navigation("Projects");
                 });
 #pragma warning restore 612, 618

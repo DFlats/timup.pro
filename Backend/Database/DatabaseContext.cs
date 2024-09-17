@@ -19,6 +19,26 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             .HasForeignKey(p => p.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<Description>()
+            .HasMany(d => d.SkillTags)
+            .WithOne()
+            .HasForeignKey(t => t.DescriptionId);
+
+        modelBuilder.Entity<Description>()
+            .HasMany(d => d.InterestTags)
+            .WithOne()
+            .HasForeignKey(t => t.DescriptionId);
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.SkillTags)
+            .WithOne()
+            .HasForeignKey(t => t.UserId);
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.InterestTags)
+            .WithOne()
+            .HasForeignKey(t => t.UserId);
+
     }
 
     internal List<ProjectResponse> GetAllProjects()
