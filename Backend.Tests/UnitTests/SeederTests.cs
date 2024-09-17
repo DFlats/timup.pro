@@ -11,4 +11,12 @@ public class SeederTests
 
         Assert.Equal(10, projects.Item1.Count);
     }
+
+    [Fact]
+    public void Seeded_Should_Have_Tags()
+    {
+        var projects = DbSeeder.GenerateProjects(1);
+
+        Assert.NotEmpty(projects.Item1[0].Description.Tags);
+    }
 }
