@@ -9,7 +9,9 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   return (
-    <ClientMap />
+    <div className="w-full h-screen flex flex-col items-center justify-center">
+      <ClientMap />
+    </div>
   );
 }
 
