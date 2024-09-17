@@ -14,6 +14,12 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return db.GetAllProjects();
     }
 
+    [HttpGet]
+    public List<ProjectResponse> GetProjectsByFilter(ProjectFilter filter)
+    {
+        return db.GetProjectsByFilter(filter);
+    }
+
     [HttpPost]
     public IActionResult PopulateProjects()
     {
