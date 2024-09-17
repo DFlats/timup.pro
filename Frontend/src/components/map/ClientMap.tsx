@@ -10,9 +10,10 @@ export default function ClientMap() {
     const { clientUser } = useClientUser();
 
     if (!clientUser) {
-        console.log("clientUser is undefined");
         return <p>Getting client user</p>
     }
+
+    console.log(clientUser)
 
     const mapProps: MapProps = {
         defaultCenter: clientUser.location,
@@ -25,7 +26,7 @@ export default function ClientMap() {
     return (
         <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
             <Map {...mapProps} className="w-full flex-auto">
-                <ClientUserMarker />
+                {/* <ClientUserMarker /> */}
             </Map>
         </APIProvider>
     );
