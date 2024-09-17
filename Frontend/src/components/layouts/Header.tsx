@@ -1,10 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { Link } from "@tanstack/react-router";
-import Logo from "../components/Logo";
-import Dashboard from "../components/Dashboard";
+import Logo from "../Logo";
+import Dashboard from "../Dashboard";
 
-export default function ProjectCard() {
+export function Header() {
     return (
         <header className="flex justify-between p-8">
             <Link to="/">
