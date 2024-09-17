@@ -74,8 +74,8 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     internal bool AddTagToUser(string id, TagRequest tagToAdd)
     {
         var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
-        if(user is null) return false;
-    
+        if (user is null) return false;
+
         if (user.Tags.FirstOrDefault(t => t.TagValue == tagToAdd.TagName) == null)
         {
             Tag newTag = new Tag
@@ -89,5 +89,20 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             return true;
         }
         return true;
+    }
+
+    internal bool RemoveTagFromUser(string id, TagRequest tagToRemove)
+    {
+        var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
+        if (user is null) return false;
+
+        var tag = user.Tags.FirstOrDefault(t => t.TagValue == tagToRemove.TagName);
+        if(tag != null)
+        {
+            user.Tags.Remove(tag);
+            Tags.Remove(tag);
+            return true;
+        }
+        return false;
     }
 }
