@@ -26,7 +26,7 @@ export default function ClientMap() {
     return (
         <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
             <Map {...mapProps} className="w-full flex-auto">
-                {/* <ClientUserMarker /> */}
+                <ClientUserMarker />
             </Map>
         </APIProvider>
     );
