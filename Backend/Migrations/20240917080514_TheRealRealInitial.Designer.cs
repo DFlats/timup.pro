@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240916152831_ActuallyFirstMigration")]
-    partial class ActuallyFirstMigration
+    [Migration("20240917080514_TheRealRealInitial")]
+    partial class TheRealRealInitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

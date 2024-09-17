@@ -10,6 +10,7 @@ public class User
     [Required]
     public string Email { get; set; } = null!;
     public List<Project> Projects { get; } = [];
-    public List<Tag> Tags = [];
+    public List<Tag> SkillTags = [];
+    public List<Tag> InterestTags = [];
 
 }
