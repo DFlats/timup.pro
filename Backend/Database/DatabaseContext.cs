@@ -1,3 +1,4 @@
+using Backend.Dtos;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,9 +21,11 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
 
     }
 
-    internal List<Project> GetAllProjects()
+    internal List<ProjectResponse> GetAllProjects()
     {
-        return [.. Projects];
+        return [.. Projects.Include(p => p.Author)
+                            .Include(p => p.Description)
+                            .Select(p => (ProjectResponse) p)];
     }
 
     internal bool PopulateProjects(int count = 10)
