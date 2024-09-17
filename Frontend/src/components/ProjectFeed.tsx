@@ -5,9 +5,11 @@ import ProjectCard from "./ProjectCard";
 /* eslint-disable react/react-in-jsx-scope */
 export default function ProjectFeed() {
     const { clientUser } = useClientUser();
-    const { projects } = useProjects();
+    const { projects, error } = useProjects();
 
     const heading = clientUser ? 'Projects tailored for you' : 'Hot projects';
+
+    if(error) return <div>{error.message}</div>
 
     return (
 
