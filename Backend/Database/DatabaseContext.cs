@@ -1,5 +1,7 @@
 using Backend.Dtos;
 using Backend.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -59,6 +61,51 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         }
     }
 
+    internal UserResponse? GetUserById(string id)
+    {
+        var user = Users
+        .Include(u => u.Projects)
+        .Include(u => u.Tags)
+        .FirstOrDefault(u => u.ClerkId == id);
+        if (user is null) return null;
+        return (UserResponse)user;
+    }
+
+    internal bool AddTagToUser(string id, TagRequest tagToAdd)
+    {
+        var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
+        if (user is null) return false;
+
+        if (user.Tags.FirstOrDefault(t => t.TagValue == tagToAdd.TagName) == null)
+        {
+            Tag newTag = new Tag
+            {
+                TagValue = tagToAdd.TagName,
+                IsSkill = tagToAdd.IsSkill,
+                UserId = id
+            };
+            Tags.Add(newTag);
+            user.Tags.Add(newTag);
+            return true;
+        }
+        return true;
+    }
+
+    internal bool RemoveTagFromUser(string id, TagRequest tagToRemove)
+    {
+        var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
+        if (user is null) return false;
+
+        var tag = user.Tags.FirstOrDefault(t => t.TagValue == tagToRemove.TagName);
+        if(tag != null)
+        {
+            user.Tags.Remove(tag);
+            Tags.Remove(tag);
+            return true;
+        }
+        return false;
+    }
+      
     internal List<ProjectResponse> GetProjectsByFilter(ProjectFilter filter)
     {
         var filterByInterestTags = filter.InterestTags is not null;
