@@ -1,10 +1,12 @@
 using Backend.Models;
 using Bogus;
+using Bogus.Generators;
 
 namespace Backend.Database;
 
 public class DbSeeder()
 {
+    static string[] tags = ["Data", "Art", "C#", "Tim", "JS", "Java"];
     public static (List<Project>, User) GenerateProjects(int count)
     {
         var authorId = Guid.NewGuid().ToString();
@@ -13,8 +15,18 @@ public class DbSeeder()
             .RuleFor(u => u.Name, f => f.Name.FirstName())
             .RuleFor(u => u.Email, f => f.Internet.Email());
 
+        Random random = new();
+        int index = random.Next(tags.Length);
+
+        var tagFaker = new Faker<Tag>()
+        .RuleFor(t => t.TagValue, v => tags[index]);
+
+        List<Tag> fakerTags = [tagFaker.Generate(), tagFaker.Generate()];
+        
         var descriptionFaker = new Faker<Description>()
-            .RuleFor(d => d.Text, f => f.Lorem.Paragraph());
+            .RuleFor(d => d.Text, f => f.Lorem.Paragraph())
+            .RuleFor(d => d.Tags, T => fakerTags);
+
 
         var fakedUser = userFaker.Generate();
 
