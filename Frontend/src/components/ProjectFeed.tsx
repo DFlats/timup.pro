@@ -5,16 +5,19 @@ import ProjectCard from "./ProjectCard";
 /* eslint-disable react/react-in-jsx-scope */
 export default function ProjectFeed() {
     const { clientUser } = useClientUser();
-    const { projects } = useProjects();
+    const { projects, error } = useProjects();
 
     const heading = clientUser ? 'Projects tailored for you' : 'Hot projects';
 
+    if(error) return <div>{error.message}</div>
+
     return (
-        <>
-            <h2 className='text-4xl mb-8'>{heading}</h2>
+
+        <div className="p-12 w-screen flex flex-col items-center justify-center">
+            <h1 className='text-4xl mb-8'>{heading}</h1>
             <div className='flex flex-row flex-wrap'>
-                {projects && projects.map(project => <ProjectCard key={project.title} project={project} />)}
+                {projects && projects.map(project => <ProjectCard key={project.id} project={project} />)}
             </div>
-        </>
+        </div>
     );
 }

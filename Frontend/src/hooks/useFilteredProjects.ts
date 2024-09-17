@@ -5,7 +5,7 @@ import useClientUser from "./useClientUser";
 export default function useProjects() {
     const { clientUser } = useClientUser();
 
-    if (!clientUser) {
+    if (!clientUser?.tags) {
         const { data, error } = useQuery({
             queryKey: ['hotprojects'],
             queryFn: async () => {
@@ -70,4 +70,5 @@ export default function useProjects() {
         projects: data,
         error
     }
+
 }
