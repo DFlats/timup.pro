@@ -20,34 +20,28 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Description>()
-            .HasMany(d => d.SkillTags)
+            .HasMany(d => d.Tags)
             .WithOne()
-            .HasForeignKey(t => t.DescriptionId);
-
-        modelBuilder.Entity<Description>()
-            .HasMany(d => d.InterestTags)
-            .WithOne()
-            .HasForeignKey(t => t.DescriptionId);
+            .HasForeignKey(t => t.DescriptionId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<User>()
-            .HasMany(u => u.SkillTags)
+            .HasMany(u => u.Tags)
             .WithOne()
-            .HasForeignKey(t => t.UserId);
+            .HasForeignKey(t => t.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.InterestTags)
-            .WithOne()
-            .HasForeignKey(t => t.UserId);
-
+        modelBuilder.Entity<Tag>()
+            .HasDiscriminator(t => t.TagType)
+            .HasValue<Tag>(TagType.Skill)
+            .HasValue<Tag>(TagType.Interest);
     }
 
     internal List<ProjectResponse> GetAllProjects()
     {
         return [.. Projects.Include(p => p.Author)
                             .Include(p => p.Description)
-                            .ThenInclude(p => p.SkillTags)
-                            .Include(p => p.Description)
-                            .ThenInclude(p => p.InterestTags)
+                            .ThenInclude(p => p.Tags)
                             .Select(p => (ProjectResponse) p)];
     }
 

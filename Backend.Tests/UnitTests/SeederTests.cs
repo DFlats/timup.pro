@@ -17,7 +17,7 @@ public class SeederTests
     {
         var projects = DbSeeder.GenerateProjects(1);
 
-        Assert.NotEmpty(projects.Item1[0].Description.InterestTags);
+        Assert.NotEmpty(projects.Item1[0].Description.Tags);
     }
 
         [Fact]
@@ -25,6 +25,6 @@ public class SeederTests
     {
         var projects = DbSeeder.GenerateProjects(1);
 
-        Assert.NotEmpty(projects.Item1[0].Description.SkillTags);
+        Assert.NotEmpty(projects.Item1[0].Description.Tags);
     }
 }

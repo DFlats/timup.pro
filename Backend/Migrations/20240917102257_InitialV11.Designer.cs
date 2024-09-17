@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240917101158_Initial")]
-    partial class Initial
+    [Migration("20240917102257_InitialV11")]
+    partial class InitialV11
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,9 +76,6 @@ namespace Backend.Migrations
                     b.Property<int>("ProgressId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TagId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -90,8 +87,6 @@ namespace Backend.Migrations
                     b.HasIndex("DescriptionId");
 
                     b.HasIndex("ProgressId");
-
-                    b.HasIndex("TagId");
 
                     b.ToTable("Projects");
                 });
@@ -107,7 +102,7 @@ namespace Backend.Migrations
                     b.Property<int?>("DescriptionId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DescriptionId1")
+                    b.Property<int>("TagType")
                         .HasColumnType("int");
 
                     b.Property<string>("TagValue")
@@ -121,11 +116,11 @@ namespace Backend.Migrations
 
                     b.HasIndex("DescriptionId");
 
-                    b.HasIndex("DescriptionId1");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Tags");
+
+                    b.HasDiscriminator<int>("TagType").HasValue(1);
                 });
 
             modelBuilder.Entity("Backend.Models.User", b =>
@@ -171,10 +166,6 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backend.Models.Tag", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("TagId");
-
                     b.Navigation("Author");
 
                     b.Navigation("Description");
@@ -185,16 +176,14 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Tag", b =>
                 {
                     b.HasOne("Backend.Models.Description", null)
-                        .WithMany("InterestTags")
-                        .HasForeignKey("DescriptionId");
-
-                    b.HasOne("Backend.Models.Description", null)
-                        .WithMany("SkillTags")
-                        .HasForeignKey("DescriptionId1");
+                        .WithMany("Tags")
+                        .HasForeignKey("DescriptionId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Backend.Models.User", null)
-                        .WithMany("InterestTags")
-                        .HasForeignKey("UserId");
+                        .WithMany("Tags")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Backend.Models.User", b =>
@@ -206,9 +195,7 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Description", b =>
                 {
-                    b.Navigation("InterestTags");
-
-                    b.Navigation("SkillTags");
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("Backend.Models.Project", b =>
@@ -216,16 +203,11 @@ namespace Backend.Migrations
                     b.Navigation("Collaborators");
                 });
 
-            modelBuilder.Entity("Backend.Models.Tag", b =>
-                {
-                    b.Navigation("Projects");
-                });
-
             modelBuilder.Entity("Backend.Models.User", b =>
                 {
-                    b.Navigation("InterestTags");
-
                     b.Navigation("Projects");
+
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

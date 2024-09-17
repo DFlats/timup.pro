@@ -5,7 +5,7 @@
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialV11 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,8 +45,7 @@ namespace Backend.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DescriptionId = table.Column<int>(type: "int", nullable: false),
-                    ProgressId = table.Column<int>(type: "int", nullable: false),
-                    TagId = table.Column<int>(type: "int", nullable: true)
+                    ProgressId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,7 +92,7 @@ namespace Backend.Migrations
                     TagValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DescriptionId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    DescriptionId1 = table.Column<int>(type: "int", nullable: true)
+                    TagType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -102,17 +101,14 @@ namespace Backend.Migrations
                         name: "FK_Tags_Descriptions_DescriptionId",
                         column: x => x.DescriptionId,
                         principalTable: "Descriptions",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Tags_Descriptions_DescriptionId1",
-                        column: x => x.DescriptionId1,
-                        principalTable: "Descriptions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Tags_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "ClerkId");
+                        principalColumn: "ClerkId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -131,19 +127,9 @@ namespace Backend.Migrations
                 column: "ProgressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Projects_TagId",
-                table: "Projects",
-                column: "TagId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Tags_DescriptionId",
                 table: "Tags",
                 column: "DescriptionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tags_DescriptionId1",
-                table: "Tags",
-                column: "DescriptionId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tags_UserId",
@@ -154,13 +140,6 @@ namespace Backend.Migrations
                 name: "IX_Users_ProjectId",
                 table: "Users",
                 column: "ProjectId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Projects_Tags_TagId",
-                table: "Projects",
-                column: "TagId",
-                principalTable: "Tags",
-                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Projects_Users_AuthorId",
@@ -179,19 +158,7 @@ namespace Backend.Migrations
                 table: "Projects");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Tags_Descriptions_DescriptionId",
-                table: "Tags");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Tags_Descriptions_DescriptionId1",
-                table: "Tags");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_Projects_Progresses_ProgressId",
-                table: "Projects");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Projects_Tags_TagId",
                 table: "Projects");
 
             migrationBuilder.DropForeignKey(
@@ -199,13 +166,13 @@ namespace Backend.Migrations
                 table: "Projects");
 
             migrationBuilder.DropTable(
+                name: "Tags");
+
+            migrationBuilder.DropTable(
                 name: "Descriptions");
 
             migrationBuilder.DropTable(
                 name: "Progresses");
-
-            migrationBuilder.DropTable(
-                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Users");
