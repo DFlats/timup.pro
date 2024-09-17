@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Backend.Database;
-using Backend.Hubs;
 
 const string applicationTitle = "TeamUp";
 const string version = "v1";
@@ -52,7 +51,6 @@ app.UseHttpsRedirection();
 // app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<NotificationHub>("/notifications");
 
 app.Run();
 public partial class Program { }
