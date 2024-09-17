@@ -1,5 +1,7 @@
 using Backend.Dtos;
 using Backend.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -57,5 +59,15 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         {
             return false;
         }
+    }
+
+    internal UserResponse? GetUserById(string id)
+    {
+        var user = Users
+        .Include(u => u.Projects)
+        .Include(u => u.Tags)
+        .FirstOrDefault(u => u.ClerkId == id);
+        if(user is null) return null;
+        return (UserResponse) user;
     }
 }
