@@ -25,7 +25,9 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     {
         return [.. Projects.Include(p => p.Author)
                             .Include(p => p.Description)
-                            .ThenInclude(d => d.Tags)
+                            .ThenInclude(p => p.SkillTags)
+                            .Include(p => p.Description)
+                            .ThenInclude(p => p.InterestTags)
                             .Select(p => (ProjectResponse) p)];
     }
 

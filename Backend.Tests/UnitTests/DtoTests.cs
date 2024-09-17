@@ -22,6 +22,6 @@ public class DtoTests()
 
         var projectResponse = (ProjectResponse)project;
 
-        Assert.Equal(project.Description.Tags.Count, projectResponse.Tags.Length);
+        Assert.Equal(project.Description.SkillTags.Count, projectResponse.SkillTags.Length);
     }
 }

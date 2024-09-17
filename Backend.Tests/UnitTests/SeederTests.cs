@@ -13,10 +13,18 @@ public class SeederTests
     }
 
     [Fact]
-    public void Seeded_Should_Have_Tags()
+    public void Seeded_Should_Have_InterestTags()
     {
         var projects = DbSeeder.GenerateProjects(1);
 
-        Assert.NotEmpty(projects.Item1[0].Description.Tags);
+        Assert.NotEmpty(projects.Item1[0].Description.InterestTags);
+    }
+
+        [Fact]
+    public void Seeded_Should_Have_SkillTags()
+    {
+        var projects = DbSeeder.GenerateProjects(1);
+
+        Assert.NotEmpty(projects.Item1[0].Description.SkillTags);
     }
 }
