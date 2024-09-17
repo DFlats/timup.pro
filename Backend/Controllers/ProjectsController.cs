@@ -15,7 +15,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet]
-    public List<ProjectResponse> GetAllProjectsByFilter(ProjectFilter filter)
+    public List<ProjectResponse> GetProjectsByFilter(ProjectFilter filter)
     {
         return db.GetProjectsByFilter(filter);
     }

@@ -69,7 +69,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             .ThenInclude(p => p.Tags)
             .ToList();
 
-        List<Project> FilterProjectsByTags(List<Project> projects, List<string> tagStrings, bool isSkill)
+        List<(Project, int)> FilterProjectsByTags(List<Project> projects, List<string> tagStrings, bool isSkill)
         {
             var tags = tagStrings
                 .Select(t => new Tag()
@@ -80,15 +80,16 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
                 })
                 .ToList();
 
-            var projectsFilteredByTags = new List<Project>();
+            var projectsFilteredByTags = new List<(Project, int)>();
 
             foreach (var project in projects)
             {
                 var projectSkillTags = project.Description.Tags.Where(tag => tag.IsSkill);
 
-                if (projectSkillTags.Intersect(tags).Count() > 0)
+                var intersection = projectSkillTags.Intersect(tags);
+                if (intersection.Count() > 0)
                 {
-                    projectsFilteredByTags.Add(project);
+                    projectsFilteredByTags.Add((project, intersection.Count()));
                 }
             }
 
@@ -97,7 +98,10 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
 
         if (filter.SkillTags is not null)
         {
-            projects = FilterProjectsByTags(projects, filter.SkillTags, true);
+            projects = FilterProjectsByTags(projects, filter.SkillTags, true)
+                .OrderByDescending(projectTuple => projectTuple.Item2)
+                .Select(projectTuple => projectTuple.Item1)
+                .ToList();
         }
 
         return projects
