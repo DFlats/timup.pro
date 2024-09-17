@@ -1,3 +1,4 @@
+using Backend.Dtos;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,8 +8,8 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     public DbSet<User> Users { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Progress> Progresses { get; set; }
-    public DbSet<User> Tags { get; set; }
-    public DbSet<User> Descriptions { get; set; }
+    public DbSet<Tag> Tags { get; set; }
+    public DbSet<Description> Descriptions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -18,20 +19,36 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             .HasForeignKey(p => p.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<Description>()
+            .HasMany(d => d.Tags)
+            .WithOne()
+            .HasForeignKey(t => t.DescriptionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Tags)
+            .WithOne()
+            .HasForeignKey(t => t.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
-    internal List<Project> GetAllProjects()
+    internal List<ProjectResponse> GetAllProjects()
     {
-        return [.. Projects];
+        return [.. Projects.Include(p => p.Author)
+                            .Include(p => p.Description)
+                            .ThenInclude(p => p.Tags)
+                            .Select(p => (ProjectResponse) p)];
     }
 
     internal bool PopulateProjects(int count = 10)
     {
         try
         {
-            var (seededProjects, seededUser) = DbSeeder.GenerateProjects(count);
-            Users.Add(seededUser);
+            var (seededProjects, seededUsers, seededTags) = DbSeeder.GenerateProjects(count);
+
+            Users.AddRange(seededUsers);
             Projects.AddRange(seededProjects);
+            Tags.AddRange(seededTags);
 
             SaveChanges();
             return true;

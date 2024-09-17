@@ -5,13 +5,13 @@
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class TheRealRealInitial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Description",
+                name: "Descriptions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -20,7 +20,7 @@ namespace Backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Description", x => x.Id);
+                    table.PrimaryKey("PK_Descriptions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -37,25 +37,6 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tag",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TagValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DescriptionId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tag", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tag_Description_DescriptionId",
-                        column: x => x.DescriptionId,
-                        principalTable: "Description",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
                 {
@@ -64,16 +45,15 @@ namespace Backend.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DescriptionId = table.Column<int>(type: "int", nullable: false),
-                    ProgressId = table.Column<int>(type: "int", nullable: false),
-                    TagId = table.Column<int>(type: "int", nullable: true)
+                    ProgressId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Projects_Description_DescriptionId",
+                        name: "FK_Projects_Descriptions_DescriptionId",
                         column: x => x.DescriptionId,
-                        principalTable: "Description",
+                        principalTable: "Descriptions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -82,15 +62,10 @@ namespace Backend.Migrations
                         principalTable: "Progresses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Projects_Tag_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tag",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     ClerkId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -100,12 +75,40 @@ namespace Backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.ClerkId);
+                    table.PrimaryKey("PK_Users", x => x.ClerkId);
                     table.ForeignKey(
-                        name: "FK_User_Projects_ProjectId",
+                        name: "FK_Users_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TagValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DescriptionId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IsSkill = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tags_Descriptions_DescriptionId",
+                        column: x => x.DescriptionId,
+                        principalTable: "Descriptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tags_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "ClerkId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -124,25 +127,25 @@ namespace Backend.Migrations
                 column: "ProgressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Projects_TagId",
-                table: "Projects",
-                column: "TagId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tag_DescriptionId",
-                table: "Tag",
+                name: "IX_Tags_DescriptionId",
+                table: "Tags",
                 column: "DescriptionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_ProjectId",
-                table: "User",
+                name: "IX_Tags_UserId",
+                table: "Tags",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ProjectId",
+                table: "Users",
                 column: "ProjectId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Projects_User_AuthorId",
+                name: "FK_Projects_Users_AuthorId",
                 table: "Projects",
                 column: "AuthorId",
-                principalTable: "User",
+                principalTable: "Users",
                 principalColumn: "ClerkId",
                 onDelete: ReferentialAction.Restrict);
         }
@@ -151,36 +154,28 @@ namespace Backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Projects_Description_DescriptionId",
+                name: "FK_Projects_Descriptions_DescriptionId",
                 table: "Projects");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Tag_Description_DescriptionId",
-                table: "Tag");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Projects_Progresses_ProgressId",
                 table: "Projects");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Projects_Tag_TagId",
-                table: "Projects");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Projects_User_AuthorId",
+                name: "FK_Projects_Users_AuthorId",
                 table: "Projects");
 
             migrationBuilder.DropTable(
-                name: "Description");
+                name: "Tags");
+
+            migrationBuilder.DropTable(
+                name: "Descriptions");
 
             migrationBuilder.DropTable(
                 name: "Progresses");
 
             migrationBuilder.DropTable(
-                name: "Tag");
-
-            migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Projects");

@@ -32,7 +32,7 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetim
     {
         await _sqlContainer.StartAsync();
         using var serviceScope = this.Services.CreateAsyncScope();
-        var service = (serviceScope.ServiceProvider.GetService<DatabaseContext>()!);
+        var service = serviceScope.ServiceProvider.GetService<DatabaseContext>()!;
         service.Database.EnsureCreated();
     }
 

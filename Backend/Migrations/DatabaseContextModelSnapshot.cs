@@ -36,7 +36,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Description");
+                    b.ToTable("Descriptions");
                 });
 
             modelBuilder.Entity("Backend.Models.Progress", b =>
@@ -73,9 +73,6 @@ namespace Backend.Migrations
                     b.Property<int>("ProgressId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TagId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -87,8 +84,6 @@ namespace Backend.Migrations
                     b.HasIndex("DescriptionId");
 
                     b.HasIndex("ProgressId");
-
-                    b.HasIndex("TagId");
 
                     b.ToTable("Projects");
                 });
@@ -104,15 +99,23 @@ namespace Backend.Migrations
                     b.Property<int?>("DescriptionId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsSkill")
+                        .HasColumnType("bit");
+
                     b.Property<string>("TagValue")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DescriptionId");
 
-                    b.ToTable("Tag");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Backend.Models.User", b =>
@@ -135,7 +138,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Backend.Models.Project", b =>
@@ -158,10 +161,6 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backend.Models.Tag", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("TagId");
-
                     b.Navigation("Author");
 
                     b.Navigation("Description");
@@ -173,7 +172,13 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Backend.Models.Description", null)
                         .WithMany("Tags")
-                        .HasForeignKey("DescriptionId");
+                        .HasForeignKey("DescriptionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Backend.Models.User", null)
+                        .WithMany("Tags")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Backend.Models.User", b =>
@@ -193,14 +198,11 @@ namespace Backend.Migrations
                     b.Navigation("Collaborators");
                 });
 
-            modelBuilder.Entity("Backend.Models.Tag", b =>
-                {
-                    b.Navigation("Projects");
-                });
-
             modelBuilder.Entity("Backend.Models.User", b =>
                 {
                     b.Navigation("Projects");
+
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

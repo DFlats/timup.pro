@@ -7,5 +7,11 @@ public class Tag
     public int Id { get; set; }
     [Required]
     public string TagValue { get; set; } = null!;
-    public List<Project> Projects { get; } = [];
+
+    public int? DescriptionId { get; set; }
+    public string? UserId { get; set; }
+
+    public bool IsSkill { get; set; } = false;
+
+    // public List<Project> Projects { get; } = [];
 }
