@@ -20,7 +20,8 @@ export default function useClientUser() {
                 name: user.fullName ?? 'John Doe',
                 email: user.primaryEmailAddress?.toString() ?? 'no$@email.com',
                 projects: [],
-                tags: []
+                tags: [],
+                location: { lat: }
             }
 
             return clientUser;

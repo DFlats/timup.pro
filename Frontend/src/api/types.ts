@@ -13,7 +13,8 @@ export type User = {
     name: string,
     email: string,
     projects?: Project[],
-    tags?: Tag[]
+    tags?: Tag[],
+    location?: google.maps.LatLngLiteral
 };
 
 export type Tag = {
