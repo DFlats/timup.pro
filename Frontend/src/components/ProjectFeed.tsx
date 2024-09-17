@@ -10,11 +10,12 @@ export default function ProjectFeed() {
     const heading = clientUser ? 'Projects tailored for you' : 'Hot projects';
 
     return (
-        <>
-            <h2 className='text-4xl mb-8'>{heading}</h2>
+
+        <div className="p-12 w-screen flex flex-col items-center justify-center">
+            <h1 className='text-4xl mb-8'>{heading}</h1>
             <div className='flex flex-row flex-wrap'>
-                {projects && projects.map(project => <ProjectCard key={project.title} project={project} />)}
+                {projects && projects.map(project => <ProjectCard key={project.id} project={project} />)}
             </div>
-        </>
+        </div>
     );
 }
