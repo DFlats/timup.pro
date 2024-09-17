@@ -33,9 +33,9 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     {
         try
         {
-            var (seededProjects, seededUser, seededTags) = DbSeeder.GenerateProjects(count);
+            var (seededProjects, seededUsers, seededTags) = DbSeeder.GenerateProjects(count);
 
-            Users.Add(seededUser);
+            Users.AddRange(seededUsers);
             Projects.AddRange(seededProjects);
             Tags.AddRange(seededTags);
 
