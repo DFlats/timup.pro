@@ -1,5 +1,8 @@
 import { AdvancedMarker, AdvancedMarkerProps, Pin, PinProps } from "@vis.gl/react-google-maps";
 import useClientUser from "../../hooks/useClientUser";
+import defaultLocation from "../../utilities/defaultLocation";
+import { User } from "../../api/types";
+import RemoteUserMarker from "./RemoteUserMarker";
 
 /* eslint-disable react/react-in-jsx-scope */
 
@@ -35,9 +38,29 @@ export default function ClientUserMarker() {
         glyph: glyph
     }
 
+    const remoteUsers: User[] = [
+        {
+            clerkId: "id",
+            name: 'John Doe',
+            email: 'john$@doe.com',
+            projects: [],
+            tags: [{ id: 0, tagValue: 'Painting' }, { id: 1, tagValue: 'JavaScript' }],
+            location: defaultLocation()
+        },
+        {
+            clerkId: "id2",
+            name: 'Jane Doe',
+            email: 'jane$@doe.com',
+            projects: [],
+            tags: [{ id: 0, tagValue: 'Debates' }, { id: 1, tagValue: 'Politics' }],
+            location: defaultLocation()
+        }
+    ]
+
     return (
         <AdvancedMarker {...advancedMarkerProps}>
             <Pin {...pinProps} />
+            {remoteUsers.map(user => <RemoteUserMarker key={user.clerkId} user={user} />)}
         </AdvancedMarker>
     );
 }

@@ -10,10 +10,8 @@ export default function ClientMap() {
     const { clientUser } = useClientUser();
 
     if (!clientUser) {
-        return <p>Getting client user</p>
+        return <p>Map: Getting client user</p>
     }
-
-    console.log(clientUser)
 
     const mapProps: MapProps = {
         defaultCenter: clientUser.location,
