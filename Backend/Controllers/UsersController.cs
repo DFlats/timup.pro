@@ -15,7 +15,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
     {
         var user = db.GetUserById(id);
         if (user is null) return NotFound("User not found");
-        return user;
+        return (UserResponse)user;
     }
 
     [HttpPost]

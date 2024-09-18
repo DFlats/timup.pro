@@ -63,14 +63,14 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         }
     }
 
-    internal UserResponse? GetUserById(string id)
+    internal User? GetUserById(string id)
     {
         var user = Users
         .Include(u => u.Projects)
         .Include(u => u.Tags)
         .FirstOrDefault(u => u.ClerkId == id);
         if (user is null) return null;
-        return (UserResponse)user;
+        return user;
     }
 
     internal UserResponse AddUser(User userToAdd)
@@ -120,8 +120,28 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return false;
     }
 
-    internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests)
+    internal List<ProjectResponse> GetProjectsByFilter(string[] skills, string[] interests)
     {
+        var projects = Projects
+            .Include(p => p.Author)
+            .Include(p => p.Description)
+            .ThenInclude(p => p.Tags)
+            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Select(p => (ProjectResponse)p)
+            .ToList();
+
+        return projects;
+    }
+
+    internal List<ProjectResponse> GetProjectsByUserId(string id)
+    {
+        var user = GetUserById(id);
+
+        if (user is null) return [];
+
+        var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
+        var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+
         var projects = Projects
             .Include(p => p.Author)
             .Include(p => p.Description)
