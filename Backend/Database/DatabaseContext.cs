@@ -73,7 +73,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return user;
     }
 
-    internal UserResponse AddUser(User userToAdd)
+    internal User AddUser(UserRequest userToAdd)
     {
         var user = new User
         {
@@ -81,8 +81,10 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             Name = userToAdd.Name,
             Email = userToAdd.Email
         };
+
         Users.Add(user);
-        return (UserResponse)user;
+        SaveChanges();
+        return user;
     }
 
     internal bool AddTagToUser(string id, TagRequest tagToAdd)
