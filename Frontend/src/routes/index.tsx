@@ -1,16 +1,6 @@
-/* eslint-disable react/react-in-jsx-scope */
-import { createFileRoute } from '@tanstack/react-router'
-import { ProjectFeed } from '../components/';
+import { createFileRoute } from "@tanstack/react-router";
+import { HomePage } from "../components/pages";
 
 export const Route = createFileRoute('/')({
-  component: Home
+  component: HomePage
 })
-
-function Home() {
-  return (
-    <div className="w-full h-screen flex flex-col items-center justify-center">
-      <ProjectFeed />
-    </div>
-  );
-}
-

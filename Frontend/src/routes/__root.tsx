@@ -10,7 +10,9 @@ export const Route = createRootRoute({
         <>
             <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY} afterSignOutUrl="/">
                 <Header />
-                <Outlet />
+                <div className="w-full flex flex-col items-center justify-center">
+                    <Outlet />
+                </div>
                 <TanStackRouterDevtools />
                 <ReactQueryDevtools />
             </ClerkProvider>

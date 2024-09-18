@@ -1,57 +1,55 @@
-import { useQuery } from "@tanstack/react-query";
-import { Project } from "../api/types"
-import { useClientUser } from "./useClientUser";
-import { getProjectById, getProjects } from "../api/endpoints";
+import { useQuery } from "@tanstack/react-query"
+import { useClientUser } from "../hooks"
+import { getProjectById, getProjects, Project } from "../api"
+import { ProjectFeedType } from "../types/types";
 
-export function useProjects() {
+export function useProjects(projectFeed: ProjectFeedType) {
     const { clientUser } = useClientUser();
 
-    const queryKeyPublicProjects = ['publicProjects'];
+    const queryKeyFeaturedProjects = ['featuredProjects'];
     const queryKeyRecommendedProjects = ['recommendedProjects'];
     const queryKeyUserProjects = ["userProjects"];
 
-    const generalProjectsQuery = useQuery({
-        queryKey: queryKeyPublicProjects,
+    const featuredProjectsQuery = useQuery({
+        queryKey: queryKeyFeaturedProjects,
         queryFn: async () => {
             return await getProjects();
         },
+        enabled: projectFeed == 'featured'
     });
 
-    const getPublicProjects = () => {
-        return generalProjectsQuery.data as Project[] | undefined;
-    }
-
-    const projectsQuery = useQuery({
+    const recommendedProjectsQuery = useQuery({
         queryKey: queryKeyRecommendedProjects,
-        queryFn: async (): Promise<Project[] | undefined> => {
-            if (!clientUser) return;
+        queryFn: async (): Promise<Project[]> => {
+            if (!clientUser) return [];
 
             return await getProjects(clientUser.skillTags, clientUser.interestTags);
         },
-        enabled: !!clientUser
+        enabled: !!clientUser && projectFeed == 'recommended'
     });
-
-    const getRecommendedProjects = () => {
-        return projectsQuery.data as Project[] | undefined;
-    }
 
     const userProjectsQuery = useQuery({
         queryKey: queryKeyUserProjects,
         queryFn: async () => {
             if (!clientUser) return;
-            //TODO: Use real implemented endpoint
+            console.log(clientUser)
             return await Promise.all(clientUser.projectIds.map(async (id) => await getProjectById(id)))
         },
-        enabled: !!clientUser
+        enabled: !!clientUser && projectFeed == 'user'
     });
 
-    const getUserProjects = () => {
-        return userProjectsQuery.data as Project[] | undefined;
-    }
-
-    return {
-        allProjects: getPublicProjects(),
-        projectsForUser: getRecommendedProjects(),
-        userProjects: getUserProjects()
+    switch (projectFeed) {
+        case 'featured':
+            return {
+                projects: featuredProjectsQuery.data as Project[]
+            }
+        case 'recommended':
+            return {
+                projects: recommendedProjectsQuery.data as Project[]
+            }
+        case 'user':
+            return {
+                projects: userProjectsQuery.data as Project[]
+            }
     }
 }

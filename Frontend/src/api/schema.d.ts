@@ -13,7 +13,39 @@ export interface paths {
         };
         get: operations["Projects_GetProjectsByFilter"];
         put?: never;
+        post: operations["Projects_CreateProject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Projects/Populate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         post: operations["Projects_PopulateProjects"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Projects/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Projects_GetProjectById"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -30,6 +62,22 @@ export interface paths {
         get: operations["Users_GetUserById"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Users_AddUser"];
         delete?: never;
         options?: never;
         head?: never;
@@ -85,6 +133,11 @@ export interface components {
             isCompleted?: boolean;
         };
         ValueTupleOfStringAndString: Record<string, never>;
+        ProjectRequest: {
+            authorId?: string;
+            title?: string;
+            description?: string;
+        };
         UserResponse: {
             id?: string;
             name?: string;
@@ -92,6 +145,11 @@ export interface components {
             projectIds?: number[];
             interestTags?: string[];
             skillTags?: string[];
+        };
+        UserRequest: {
+            clerkId?: string;
+            name?: string;
+            email?: string;
         };
         TagRequest: {
             tagName?: string;
@@ -128,6 +186,29 @@ export interface operations {
             };
         };
     };
+    Projects_CreateProject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
     Projects_PopulateProjects: {
         parameters: {
             query?: never;
@@ -143,6 +224,27 @@ export interface operations {
                 };
                 content: {
                     "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Projects_GetProjectById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"];
                 };
             };
         };
@@ -164,6 +266,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserResponse"];
+                };
+            };
+        };
+    };
+    Users_AddUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
                 };
             };
         };
