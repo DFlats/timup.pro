@@ -1,12 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
-
 import { SignedIn, SignedOut, SignInButton, SignOutButton, SignUpButton } from "@clerk/clerk-react";
 import { ClientUserModal } from ".";
-import { useClientUser, useClientUserModal } from "../hooks";
+import { useClientUser } from "../hooks";
 import { Link } from "@tanstack/react-router";
 
 export function Dashboard() {
-    const { openClientUserModal } = useClientUserModal();
     const { clientUser } = useClientUser();
 
     const profileLink = clientUser ? (
@@ -21,6 +19,7 @@ export function Dashboard() {
         <div className="flex items-center justify-center">
             <SignedIn>
                 {profileLink}
+
                 <SignOutButton>
                     <button className='mx-4 btn text-3xl'>Sign Out</button>
                 </SignOutButton>
@@ -39,7 +38,6 @@ export function Dashboard() {
                     </button>
                 </SignUpButton>
             </SignedOut>
-
         </div>
     );
 }
