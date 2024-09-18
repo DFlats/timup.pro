@@ -1,5 +1,4 @@
 /* eslint-disable react/react-in-jsx-scope */
-
 import { SubmitHandler, useForm } from "react-hook-form"
 
 type Inputs = {

@@ -5,7 +5,7 @@ interface TagProps {
     onClick?: (tag: string) => void
 }
 
-export default function TagButton({ tagText, type, onClick }: TagProps) {
+export function TagButton({ tagText, type, onClick }: TagProps) {
     const color = type == 'skill' ? 'bg-amber-600' : 'bg-slate-600';
 
     const handleClick = onClick ? () => onClick(tagText) : () => undefined;

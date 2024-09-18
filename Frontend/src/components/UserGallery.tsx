@@ -2,7 +2,7 @@
 import { useUsers } from "../hooks";
 import { UserCard } from "./";
 
-export default function UserGallery() {
+export function UserGallery() {
     const { users } = useUsers();
 
     return (

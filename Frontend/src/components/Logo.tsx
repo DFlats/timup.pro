@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 
-export default function Logo() {
+export function Logo() {
     return (
         <div className="flex justify-between gap-1">
             <p className="font-bold text-white text-4xl">Team</p>

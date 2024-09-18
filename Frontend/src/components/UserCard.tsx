@@ -1,12 +1,12 @@
 /* eslint-disable react/react-in-jsx-scope */
 
-import { User } from "../api/types";
+import { User } from "../api";
 
 interface Props {
     user: User
 }
 
-export default function UserCard({ user }: Props) {
+export function UserCard({ user }: Props) {
     return (
         <tbody>
             <tr className="hover">
