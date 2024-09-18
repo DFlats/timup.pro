@@ -52,6 +52,5 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
-app.Run();
-
+//app.Run("http://0.0.0.0:26969");
 public partial class Program { }
