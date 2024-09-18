@@ -14,7 +14,7 @@ export function Dashboard() {
                     Profile
                 </button>
                 <SignOutButton>
-                    <button className='btn text-3xl'>Sign Out</button>
+                    <button className='mx-4 btn text-3xl'>Sign Out</button>
                 </SignOutButton>
 
                 <ClientUserModal />

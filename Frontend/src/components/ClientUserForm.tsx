@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { useRef } from 'react';
-import { TagButton } from '.';
+import { Tag } from '.';
 import { useClientUser } from '../hooks';
 
 export function ClientUserForm() {
@@ -22,9 +22,9 @@ export function ClientUserForm() {
     }
 
     const tagButtons = clientUser.skillTags?.map((tag, i) =>
-        <TagButton
+        <Tag
             key={i}
-            tagText={tag}
+            tag={tag}
             onClick={(tag) => { removeTag(tag, true) }}
             type='skill'
         />);

@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { Project } from "../api";
-import { TagButton } from ".";
+import { Tag } from ".";
 
 interface Props {
     project: Project
@@ -10,7 +10,7 @@ interface Props {
 export function ProjectCard({ project }: Props) {
     const skillTags =
         project.skillTags
-            ? project.skillTags.map(tag => <TagButton key={0} tagText={tag} type='skill' />)
+            ? project.skillTags.map(tag => <Tag key={0} tag={tag} type='skill' />)
             : null;
 
     return (
