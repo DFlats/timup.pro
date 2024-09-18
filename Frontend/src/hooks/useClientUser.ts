@@ -1,6 +1,7 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { addTagToUser, getUserById, postUser, removeTagFromUser } from "../api";
+import { TagType } from "../types";
 
 export function useClientUser() {
     const { user } = useUser();
@@ -43,10 +44,12 @@ export function useClientUser() {
         return clientUserQuery.data?.interestTags ?? [] as string[]
     }
 
-    const addTag = async (tagText: string, isSkill: boolean) => {
-
+    const addTag = async (tagText: string, tagType: TagType) => {
         const clientUser = clientUserQuery.data;
+
         if (!clientUser) return;
+
+        const isSkill = tagType == 'skill';
 
         await addTagToUser(clientUser.id, { tagName: tagText, isSkill });
 
@@ -57,9 +60,12 @@ export function useClientUser() {
         });
     }
 
-    const removeTag = async (tagText: string, isSkill: boolean) => {
+    const removeTag = async (tagText: string, tagType: TagType) => {
         const clientUser = clientUserQuery.data;
+
         if (!clientUser) return;
+
+        const isSkill = tagType == 'skill';
 
         await removeTagFromUser(clientUser.id, { tagName: tagText, isSkill })
 

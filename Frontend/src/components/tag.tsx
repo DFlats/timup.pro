@@ -1,13 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { TagType } from "../types/types";
 
-interface Props {
+export interface TagProps {
     tag: string,
     tagType: TagType
     onClick?: (tag: string) => void
 }
 
-export function Tag({ tag, tagType, onClick }: Props) {
+export function Tag({ tag, tagType, onClick }: TagProps) {
     const color = tagType == 'skill' ? 'bg-amber-600' : 'bg-slate-600';
 
     const handleClick = onClick ? () => onClick(tag) : () => undefined;
@@ -16,7 +16,7 @@ export function Tag({ tag, tagType, onClick }: Props) {
         <button
             className={`btn rounded-full m-2 text-white ${color}`}
             onClick={() => handleClick()}>
-            {tag}
+            <p>{tag}</p>
         </button>
     );
 }
