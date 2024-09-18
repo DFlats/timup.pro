@@ -49,5 +49,11 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return (ProjectResponse)res;
     }
 
+    [HttpGet("ProjectsByUserId/id")]
+    public ActionResult<List<ProjectResponse>> GetProjectsByUserId(string id)
+    {
+        var projects = db.GetProjectsByUserId(id);
+        return projects;
+    }
 
 }

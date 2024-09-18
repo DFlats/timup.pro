@@ -184,6 +184,11 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
                         .FirstOrDefault(p => p.Id == id);
     }
 
+    internal List<Project> GetProjectsByUserId(string id)
+    {
+        throw new NotImplementedException();
+    }
+
     public enum Statuses
     {
         UserNotFound,
