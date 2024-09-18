@@ -1,9 +1,10 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tag, User } from "../api/types";
-import defaultLocation from '../utilities/defaultLocation';
+import { defaultLocation}  from '../utilities/defaultLocation';
 
-export default function useClientUser() {
+export function useClientUser() {
+    
     const { user } = useUser();
     const queryClient = useQueryClient();
 

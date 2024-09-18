@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Project } from "../api/types"
-import useClientUser from "./useClientUser";
+import { useClientUser } from "./useClientUser";
 
-export default function useProjects() {
+export function useProjects() {
     const { clientUser } = useClientUser();
 
     if (!clientUser?.tags) {

@@ -1,6 +1,6 @@
 import { User } from "../api/types"
 
-export default function useUsers() {
+export function useUsers() {
     const users: User[] = Array(5).fill(
         {
             clerkId: 0,

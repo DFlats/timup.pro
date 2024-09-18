@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-export default function useGoogleMaps() {
+export function useGoogleMaps() {
     const queryKey = ["placesLibrary"];
 
     useQuery({
