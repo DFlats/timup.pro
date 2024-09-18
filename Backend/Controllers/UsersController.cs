@@ -1,5 +1,6 @@
 using Backend.Database;
 using Backend.Dtos;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -9,12 +10,27 @@ namespace Backend.Controllers;
 public class UsersController(DatabaseContext db) : ControllerBase
 {
 
-    [HttpGet("{id}")] 
+    [HttpGet("{id}")]
     public ActionResult<UserResponse> GetUserById(string id)
     {
         var user = db.GetUserById(id);
         if (user is null) return NotFound("User not found");
         return user;
+    }
+
+    [HttpPost]
+    public IActionResult AddUser(UserRequest userToAdd)
+    {
+        var user = new User()
+        {
+            ClerkId = userToAdd.ClerkId,
+            Name = userToAdd.Name,
+            Email = userToAdd.Email
+        };
+
+        var userResponse = db.AddUser(user);
+        db.SaveChanges();
+        return CreatedAtAction("GetUserById", user.ClerkId, userResponse);
     }
 
     [HttpPost("AddTag/{id}")]

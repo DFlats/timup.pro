@@ -72,6 +72,18 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return (UserResponse)user;
     }
 
+    internal UserResponse AddUser(User userToAdd)
+    {
+        var user = new User
+        {
+            ClerkId = userToAdd.ClerkId,
+            Name = userToAdd.Name,
+            Email = userToAdd.Email
+        };
+        Users.Add(user);
+        return (UserResponse)user;
+    }
+
     internal bool AddTagToUser(string id, TagRequest tagToAdd)
     {
         var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
