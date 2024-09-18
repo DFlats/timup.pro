@@ -4,14 +4,30 @@
  */
 
 export interface paths {
-    "/api/Template": {
+    "/api/Projects": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["Template_TemplateGreeting"];
+        get: operations["Projects_GetProjectsByFilter"];
+        put?: never;
+        post: operations["Projects_PopulateProjects"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Users_GetUserById"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20,10 +36,72 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Users/AddTag/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Users_AddTagToUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Users/RemoveTag/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["Users_RemoveTagFromUser"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: never;
+    schemas: {
+        ProjectResponse: {
+            /** Format: int32 */
+            id?: number;
+            title?: string;
+            authorName?: string;
+            authorId?: string;
+            collaborators?: components["schemas"]["ValueTupleOfStringAndString"][];
+            description?: string;
+            skillTags?: string[];
+            interestTags?: string[];
+            isCompleted?: boolean;
+        };
+        ValueTupleOfStringAndString: Record<string, never>;
+        ProjectFilter: {
+            skillTags?: string[] | null;
+            interestTags?: string[] | null;
+        };
+        UserResponse: {
+            id?: string;
+            name?: string;
+            email?: string;
+            projectIds?: number[];
+            interestTags?: string[];
+            skillTags?: string[];
+        };
+        TagRequest: {
+            tagName?: string;
+            isSkill?: boolean;
+        };
+    };
     responses: never;
     parameters: never;
     requestBodies: never;
@@ -32,7 +110,30 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    Template_TemplateGreeting: {
+    Projects_GetProjectsByFilter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ProjectFilter"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"][];
+                };
+            };
+        };
+    };
+    Projects_PopulateProjects: {
         parameters: {
             query?: never;
             header?: never;
@@ -46,7 +147,78 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": string;
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Users_GetUserById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserResponse"];
+                };
+            };
+        };
+    };
+    Users_AddTagToUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TagRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Users_RemoveTagFromUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TagRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
                 };
             };
         };
