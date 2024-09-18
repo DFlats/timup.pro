@@ -15,20 +15,17 @@ export default function ClientUserForm() {
         const value = inputSkillRef!.current?.value;
         if (!value) return;
 
-        addTag({
-            id: 0,
-            tagValue: value,
-        });
+        addTag(value, true);
 
         inputSkillRef.current.value = '';
         inputSkillRef.current.focus();
     }
 
-    const tagButtons = clientUser.tags?.map((tag, i) =>
+    const tagButtons = clientUser.skillTags?.map((tag, i) =>
         <TagButton
             key={i}
-            tag={tag}
-            onClick={(tag) => { removeTag(tag) }}
+            tagText={tag}
+            onClick={(tag) => { removeTag(tag, true) }}
             type='skill'
         />);
 

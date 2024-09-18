@@ -18,6 +18,10 @@ export const getProjects = async (skillTags?: string[], interestTags?: string[])
     return response.data as Project[];
 }
 
+export const getProjectById = async (id: number) => {
+    return id;
+}
+
 export const getUserById = async (id: string): Promise<User> => {
     const response = await client.GET('/api/Users/{id}', {
         params: { path: { id } }

@@ -2,7 +2,7 @@
 
 import { SignedIn, SignedOut, SignInButton, SignOutButton, SignUpButton } from "@clerk/clerk-react";
 import ClientUserModal from "./ClientUserModal";
-import useClientUserModal from "../hooks/useClientUserModal";
+import { useClientUserModal } from "../hooks";
 import { Link } from "@tanstack/react-router";
 
 export default function Dashboard() {

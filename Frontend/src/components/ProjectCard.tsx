@@ -9,8 +9,8 @@ interface Props {
 
 export default function ProjectCard({ project }: Props) {
     const skillTags =
-        project.description.tags
-            ? project.description.tags.map(tag => <TagButton key={0} tag={tag} type='skill' />)
+        project.skillTags
+            ? project.skillTags.map(tag => <TagButton key={0} tagText={tag} type='skill' />)
             : null;
 
     return (
@@ -22,7 +22,7 @@ export default function ProjectCard({ project }: Props) {
             </figure>
             <div className="card-body">
                 <h2 className="card-title">{project.title}</h2>
-                <p>{project.description.text}</p>
+                <p>{project.description}</p>
                 <div className="flex flex-row">
                     {skillTags}
                 </div>
