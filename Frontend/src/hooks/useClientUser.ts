@@ -1,10 +1,9 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Tag, User } from "../api/types";
-import { defaultLocation}  from '../utilities/defaultLocation';
+import { addTagToUser, getUserById, removeTagFromUser } from "../api/endpoints";
 
 export function useClientUser() {
-    
+
     const { user } = useUser();
     const queryClient = useQueryClient();
 
@@ -15,18 +14,7 @@ export function useClientUser() {
         queryFn: async () => {
             if (!user) return;
 
-            //fetch full user from backend here instead
-
-            const clientUser: User = {
-                clerkId: user.id,
-                name: user.fullName ?? 'John Doe',
-                email: user.primaryEmailAddress?.toString() ?? 'no$@email.com',
-                projects: [],
-                tags: [],
-                location: defaultLocation()
-            }
-
-            return clientUser;
+            return await getUserById(user.id);
         },
         staleTime: Infinity,
         enabled: !!user
@@ -42,34 +30,66 @@ export function useClientUser() {
         });
     }
 
-    const getTags = () => {
-        return clientUserQuery.data?.tags ?? [] as Tag[]
+    const getSkillTags = () => {
+        return clientUserQuery.data?.skillTags ?? [] as string[]
     }
 
-    const addTag = (tag: Tag) => {
+    const getInterestTags = () => {
+        return clientUserQuery.data?.interestTags ?? [] as string[]
+    }
+
+    const addSkillTag = async (tagText: string) => {
         const clientUser = clientUserQuery.data;
         if (!clientUser) return;
 
+        await addTagToUser(clientUser.id, { tagName: tagText, isSkill: true });
+
         queryClient.setQueryData(queryKey, {
             ...clientUser,
-            tags: [...getTags(), tag]
+            skillTags: [...getSkillTags(), tagText]
         });
     };
 
-    const removeTag = (tag: Tag) => {
+    const removeSkillTag = async (tagText: string) => {
         const clientUser = clientUserQuery.data;
         if (!clientUser) return;
 
+        await removeTagFromUser(clientUser.id, { tagName: tagText, isSkill: true })
+
         queryClient.setQueryData(queryKey, {
             ...clientUser,
-            tags: getTags().filter(t => t.tagValue != tag.tagValue)
+            skillTags: getSkillTags().filter(t => t != tagText)
+        });
+    }
+
+    const addInterestTag = async (tagText: string) => {
+        const clientUser = clientUserQuery.data;
+        if (!clientUser) return;
+
+        await addTagToUser(clientUser.id, { tagName: tagText, isSkill: false });
+
+        queryClient.setQueryData(queryKey, {
+            ...clientUser,
+            interestTags: [...getInterestTags(), tagText]
+        });
+    };
+
+    const removeInterestTag = async (tagText: string) => {
+        const clientUser = clientUserQuery.data;
+        if (!clientUser) return;
+
+        await removeTagFromUser(clientUser.id, { tagName: tagText, isSkill: false })
+
+        queryClient.setQueryData(queryKey, {
+            ...clientUser,
+            interestTags: getInterestTags().filter(t => t != tagText)
         });
     }
 
     return {
         clientUser: clientUserQuery.data,
-        addTag,
-        removeTag,
+        addTag: addSkillTag,
+        removeTag: removeSkillTag,
         setLocation
     }
 }
