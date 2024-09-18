@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useClientUser } from "../hooks"
-import { getProjectById, getProjects, Project } from "../api"
+import { getProjectById, getProjectsByFilter, Project } from "../api"
 import { ProjectFeedType } from "../types/types";
 
 export function useProjects(projectFeed: ProjectFeedType) {
@@ -13,7 +13,7 @@ export function useProjects(projectFeed: ProjectFeedType) {
     const featuredProjectsQuery = useQuery({
         queryKey: queryKeyFeaturedProjects,
         queryFn: async () => {
-            return await getProjects();
+            return await getProjectsByFilter();
         },
         enabled: projectFeed == 'featured'
     });
@@ -23,7 +23,7 @@ export function useProjects(projectFeed: ProjectFeedType) {
         queryFn: async (): Promise<Project[]> => {
             if (!clientUser) return [];
 
-            return await getProjects(clientUser.skillTags, clientUser.interestTags);
+            return await getProjectsByFilter(clientUser.skillTags, clientUser.interestTags);
         },
         enabled: !!clientUser && projectFeed == 'recommended'
     });

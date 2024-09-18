@@ -1,10 +1,10 @@
 import { paths } from './schema';
 import createClient from "openapi-fetch";
-import { Project, User, TagRequest } from './types';
+import { Project, User, TagRequest, ProjectRequest } from './types';
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
-export const getProjects = async (skillTags?: string[], interestTags?: string[]): Promise<Project[]> => {
+export const getProjectsByFilter = async (skillTags?: string[], interestTags?: string[]): Promise<Project[]> => {
     const response = await client.GET('/api/Projects', {
         params: {
             query: {
@@ -14,6 +14,27 @@ export const getProjects = async (skillTags?: string[], interestTags?: string[])
         }
     });
 
+    return response.data as Project[];
+}
+
+export const postProject = async (request: ProjectRequest) => {
+    await client.POST('/api/Projects', {
+        body: request
+    });
+}
+
+export const getRecommendedProjectsByUserId = async (userId: string) => {
+    const response = await client.GET('/api/Projects/Recommended/{id}', {
+        params: {
+            path: {
+                id: userId
+            }
+        }
+    });
+
+    if (!response.data) {
+        throw new Error(response.error);
+    }
     return response.data as Project[];
 }
 
