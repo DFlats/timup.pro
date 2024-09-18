@@ -2,6 +2,7 @@ import { components } from './schema';
 
 export type Project = Required<components['schemas']['ProjectResponse']>
 export type ProjectRequest = Required<components['schemas']['ProjectRequest']>
+export type ProjectOverviewResponse = Required<components['schemas']['ProjectOverviewResponse']>
 
 export type TagRequest = Required<components['schemas']['TagRequest']>
 
