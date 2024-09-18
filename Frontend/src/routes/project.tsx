@@ -1,14 +1,14 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { createFileRoute } from '@tanstack/react-router'
-import { useProjects } from '../hooks';
 import { ProjectCard, CreateProjectModal } from '../components';
 
-export const Route = createFileRoute('/projects')({
+
+export const Route = createFileRoute('/project')({
   component: ProjectsPage
 })
 
 function ProjectsPage() {
-  const { projects } = useProjects('recommended');
+  const { project } = useProject(id);
 
   function handleModal() {
     const modal = document.getElementById("create-project") as HTMLDialogElement;

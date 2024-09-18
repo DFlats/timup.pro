@@ -1,1 +1,1 @@
-export type ProjectFeedType = 'featured' | 'recommended' | 'user' | number;
+export type ProjectFeedType = 'featured' | 'recommended' | 'user';

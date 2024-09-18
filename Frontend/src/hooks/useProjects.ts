@@ -3,7 +3,6 @@ import { useClientUser } from "../hooks"
 import { getProjectById, getProjects, Project } from "../api"
 import { ProjectFeedType } from "../types/types";
 
-
 export function useProjects(projectFeed: ProjectFeedType) {
     const { clientUser } = useClientUser();
 
