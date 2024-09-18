@@ -16,9 +16,23 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return db.GetProjectsByFilter(skills, interests);
     }
 
-    [HttpPost]
+    [HttpPost("Populate")]
     public IActionResult PopulateProjects()
     {
         return Ok(db.PopulateProjects());
     }
+
+    [HttpPost()]
+    public IActionResult CreateProject(ProjectRequest projectRequest)
+    {
+        var result = db.CreateProject(projectRequest);
+        if (result.Item1 == DatabaseContext.Statuses.Ok)
+        {
+            db.SaveChanges();
+            return CreatedAtAction(nameof(CreateProject), result.Item2!.Id, (ProjectResponse)result.Item2 );
+        }
+        return NotFound("User not found");
+    }
+
+
 }
