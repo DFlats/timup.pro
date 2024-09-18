@@ -14,7 +14,9 @@ export function HomePage() {
     }
 
     return (
-
-        <ProjectFeed projectFeed={projectFeed()} />
+        <>
+            <p>{projectFeed()}</p>
+            <ProjectFeed projectFeed={projectFeed()} />
+        </>
     );
 }
