@@ -193,6 +193,24 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return (Statuses.Ok, user.Projects);
     }
 
+
+       internal (Statuses ,List<User>?) GetRecommendedUsersByProjectId(int id)
+    {
+        var project = GetProjectById(id);
+
+        if (project is null) return (Statuses.ProjectNotFound, null);
+
+        var interests = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
+        var skills = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+
+        var users = Users
+            .Include(u => u.Tags)
+            .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .ToList();
+
+        return (Statuses.Ok, users);
+    }
+
     public enum Statuses
     {
         UserNotFound,
