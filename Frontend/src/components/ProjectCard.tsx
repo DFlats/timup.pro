@@ -10,7 +10,7 @@ interface Props {
 export function ProjectCard({ project }: Props) {
     const skillTags =
         project.skillTags
-            ? project.skillTags.map(tag => <Tag key={0} tag={tag} type='skill' />)
+            ? project.skillTags.map(tag => <Tag key={0} tag={tag} tagType='skill' />)
             : null;
 
     return (

@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
 import { useUser } from "../../hooks";
+import { TagContainer } from "../tagContainer";
 
 export function ProfilePage() {
     const Route = getRouteApi('/profile/$userId');
@@ -11,6 +12,7 @@ export function ProfilePage() {
 
     return (<>
         <h1>{user.name}</h1>
-        <p>{user.}</p>
+        <TagContainer tags={user.skillTags} tagType='skill' />
+        <TagContainer tags={user.interestTags} tagType='interest' />
     </>)
 }

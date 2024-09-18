@@ -26,7 +26,7 @@ export function ClientUserForm() {
             key={i}
             tag={tag}
             onClick={(tag) => { removeTag(tag, true) }}
-            type='skill'
+            tagType='skill'
         />);
 
     return (<div className='py-4'>
