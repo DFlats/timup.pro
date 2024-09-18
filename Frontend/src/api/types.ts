@@ -1,3 +1,11 @@
+import { components } from './schema';
+
+export type ProjectFilter = Required<components['schemas']['ProjectFilter']>
+export type ProjectResponse = Required<components['schemas']['ProjectResponse']>
+export type TagRequest = Required<components['schemas']['TagRequest']>
+export type UserResponse = Required<components['schemas']['UserResponse']>
+export type ValueTupleOfStringAndString = Required<components['schemas']['ValueTupleOfStringAndString']>
+
 export type Project = {
     id: number,
     title: string,

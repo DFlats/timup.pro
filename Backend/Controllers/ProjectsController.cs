@@ -10,10 +10,10 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
 {
 
     [HttpGet()]
-    public List<ProjectResponse> GetProjectsByFilter(ProjectFilter? filter)
+    public List<ProjectResponse> GetProjectsByFilter([FromQuery(Name = "interests")] string[]? interests, [FromQuery(Name = "skills")] string[]? skills)
     {
-        if(filter is null) return db.GetAllProjects();
-        return db.GetProjectsByFilter(filter);
+        if (skills.Length == 0 && interests.Length == 0) return db.GetAllProjects();
+        return db.GetProjectsByFilter(skills, interests);
     }
 
     [HttpPost]

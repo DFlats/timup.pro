@@ -47,6 +47,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         try
         {
             var (seededProjects, seededUsers, seededTags) = DbSeeder.GenerateProjects(count);
+            Console.WriteLine("hello");
 
             Users.AddRange(seededUsers);
             Projects.AddRange(seededProjects);
@@ -97,7 +98,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         if (user is null) return false;
 
         var tag = user.Tags.FirstOrDefault(t => t.TagValue == tagToRemove.TagName && t.IsSkill == tagToRemove.IsSkill);
-        if(tag != null)
+        if (tag != null)
         {
             user.Tags.Remove(tag);
             Tags.Remove(tag);
@@ -105,53 +106,17 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         }
         return false;
     }
-      
-    internal List<ProjectResponse> GetProjectsByFilter(ProjectFilter filter)
-    {
-        var filterByInterestTags = filter.InterestTags is not null;
 
+    internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests)
+    {
         var projects = Projects
             .Include(p => p.Author)
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
+            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Select(p => (ProjectResponse)p)
             .ToList();
 
-        List<(Project, int)> FilterProjectsByTags(List<Project> projects, List<string> tagStrings, bool isSkill)
-        {
-            var tags = tagStrings
-                .Select(t => new Tag()
-                {
-                    Id = 0,
-                    TagValue = t,
-                    IsSkill = isSkill
-                })
-                .ToList();
-
-            var projectsFilteredByTags = new List<(Project, int)>();
-
-            foreach (var project in projects)
-            {
-                var projectSkillTags = project.Description.Tags.Where(tag => tag.IsSkill);
-
-                var intersection = projectSkillTags.Intersect(tags);
-                if (intersection.Count() > 0)
-                {
-                    projectsFilteredByTags.Add((project, intersection.Count()));
-                }
-            }
-
-            return projectsFilteredByTags.ToList();
-        }
-
-        if (filter.SkillTags is not null)
-        {
-            projects = FilterProjectsByTags(projects, filter.SkillTags, true)
-                .OrderByDescending(projectTuple => projectTuple.Item2)
-                .Select(projectTuple => projectTuple.Item1)
-                .ToList();
-        }
-
-        return projects
-            .Select(p => (ProjectResponse)p).ToList();
+        return projects;
     }
 }

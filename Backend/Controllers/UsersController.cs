@@ -9,7 +9,7 @@ namespace Backend.Controllers;
 public class UsersController(DatabaseContext db) : ControllerBase
 {
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}")] 
     public ActionResult<UserResponse> GetUserById(string id)
     {
         var user = db.GetUserById(id);
