@@ -1,11 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { Project } from "../api/types"
-import { useClientUser } from "./useClientUser";
-import { getProjectById, getProjects } from "../api/endpoints";
+import { useQuery } from "@tanstack/react-query"
+import { useClientUser } from "../hooks"
+import { getProjectById, getProjects, Project } from "../api"
+import { ProjectFeedType } from "../types/types";
 
-export type ProjectFeed = 'featured' | 'recommended' | 'user';
 
-export function useProjects(projectFeed: ProjectFeed) {
+export function useProjects(projectFeed: ProjectFeedType) {
     const { clientUser } = useClientUser();
 
     const queryKeyFeaturedProjects = ['featuredProjects'];
@@ -20,49 +19,38 @@ export function useProjects(projectFeed: ProjectFeed) {
         enabled: projectFeed == 'featured'
     });
 
-    const getFeaturedProjects = () => {
-        return featuredProjectsQuery.data as Project[] | undefined;
-    }
-
     const recommendedProjectsQuery = useQuery({
         queryKey: queryKeyRecommendedProjects,
-        queryFn: async (): Promise<Project[] | undefined> => {
-            if (!clientUser) return;
+        queryFn: async (): Promise<Project[]> => {
+            if (!clientUser) return [];
 
             return await getProjects(clientUser.skillTags, clientUser.interestTags);
         },
         enabled: !!clientUser && projectFeed == 'recommended'
     });
 
-    const getRecommendedProjects = () => {
-        return recommendedProjectsQuery.data as Project[] | undefined;
-    }
-
     const userProjectsQuery = useQuery({
         queryKey: queryKeyUserProjects,
         queryFn: async () => {
             if (!clientUser) return;
+            console.log(clientUser)
             return await Promise.all(clientUser.projectIds.map(async (id) => await getProjectById(id)))
         },
         enabled: !!clientUser && projectFeed == 'user'
     });
 
-    const getUserProjects = () => {
-        return userProjectsQuery.data as Project[] | undefined;
-    }
-
     switch (projectFeed) {
         case 'featured':
             return {
-                projects: getFeaturedProjects()
+                projects: featuredProjectsQuery.data as Project[]
             }
         case 'recommended':
             return {
-                projects: getRecommendedProjects()
+                projects: recommendedProjectsQuery.data as Project[]
             }
         case 'user':
             return {
-                projects: getUserProjects()
+                projects: userProjectsQuery.data as Project[]
             }
     }
 }

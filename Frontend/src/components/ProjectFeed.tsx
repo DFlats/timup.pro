@@ -1,9 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useProjects } from "../hooks";
 import { ProjectCard } from "../components";
+import { ProjectFeedType } from "../types/types";
 
 interface Props {
-    projectFeed: 'featured' | 'recommended' | 'user';
+    projectFeed: ProjectFeedType;
 }
 
 export function ProjectFeed({ projectFeed }: Props) {
