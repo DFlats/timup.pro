@@ -12,7 +12,7 @@ export function Dashboard() {
         <div className="flex items-center justify-center">
 
             <SignedIn>
-                <Link className="text-white text-3xl" to="/projects">Projects</Link>
+                <Link className="text-white text-3xl" to="/project">Projects</Link>
                 <button className="btn text-3xl" onClick={openClientUserModal}>
                     Profile
                 </button>

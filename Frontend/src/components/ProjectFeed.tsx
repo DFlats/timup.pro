@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useProjects } from "../hooks";
-import { ProjectCard } from "../components";
+import { ProjectCard } from ".";
 import { ProjectFeedType } from "../types/types";
 
 interface Props {

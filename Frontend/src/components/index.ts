@@ -8,4 +8,3 @@ export * from './projectCard';
 export * from './projectFeed';
 export * from './tagButton';
 export * from './userCard';
-export * from './userGallery';
