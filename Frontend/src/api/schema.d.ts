@@ -11,9 +11,25 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["Projects_GetProjectsByFilter"];
+        get: operations["Projects_GetProjects"];
         put?: never;
         post: operations["Projects_CreateProject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Projects/Recommended/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Projects_GetRecommendedProjectsByUserId"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -44,6 +60,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["Projects_GetProjectById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Projects/ProjectsByUserId/id": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Projects_GetProjectsByUserId"];
         put?: never;
         post?: never;
         delete?: never;
@@ -138,11 +170,22 @@ export interface components {
             title?: string;
             description?: string;
         };
+        ProjectOverviewResponse: {
+            /** Format: int32 */
+            id?: number;
+            title?: string;
+            authorId?: string;
+            /** Format: int32 */
+            collabCount?: number;
+            description?: string;
+            skillTags?: string[];
+            interestTags?: string[];
+            isCompleted?: boolean;
+        };
         UserResponse: {
             id?: string;
             name?: string;
             email?: string;
-            projectIds?: number[];
             interestTags?: string[];
             skillTags?: string[];
         };
@@ -164,7 +207,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    Projects_GetProjectsByFilter: {
+    Projects_GetProjects: {
         parameters: {
             query?: {
                 interests?: string[] | null;
@@ -209,6 +252,27 @@ export interface operations {
             };
         };
     };
+    Projects_GetRecommendedProjectsByUserId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"][];
+                };
+            };
+        };
+    };
     Projects_PopulateProjects: {
         parameters: {
             query?: never;
@@ -245,6 +309,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProjectResponse"];
+                };
+            };
+        };
+    };
+    Projects_GetProjectsByUserId: {
+        parameters: {
+            query?: {
+                id?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectOverviewResponse"][];
                 };
             };
         };
