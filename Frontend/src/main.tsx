@@ -4,8 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { routeTree } from './routeTree.gen'
 import { createRouter, RouterProvider } from '@tanstack/react-router';
-import { DefaultCatchBoundary } from './components/routing/defaultCatchBoundary.tsx';
-import { NotFound } from './components/routing/notFound.tsx';
+import { DefaultCatchBoundary, NotFound } from './components/routing';
 import './index.css'
 
 const queryClient = new QueryClient();

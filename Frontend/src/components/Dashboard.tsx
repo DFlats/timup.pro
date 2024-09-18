@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { SignedIn, SignedOut, SignInButton, SignOutButton, SignUpButton } from "@clerk/clerk-react";
-import { ClientUserModal } from "./";
+import { ClientUserModal } from "../components";
 import { useClientUserModal } from "../hooks";
 import { Link } from "@tanstack/react-router";
 

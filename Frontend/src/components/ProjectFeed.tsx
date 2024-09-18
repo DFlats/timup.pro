@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useClientUser, useProjects } from "../hooks";
-import { ProjectCard } from "./";
+import { ProjectCard } from "../components";
 
 export function ProjectFeed() {
     const { clientUser } = useClientUser();

@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { useRef } from 'react';
-import { TagButton } from './';
+import { TagButton } from '../components';
 import { useClientUser } from '../hooks';
 
 export function ClientUserForm() {

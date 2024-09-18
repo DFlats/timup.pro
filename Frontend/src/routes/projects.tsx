@@ -1,8 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { createFileRoute } from '@tanstack/react-router'
 import { useProjects } from '../hooks';
-import ProjectCard from '../components/projectCard';
-import { CreateProjectModal } from '../components/createProjectModal';
+import { ProjectCard, CreateProjectModal } from '../components';
 
 export const Route = createFileRoute('/projects')({
   component: Projects
