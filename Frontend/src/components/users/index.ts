@@ -1,3 +1,3 @@
-export * from './clientUserModal'
+export * from './editUserModal'
 export * from './userCard'
 export * from './userGallery'

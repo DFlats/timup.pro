@@ -17,8 +17,18 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
         } as TagProps;
     };
 
+    const heading = () => {
+        switch (tagType) {
+            case 'skill':
+                return 'Skills'
+            case 'interest':
+                return 'Interests'
+        }
+    }
+
     return (
         <>
+            <h2>{heading()}</h2>
             <div className="flex flex-row flex-wrap">
                 {tags.map(tag => <Tag key={tag} {...tagProps(tag)} />)}
             </div>
