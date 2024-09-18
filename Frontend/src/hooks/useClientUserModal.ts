@@ -1,12 +1,12 @@
-export function useClientUserModal() {
+export function useEditUserModal() {
 
-    const openClientUserModal = () => {
+    const openEditUserModal = () => {
         const modal = document.getElementById(import.meta.env.VITE_CLIENT_USER_MODAL_ID) as HTMLDialogElement;
         if (!modal) return;
         modal.showModal();
     }
 
     return {
-        openClientUserModal
+        openEditUserModal
     }
 }

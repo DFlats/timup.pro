@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
-import { useClientUser, useClientUserModal, useUser } from "../../hooks";
+import { useClientUser, useEditUserModal, useUser } from "../../hooks";
 import { TagContainer } from "../../components/tags";
 
 export function ProfilePage() {
@@ -10,7 +10,7 @@ export function ProfilePage() {
     const { user } = useUser(userId);
     const { clientUser } = useClientUser();
 
-    const { openClientUserModal } = useClientUserModal()
+    const { openEditUserModal } = useEditUserModal()
 
     if (!user) return;
 
@@ -26,7 +26,7 @@ export function ProfilePage() {
             {userIsClient &&
                 <button
                     className='btn'
-                    onClick={openClientUserModal}>
+                    onClick={openEditUserModal}>
                     Edit Profile
                 </button>
             }
