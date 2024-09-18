@@ -4,12 +4,18 @@ import { ProjectFilter, ProjectResponse, Tag, UserResponse } from './types';
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
-export const getProjects = async (filter: ProjectFilter) => {
+
+export const getProjects = async (skillTags: string[], interestTags: string[]) => {
     const response = await client.GET('/api/Projects', {
-        body: filter
+        params: {
+            query: {
+                interests: interestTags,
+                skills: skillTags
+            }
+        }
     })
 
-    return response.data as ProjectResponse[];
+    return response.data as Project[];
 }
 
 export const getUserById = async (id: string) => {
@@ -17,16 +23,24 @@ export const getUserById = async (id: string) => {
         params: { path: { id } }
     })
 
-    return response.data as UserResponse;
+    return response.data as User;
 }
 
-export const userAddTag = async (id: string, tag: Tag) => {
+export const addTagToUser = async (id: string, tagRequest: TagRequest) => {
     const response = await client.POST('/api/Users/AddTag/{id}', {
         params: { path: { id } },
-        body: {
-            tagName: tag.tagValue
-        }
+        body: tagRequest
     })
 
     return response.data;
+}
+export const removeTagFromUser = async (id: string, tagRequest: TagRequest) => {
+    await client.DELETE('/api/Users/RemoveTag/{id}', {
+        params: {
+            path: {
+                id
+            }
+        },
+        body: tagRequest
+    });
 }
