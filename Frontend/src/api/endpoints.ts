@@ -5,12 +5,12 @@ import { Project, User, TagRequest } from './types';
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
 
-export const getProjects = async (skillTags: string[], interestTags: string[]) => {
+export const getProjects = async (skillTags?: string[], interestTags?: string[]): Promise<Project[]> => {
     const response = await client.GET('/api/Projects', {
         params: {
             query: {
-                interests: interestTags,
-                skills: skillTags
+                interests: interestTags ?? [],
+                skills: skillTags ?? []
             }
         }
     })
@@ -18,21 +18,19 @@ export const getProjects = async (skillTags: string[], interestTags: string[]) =
     return response.data as Project[];
 }
 
-export const getUserById = async (id: string) => {
+export const getUserById = async (id: string): Promise<User> => {
     const response = await client.GET('/api/Users/{id}', {
         params: { path: { id } }
-    })
+    });
 
     return response.data as User;
 }
 
 export const addTagToUser = async (id: string, tagRequest: TagRequest) => {
-    const response = await client.POST('/api/Users/AddTag/{id}', {
+    await client.POST('/api/Users/AddTag/{id}', {
         params: { path: { id } },
         body: tagRequest
     })
-
-    return response.data;
 }
 export const removeTagFromUser = async (id: string, tagRequest: TagRequest) => {
     await client.DELETE('/api/Users/RemoveTag/{id}', {
