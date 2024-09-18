@@ -156,6 +156,13 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return (Statuses.Ok, project);
     }
 
+    internal Project? GetProjectById(int id)
+    {
+        return Projects.Include(p => p.Description).ThenInclude(d => d.Tags)
+                        .Include(p => p.Author)
+                        .FirstOrDefault(p => p.Id == id);
+    }
+
     public enum Statuses
     {
         UserNotFound,

@@ -29,9 +29,16 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         if (result.Item1 == DatabaseContext.Statuses.Ok)
         {
             db.SaveChanges();
-            return CreatedAtAction(nameof(CreateProject), result.Item2!.Id, (ProjectResponse)result.Item2 );
+            return CreatedAtAction(nameof(GetProjectById), new {id = result.Item2!.Id}, (ProjectResponse)result.Item2 );
         }
         return NotFound("User not found");
+    }
+
+    [HttpGet("{id}")]
+    public ActionResult<ProjectResponse> GetProjectById(int id){
+        var res = db.GetProjectById(id);
+        if(res == null) return NotFound("Project was not found");
+        return (ProjectResponse) res;
     }
 
 
