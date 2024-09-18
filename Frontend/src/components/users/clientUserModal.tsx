@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useClientUser } from "../../hooks";
-import { TagEditor } from "../../components/tags";
+import { TagEditor } from "../tags";
 
 export function ClientUserModal() {
     const { clientUser, addTag, removeTag } = useClientUser();
