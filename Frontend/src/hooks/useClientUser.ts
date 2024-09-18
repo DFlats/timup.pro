@@ -1,9 +1,8 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { addTagToUser, getUserById, removeTagFromUser } from "../api/endpoints";
+import { addTagToUser, getUserById, removeTagFromUser } from "../api";
 
 export function useClientUser() {
-
     const { user } = useUser();
     const queryClient = useQueryClient();
 
@@ -12,7 +11,7 @@ export function useClientUser() {
     const clientUserQuery = useQuery({
         queryKey,
         queryFn: async () => {
-            if (!user) return;
+            if (!user) throw new Error('Could not load clerk user');
 
             return await getUserById(user.id);
         },

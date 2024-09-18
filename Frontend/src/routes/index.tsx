@@ -9,7 +9,7 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   return (
     <div className="flex flex-col items-center justify-center">
-      <ProjectFeed projectFeed='featured' />
+      <ProjectFeed projectFeed='recommended' />
     </div>
   );
 }
