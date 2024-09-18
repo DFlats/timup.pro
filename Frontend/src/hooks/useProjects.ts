@@ -3,7 +3,7 @@ import { Project } from "../api/types"
 import { useClientUser } from "./useClientUser";
 import { getProjectById, getProjects } from "../api/endpoints";
 
-type ProjectFeed = 'featured' | 'recommended' | 'user';
+export type ProjectFeed = 'featured' | 'recommended' | 'user';
 
 export function useProjects(projectFeed: ProjectFeed) {
     const { clientUser } = useClientUser();

@@ -8,7 +8,7 @@ export const Route = createFileRoute('/projects')({
 })
 
 function ProjectsPage() {
-  const { userProjects } = useProjects();
+  const { projects } = useProjects('recommended');
 
   function handleModal() {
     const modal = document.getElementById("create-project") as HTMLDialogElement;
@@ -18,7 +18,7 @@ function ProjectsPage() {
   return (
     <div className="p-12 w-screen flex flex-col items-center justify-center">
       <h1 className='text-4xl mb-8'>Projects you are in</h1>
-      {userProjects?.map(project => <ProjectCard key={project.title} project={project} />)}
+      {projects?.map(project => <ProjectCard key={project.title} project={project} />)}
       <button onClick={handleModal} className="button button-primary flex justify-center items-center m-4 w-96 h-96 shadow-xl">
         <div className="text-8xl">+</div>
       </button>
