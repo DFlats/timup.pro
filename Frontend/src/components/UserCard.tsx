@@ -11,7 +11,8 @@ export default function UserCard({ user }: Props) {
         <tbody>
             <tr className="hover">
                 <td>{user.name}</td>
-                <td>{user.tags?.map(tag => <p className="badge badge-primary mr-2" key={tag.id}>{tag.tagValue}</p>)}</td>
+                <td>{user.skillTags?.map(tag => <p className="badge badge-primary mr-2" key={tag}>{tag}</p>)}</td>
+                <td>{user.interestTags?.map(tag => <p className="badge badge-primary mr-2" key={tag}>{tag}</p>)}</td>
             </tr>
         </tbody>
     )

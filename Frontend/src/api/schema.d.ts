@@ -85,10 +85,6 @@ export interface components {
             isCompleted?: boolean;
         };
         ValueTupleOfStringAndString: Record<string, never>;
-        ProjectFilter: {
-            skillTags?: string[] | null;
-            interestTags?: string[] | null;
-        };
         UserResponse: {
             id?: string;
             name?: string;
@@ -112,16 +108,15 @@ export type $defs = Record<string, never>;
 export interface operations {
     Projects_GetProjectsByFilter: {
         parameters: {
-            query?: never;
+            query?: {
+                interests?: string[] | null;
+                skills?: string[] | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["ProjectFilter"];
-            };
-        };
+        requestBody?: never;
         responses: {
             200: {
                 headers: {

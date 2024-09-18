@@ -1,73 +1,57 @@
 import { useQuery } from "@tanstack/react-query";
 import { Project } from "../api/types"
 import { useClientUser } from "./useClientUser";
+import { getProjectById, getProjects } from "../api/endpoints";
 
 export function useProjects() {
     const { clientUser } = useClientUser();
 
-    if (!clientUser) {
-        const { data, error } = useQuery({
-            queryKey: ['hotprojects'],
-            queryFn: async () => {
+    const queryKeyPublicProjects = ['publicProjects'];
+    const queryKeyRecommendedProjects = ['recommendedProjects'];
+    const queryKeyUserProjects = ["userProjects"];
 
-                //fetch projects from backend instead 
-
-                const projects: Project[] = Array(5).fill(
-                    {
-                        id: 0,
-                        title: "Web Site",
-                        description: {
-                            id: 0, text: "We build a website", tags: [
-                                { id: 0, tagValue: "CSS", projects: [] },
-                                { id: 1, tagValue: "HTML", projects: [] },
-                                { id: 2, tagValue: "JavaScript", projects: [] }
-                            ]
-                        },
-                        author: { clerkId: '0', name: "Charles Darwin", email: "charles@email.com" },
-                        authorId: '0',
-                        collaborators: [],
-                        progress: { id: 0, isCompleted: false }
-                    });
-
-                return projects
-            },
-        });
-
-        return {
-            projects: data,
-            error
-        }
-    }
-
-    const { data, error } = useQuery({
-        queryKey: ['tailoredprojects'],
+    const generalProjectsQuery = useQuery({
+        queryKey: queryKeyPublicProjects,
         queryFn: async () => {
-
-            //fetch filtered projects from backend instead 
-
-            const projects: Project[] = Array(5).fill(
-                {
-                    id: 0,
-                    title: "Book Club",
-                    description: {
-                        id: 0, text: "We meet and discuss heavy literature", tags: [
-                            { id: 0, tagValue: "Literature", projects: [] },
-                            { id: 1, tagValue: "Politics", projects: [] },
-                            { id: 2, tagValue: "Debate", projects: [] }
-                        ]
-                    },
-                    author: { clerkId: '0', name: "Benjamin Buttons", email: "Arbe@fjksl.com" },
-                    authorId: '0',
-                    collaborators: [],
-                    progress: { id: 0, isCompleted: false }
-                });
-
-            return projects
+            return await getProjects();
         },
     });
 
+    const getPublicProjects = () => {
+        return generalProjectsQuery.data as Project[] | undefined;
+    }
+
+    const projectsQuery = useQuery({
+        queryKey: queryKeyRecommendedProjects,
+        queryFn: async (): Promise<Project[] | undefined> => {
+            if (!clientUser) return;
+
+            return await getProjects(clientUser.skillTags, clientUser.interestTags);
+        },
+        enabled: !!clientUser
+    });
+
+    const getRecommendedProjects = () => {
+        return projectsQuery.data as Project[] | undefined;
+    }
+
+    const userProjectsQuery = useQuery({
+        queryKey: queryKeyUserProjects,
+        queryFn: async () => {
+            if (!clientUser) return;
+            //TODO: Use real implemented endpoint
+            return await Promise.all(clientUser.projectIds.map(async (id) => await getProjectById(id)))
+        },
+        enabled: !!clientUser
+    });
+
+    const getUserProjects = () => {
+        return userProjectsQuery.data as Project[] | undefined;
+    }
+
     return {
-        projects: data,
-        error
+        allProjects: getPublicProjects(),
+        projectsForUser: getRecommendedProjects(),
+        userProjects: getUserProjects()
     }
 }
