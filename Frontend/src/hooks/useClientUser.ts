@@ -38,58 +38,37 @@ export function useClientUser() {
         return clientUserQuery.data?.interestTags ?? [] as string[]
     }
 
-    const addSkillTag = async (tagText: string) => {
+    const addTag = async (tagText: string, isSkill: boolean) => {
+
         const clientUser = clientUserQuery.data;
         if (!clientUser) return;
 
-        await addTagToUser(clientUser.id, { tagName: tagText, isSkill: true });
+        await addTagToUser(clientUser.id, { tagName: tagText, isSkill });
 
         queryClient.setQueryData(queryKey, {
             ...clientUser,
-            skillTags: [...getSkillTags(), tagText]
-        });
-    };
-
-    const removeSkillTag = async (tagText: string) => {
-        const clientUser = clientUserQuery.data;
-        if (!clientUser) return;
-
-        await removeTagFromUser(clientUser.id, { tagName: tagText, isSkill: true })
-
-        queryClient.setQueryData(queryKey, {
-            ...clientUser,
-            skillTags: getSkillTags().filter(t => t != tagText)
+            skillTags: isSkill ? [...getSkillTags(), tagText] : getSkillTags(),
+            interestTags: !isSkill ? [...getInterestTags(), tagText] : getInterestTags()
         });
     }
 
-    const addInterestTag = async (tagText: string) => {
+    const removeTag = async (tagText: string, isSkill: boolean) => {
         const clientUser = clientUserQuery.data;
         if (!clientUser) return;
 
-        await addTagToUser(clientUser.id, { tagName: tagText, isSkill: false });
+        await removeTagFromUser(clientUser.id, { tagName: tagText, isSkill })
 
         queryClient.setQueryData(queryKey, {
             ...clientUser,
-            interestTags: [...getInterestTags(), tagText]
-        });
-    };
-
-    const removeInterestTag = async (tagText: string) => {
-        const clientUser = clientUserQuery.data;
-        if (!clientUser) return;
-
-        await removeTagFromUser(clientUser.id, { tagName: tagText, isSkill: false })
-
-        queryClient.setQueryData(queryKey, {
-            ...clientUser,
-            interestTags: getInterestTags().filter(t => t != tagText)
+            skillTags: isSkill ? getSkillTags().filter(t => t != tagText) : getSkillTags(),
+            interestTags: !isSkill ? getInterestTags().filter(t => t != tagText) : getInterestTags()
         });
     }
 
     return {
         clientUser: clientUserQuery.data,
-        addTag: addSkillTag,
-        removeTag: removeSkillTag,
+        addTag,
+        removeTag,
         setLocation
     }
 }
