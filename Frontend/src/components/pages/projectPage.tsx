@@ -7,7 +7,12 @@ export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
     const id = Number.parseInt(Route.useParams().id);
     const { project } = useProject(id);
-    return (<p>{`Project page for ${}`}</p>);
+
+    if (!project) {
+        return <p>{`Project (${id}) could not be found`}</p>
+    }
+
+    return (<p>{`Project page for ${project.title}`}</p>);
     // const { project } = useProject(id);
 
     // function handleModal() {

@@ -1,6 +1,6 @@
 import { paths } from './schema';
 import createClient from "openapi-fetch";
-import { Project, User, TagRequest, ProjectRequest } from './types';
+import { Project, User, TagRequest, ProjectRequest, UserRequest } from './types';
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
@@ -17,17 +17,17 @@ export const getProjectsByFilter = async (skillTags?: string[], interestTags?: s
     return response.data as Project[];
 }
 
-export const postProject = async (request: ProjectRequest) => {
+export const postProject = async (projectRequest: ProjectRequest) => {
     await client.POST('/api/Projects', {
-        body: request
+        body: projectRequest
     });
 }
 
 export const getRecommendedProjectsByUserId = async (userId: string) => {
-    const response = await client.GET('/api/Projects/Recommended/{id}', {
+    const response = await client.GET('/api/Projects/RecommendedProjects/{userId}', {
         params: {
             path: {
-                id: userId
+                userId
             }
         }
     });
@@ -38,12 +38,11 @@ export const getRecommendedProjectsByUserId = async (userId: string) => {
     return response.data as Project[];
 }
 
-export const getProjectById = async (id: number) => {
-    console.log(getProjectById);
+export const getProjectById = async (projectId: number) => {
     const response = await client.GET('/api/Projects/{id}', {
         params: {
             path: {
-                id,
+                id: projectId
             }
         }
     });
@@ -57,12 +56,38 @@ export const getProjectById = async (id: number) => {
     return response.data as Project;
 }
 
+export const getProjectsByUserId = async (userId: string) => {
+    const response = await client.GET('/api/Projects/ProjectsByUserId/id', {
+        params: {
+            query: {
+                id: userId
+            }
+        }
+    })
+
+    if (!response.data) {
+        throw new Error(response.error);
+    }
+
+    return response.data as Project[];
+}
+
 export const getUserById = async (id: string): Promise<User> => {
     const response = await client.GET('/api/Users/{id}', {
         params: { path: { id } }
     });
 
+    if (!response.data) {
+        throw new Error(response.error);
+    }
+
     return response.data as User;
+}
+
+export const postUser = async (userRequest: UserRequest) => {
+    await client.POST('/api/Users', {
+        body: userRequest
+    });
 }
 
 export const addTagToUser = async (id: string, tagRequest: TagRequest) => {
@@ -80,4 +105,20 @@ export const removeTagFromUser = async (id: string, tagRequest: TagRequest) => {
         },
         body: tagRequest
     });
+}
+
+export const recommendedUsersByProjectId = async (projectId: number) => {
+    const response = await client.GET('/api/Users/RecommendedUsers/{projectId}', {
+        params: {
+            path: {
+                projectId
+            }
+        }
+    });
+
+    if (!response.data) {
+        throw new Error(response.error);
+    }
+
+    return response.data as User[];
 }
