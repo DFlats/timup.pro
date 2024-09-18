@@ -42,7 +42,6 @@ export function useProjects(projectFeed: ProjectFeed) {
         queryKey: queryKeyUserProjects,
         queryFn: async () => {
             if (!clientUser) return;
-            //TODO: Use real implemented endpoint
             return await Promise.all(clientUser.projectIds.map(async (id) => await getProjectById(id)))
         },
         enabled: !!clientUser && projectFeed == 'user'

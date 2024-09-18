@@ -18,7 +18,19 @@ export const getProjects = async (skillTags?: string[], interestTags?: string[])
 }
 
 export const getProjectById = async (id: number) => {
-    return id;
+    const response = await client.GET('/api/Projects/{id}', {
+        params: {
+            path: {
+                id,
+            }
+        }
+    });
+
+    if (!response.data) {
+        throw new Error('getProjectsById: No data');
+    }
+
+    return response.data as Project;
 }
 
 export const getUserById = async (id: string): Promise<User> => {
