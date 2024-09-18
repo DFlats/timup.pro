@@ -1,6 +1,6 @@
 import { paths } from './schema';
 import createClient from "openapi-fetch";
-import { ProjectFilter, ProjectResponse, Tag, UserResponse } from './types';
+import { Project, User, TagRequest } from './types';
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
