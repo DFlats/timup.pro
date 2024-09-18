@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { Project } from "../api/types";
-import TagButton from "./TagButton";
+import TagButton from "./tagButton";
 
 interface Props {
     project: Project

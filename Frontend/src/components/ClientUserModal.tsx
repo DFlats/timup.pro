@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { useClientUser } from "../hooks";
-import ClientUserForm from "./ClientUserForm";
+import ClientUserForm from "./clientUserForm";
 
 export default function ClientUserModal() {
     const { clientUser } = useClientUser();
