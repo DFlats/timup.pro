@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useClientUser } from "../hooks"
-import { getProjectById, getProjectsByFilter, Project } from "../api"
+import { getProjectsByFilter, getProjectsByUserId, Project } from "../api"
 import { ProjectFeedType } from "../types/types";
 
 export function useProjects(projectFeed: ProjectFeedType) {
@@ -32,8 +32,7 @@ export function useProjects(projectFeed: ProjectFeedType) {
         queryKey: queryKeyUserProjects,
         queryFn: async () => {
             if (!clientUser) return;
-            console.log(clientUser)
-            return await Promise.all(clientUser.projectIds.map(async (id) => await getProjectById(id)))
+            return await getProjectsByUserId(clientUser.id);
         },
         enabled: !!clientUser && projectFeed == 'user'
     });

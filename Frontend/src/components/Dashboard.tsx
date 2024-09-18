@@ -3,16 +3,13 @@
 import { SignedIn, SignedOut, SignInButton, SignOutButton, SignUpButton } from "@clerk/clerk-react";
 import { ClientUserModal } from ".";
 import { useClientUserModal } from "../hooks";
-import { Link } from "@tanstack/react-router";
 
 export function Dashboard() {
     const { openClientUserModal } = useClientUserModal();
 
     return (
         <div className="flex items-center justify-center">
-
             <SignedIn>
-                <Link className="text-white text-3xl" to="/project">Projects</Link>
                 <button className="btn text-3xl" onClick={openClientUserModal}>
                     Profile
                 </button>

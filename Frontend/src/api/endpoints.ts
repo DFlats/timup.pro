@@ -24,10 +24,10 @@ export const postProject = async (projectRequest: ProjectRequest) => {
 }
 
 export const getRecommendedProjectsByUserId = async (userId: string) => {
-    const response = await client.GET('/api/Projects/Recommended/{id}', {
+    const response = await client.GET('/api/Projects/RecommendedProjects/{userId}', {
         params: {
             path: {
-                id: userId
+                userId
             }
         }
     });
