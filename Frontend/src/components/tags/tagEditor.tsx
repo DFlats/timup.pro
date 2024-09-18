@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useRef } from 'react';
-import { TagContainer } from '.';
-import { TagType } from '../types';
+import { TagContainer } from '../../components/tags';
+import { TagType } from '../../types';
 
 interface Props {
     tags: string[],

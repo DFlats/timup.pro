@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { Project } from "../api";
-import { Tag } from ".";
+import { Tag } from "../components/tags";
 
 interface Props {
     project: Project

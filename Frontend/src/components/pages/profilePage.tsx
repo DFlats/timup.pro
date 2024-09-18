@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
 import { useUser } from "../../hooks";
-import { TagContainer } from "../tagContainer";
+import { TagContainer } from "../../components/tags";
 
 export function ProfilePage() {
     const Route = getRouteApi('/profile/$userId');
