@@ -4,7 +4,6 @@ import { Project, User, TagRequest } from './types';
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
-
 export const getProjects = async (skillTags?: string[], interestTags?: string[]): Promise<Project[]> => {
     const response = await client.GET('/api/Projects', {
         params: {

@@ -1,8 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useUsers } from "../hooks";
-import UserCard from "./UserCard";
+import { UserCard } from "../components";
 
-export default function UserGallery() {
+export function UserGallery() {
     const { users } = useUsers();
 
     return (

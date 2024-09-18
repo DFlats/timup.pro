@@ -1,13 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 
-import { Project } from "../api/types";
-import TagButton from "./TagButton";
+import { Project } from "../api";
+import { TagButton } from "../components";
 
 interface Props {
     project: Project
 }
 
-export default function ProjectCard({ project }: Props) {
+export function ProjectCard({ project }: Props) {
     const skillTags =
         project.skillTags
             ? project.skillTags.map(tag => <TagButton key={0} tagText={tag} type='skill' />)

@@ -1,8 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
-
 import { Link } from "@tanstack/react-router";
-import Logo from "../Logo";
-import Dashboard from "../Dashboard";
+import { Dashboard, Logo } from "../../components";
 
 export function Header() {
     return (
