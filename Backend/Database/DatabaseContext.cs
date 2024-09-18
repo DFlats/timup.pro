@@ -1,3 +1,4 @@
+using Backend.Controllers;
 using Backend.Dtos;
 using Backend.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -72,6 +73,18 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return (UserResponse)user;
     }
 
+    internal UserResponse AddUser(User userToAdd)
+    {
+        var user = new User
+        {
+            ClerkId = userToAdd.ClerkId,
+            Name = userToAdd.Name,
+            Email = userToAdd.Email
+        };
+        Users.Add(user);
+        return (UserResponse)user;
+    }
+
     internal bool AddTagToUser(string id, TagRequest tagToAdd)
     {
         var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
@@ -118,5 +131,44 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             .ToList();
 
         return projects;
+    }
+
+    private static User? getUser(string userId, DbSet<User> Users)
+    {
+        return Users.FirstOrDefault(u => u.ClerkId == userId);
+    }
+
+    internal (Statuses, Project?) CreateProject(ProjectRequest projectRequest)
+    {
+        User? user = getUser(projectRequest.AuthorId, Users);
+        if (user is null) return (Statuses.UserNotFound, null);
+        var description = new Description { Text = projectRequest.Description };
+
+        var project = new Project
+        {
+            Title = projectRequest.Title,
+            Author = user,
+            AuthorId = user.ClerkId,
+            Description = description,
+        };
+        Descriptions.Add(description);
+        Projects.Add(project);
+        return (Statuses.Ok, project);
+    }
+
+    internal Project? GetProjectById(int id)
+    {
+        return Projects.Include(p => p.Description).ThenInclude(d => d.Tags)
+                        .Include(p => p.Author)
+                        .FirstOrDefault(p => p.Id == id);
+    }
+
+    public enum Statuses
+    {
+        UserNotFound,
+        ProjectNotFound,
+        TagAlreadyExists,
+        TagNotFound,
+        Ok
     }
 }
