@@ -54,4 +54,12 @@ public class UsersController(DatabaseContext db) : ControllerBase
         }
         return NotFound();
     }
+
+    [HttpGet("RecommendedUsers/{projectId}")]
+    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int projectId)
+    {
+        var res = db.GetRecommendedUsersByProjectId(projectId);
+        if (res.Item1 == DatabaseContext.Statuses.ProjectNotFound) return NotFound("Project not found");
+        return res.Item2!.Select(u => (UserResponse)u).ToList();
+    }
 }
