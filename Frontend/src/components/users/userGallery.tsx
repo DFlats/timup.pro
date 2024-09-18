@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useUsers } from "../hooks";
+import { useUsers } from "../../hooks";
 import { UserCard } from ".";
 
 export function UserGallery() {

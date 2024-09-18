@@ -1,10 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
-
-import { useClientUser } from "../hooks";
-import { ClientUserForm } from ".";
+import { useClientUser } from "../../hooks";
+import { TagEditor } from "../tags";
 
 export function ClientUserModal() {
-    const { clientUser } = useClientUser();
+    const { clientUser, addTag, removeTag } = useClientUser();
 
     if (!clientUser) return;
 
@@ -13,7 +12,11 @@ export function ClientUserModal() {
             <dialog id={import.meta.env.VITE_CLIENT_USER_MODAL_ID} className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">{clientUser.name}</h3>
-                    <ClientUserForm />
+                    <TagEditor
+                        tags={clientUser.skillTags}
+                        tagType='skill'
+                        onAddTag={addTag}
+                        onRemoveTag={removeTag} />
                 </div>
                 <form method="dialog" className="modal-backdrop">
                     <button>close</button>

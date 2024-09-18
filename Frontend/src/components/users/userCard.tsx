@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { User } from "../api";
+import { User } from "../../api";
 
 interface Props {
     user: User

@@ -9,7 +9,6 @@ export function Header() {
                 <Logo />
             </Link>
             <div className="flex items-center justify-center gap-4">
-                <Link className="text-white text-3xl" to="/">Home</Link>
                 <Dashboard />
             </div>
         </header>

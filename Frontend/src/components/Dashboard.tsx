@@ -1,20 +1,27 @@
 /* eslint-disable react/react-in-jsx-scope */
-
 import { SignedIn, SignedOut, SignInButton, SignOutButton, SignUpButton } from "@clerk/clerk-react";
-import { ClientUserModal } from ".";
-import { useClientUserModal } from "../hooks";
+import { ClientUserModal } from "./users";
+import { useClientUser } from "../hooks";
+import { Link } from "@tanstack/react-router";
 
 export function Dashboard() {
-    const { openClientUserModal } = useClientUserModal();
+    const { clientUser } = useClientUser();
+
+    const profileLink = clientUser ? (
+        <Link to={`/profile/${clientUser.id}`}>
+            <button className="btn text-3xl">
+                Profile
+            </button>
+        </Link>
+    ) : null;
 
     return (
         <div className="flex items-center justify-center">
             <SignedIn>
-                <button className="btn text-3xl" onClick={openClientUserModal}>
-                    Profile
-                </button>
+                {profileLink}
+
                 <SignOutButton>
-                    <button className='btn text-3xl'>Sign Out</button>
+                    <button className='mx-4 btn text-3xl'>Sign Out</button>
                 </SignOutButton>
 
                 <ClientUserModal />
@@ -31,7 +38,6 @@ export function Dashboard() {
                     </button>
                 </SignUpButton>
             </SignedOut>
-
         </div>
     );
 }

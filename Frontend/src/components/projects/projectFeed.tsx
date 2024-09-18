@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useProjects } from "../hooks";
-import { ProjectCard } from ".";
-import { ProjectFeedType } from "../types/types";
+import { useProjects } from "../../hooks";
+import { ProjectCard } from "..";
+import { ProjectFeedType } from "../../types/types";
 
 interface Props {
     projectFeed: ProjectFeedType;
