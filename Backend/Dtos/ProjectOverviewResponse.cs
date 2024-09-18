@@ -2,7 +2,7 @@ using Backend.Models;
 
 namespace Backend.Dtos;
 
-public record ProjectOverviewResponse(int Id, string Title, string AuthorName, string AuthorId, int CollabCount, string Description, string[] SkillTags, string[] InterestTags, bool IsCompleted)
+public record ProjectOverviewResponse(int Id, string Title, string AuthorId, int CollabCount, string Description, string[] SkillTags, string[] InterestTags, bool IsCompleted)
 {
     public static implicit operator ProjectOverviewResponse(Project project)
     {
@@ -14,7 +14,6 @@ public record ProjectOverviewResponse(int Id, string Title, string AuthorName, s
         return new ProjectOverviewResponse(
             project.Id,
             project.Title,
-            project.Author.Name,
             project.AuthorId,
             collabCount,
             project.Description.Text,
