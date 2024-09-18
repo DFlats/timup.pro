@@ -21,16 +21,22 @@ public class UsersController(DatabaseContext db) : ControllerBase
     [HttpPost]
     public IActionResult AddUser(UserRequest userToAdd)
     {
-        var user = new User()
+        var user = db.GetUserById(userToAdd.ClerkId);
+        if (user is not null)
+        {
+            return Conflict("User already exists");
+        }
+
+        var newUser = new User()
         {
             ClerkId = userToAdd.ClerkId,
             Name = userToAdd.Name,
             Email = userToAdd.Email
         };
 
-        var userResponse = db.AddUser(user);
+        var userResponse = db.AddUser(newUser);
         db.SaveChanges();
-        return CreatedAtAction((nameof(GetUserById)), new {id = user.ClerkId}, userResponse);
+        return CreatedAtAction(nameof(GetUserById), new { id = newUser.ClerkId }, userResponse);
     }
 
     [HttpPost("AddTag/{id}")]
