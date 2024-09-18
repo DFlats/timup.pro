@@ -2,7 +2,7 @@
 import { useClientUser } from "../../hooks";
 import { TagEditor } from "../tags";
 
-export function ClientUserModal() {
+export function EditUserModal() {
     const { clientUser, addTag, removeTag } = useClientUser();
 
     if (!clientUser) return;
@@ -15,6 +15,11 @@ export function ClientUserModal() {
                     <TagEditor
                         tags={clientUser.skillTags}
                         tagType='skill'
+                        onAddTag={addTag}
+                        onRemoveTag={removeTag} />
+                    <TagEditor
+                        tags={clientUser.interestTags}
+                        tagType='interest'
                         onAddTag={addTag}
                         onRemoveTag={removeTag} />
                 </div>
