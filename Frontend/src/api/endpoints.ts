@@ -1,6 +1,6 @@
 import { paths } from './schema';
 import createClient from "openapi-fetch";
-import { ProjectFilter } from './types';
+import { ProjectFilter, ProjectResponse } from './types';
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
@@ -9,5 +9,5 @@ export const getProjects = async (filter: ProjectFilter) => {
         body: filter
     })
 
-    return response.data;
+    return response.data as ProjectResponse[];
 }
