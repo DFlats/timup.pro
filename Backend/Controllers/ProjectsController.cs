@@ -22,7 +22,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return Ok(db.PopulateProjects());
     }
 
-    [HttpPost()]
+    [HttpPost]
     public IActionResult CreateProject(ProjectRequest projectRequest)
     {
         var result = db.CreateProject(projectRequest);

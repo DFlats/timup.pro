@@ -30,7 +30,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
 
         var userResponse = db.AddUser(user);
         db.SaveChanges();
-        return CreatedAtAction("GetUserById", user.ClerkId, userResponse);
+        return CreatedAtAction((nameof(GetUserById)), new {id = user.ClerkId}, userResponse);
     }
 
     [HttpPost("AddTag/{id}")]
