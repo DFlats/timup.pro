@@ -21,7 +21,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet("Recommended/{id}")]
-    public List<ProjectResponse> GetProjectsByUserId(string id) => db.GetProjectsByUserId(id);
+    public List<ProjectResponse> GetRecommendedProjectsByUserId(string id) => db.GetRecommendedProjectsByUserId(id);
 
     [HttpPost("Populate")]
     public IActionResult PopulateProjects()
@@ -49,5 +49,12 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return (ProjectResponse)res;
     }
 
+    [HttpGet("ProjectsByUserId/id")]
+    public ActionResult<List<ProjectResponse>> GetProjectsByUserId(string id)
+    {
+        var projects = db.GetProjectsByUserId(id);
+        if(projects.Item1 != DatabaseContext.Statuses.Ok) return NotFound("User not found");
+        return projects.Item2!.Select(p => (ProjectResponse) p).ToList();
+    }
 
 }
