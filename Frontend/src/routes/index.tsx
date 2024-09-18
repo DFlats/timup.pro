@@ -3,12 +3,12 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ProjectFeed } from '../components/';
 
 export const Route = createFileRoute('/')({
-  component: Home
+  component: HomePage
 })
 
-function Home() {
+function HomePage() {
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <ProjectFeed />
     </div>
   );

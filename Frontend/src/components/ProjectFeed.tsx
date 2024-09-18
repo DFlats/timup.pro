@@ -6,7 +6,7 @@ export function ProjectFeed() {
     const { clientUser } = useClientUser();
     const { allProjects } = useProjects();
 
-    const heading = clientUser ? 'Projects tailored for you' : 'Hot projects';
+    const heading = clientUser ? 'Projects tailored for you' : 'Featured projects';
 
     return (
 

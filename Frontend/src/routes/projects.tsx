@@ -4,10 +4,10 @@ import { useProjects } from '../hooks';
 import { ProjectCard, CreateProjectModal } from '../components';
 
 export const Route = createFileRoute('/projects')({
-  component: Projects
+  component: ProjectsPage
 })
 
-function Projects() {
+function ProjectsPage() {
   const { userProjects } = useProjects();
 
   function handleModal() {
