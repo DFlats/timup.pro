@@ -50,11 +50,11 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet("ProjectsByUserId/id")]
-    public ActionResult<List<ProjectResponse>> GetProjectsByUserId(string id)
+    public ActionResult<List<ProjectOverviewResponse>> GetProjectsByUserId(string id)
     {
         var projects = db.GetProjectsByUserId(id);
         if(projects.Item1 != DatabaseContext.Statuses.Ok) return NotFound("User not found");
-        return projects.Item2!.Select(p => (ProjectResponse) p).ToList();
+        return projects.Item2!.Select(p => (ProjectOverviewResponse) p).ToList();
     }
 
 }
