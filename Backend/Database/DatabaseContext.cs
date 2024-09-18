@@ -76,7 +76,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
         if (user is null) return false;
 
-        if (user.Tags.FirstOrDefault(t => t.TagValue == tagToAdd.TagName) == null)
+        if (user.Tags.FirstOrDefault(t => t.TagValue == tagToAdd.TagName && t.IsSkill == tagToAdd.IsSkill) == null)
         {
             Tag newTag = new Tag
             {
