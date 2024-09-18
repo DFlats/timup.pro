@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 
-import { CreateProjectForm } from "../components";
+import { CreateProjectForm } from ".";
 
 export function CreateProjectModal() {
     return (
