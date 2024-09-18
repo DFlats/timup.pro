@@ -1,8 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { useRef } from 'react';
-import useClientUser from '../hooks/useClientUser';
 import TagButton from "./TagButton";
+import { useClientUser } from '../hooks';
 
 export default function ClientUserForm() {
     const { clientUser, addTag, removeTag } = useClientUser();
