@@ -66,7 +66,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     internal User? GetUserById(string id)
     {
         var user = Users
-        .Include(u => u.Projects)
+        .Include(u => u.Projects).ThenInclude(p => p.Description).ThenInclude(d => d.Tags)
         .Include(u => u.Tags)
         .FirstOrDefault(u => u.ClerkId == id);
         if (user is null) return null;
@@ -133,7 +133,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return projects;
     }
 
-    internal List<ProjectResponse> GetProjectsByUserId(string id)
+    internal List<ProjectResponse> GetRecommendedProjectsByUserId(string id)
     {
         var user = GetUserById(id);
 
@@ -184,9 +184,11 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
                         .FirstOrDefault(p => p.Id == id);
     }
 
-    internal List<Project> GetProjectsByUserId(string id)
+    internal (Statuses, List<Project>?) GetProjectsByUserId(string id)
     {
-        throw new NotImplementedException();
+        var user = GetUserById(id);
+        if(user is null) return (Statuses.UserNotFound, null); 
+        return (Statuses.Ok, user.Projects);
     }
 
     public enum Statuses
