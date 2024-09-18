@@ -15,7 +15,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
     {
         var user = db.GetUserById(id);
         if (user is null) return NotFound("User not found");
-        return user;
+        return (UserResponse)user;
     }
 
     [HttpPost]
@@ -27,16 +27,8 @@ public class UsersController(DatabaseContext db) : ControllerBase
             return Conflict("User already exists");
         }
 
-        var newUser = new User()
-        {
-            ClerkId = userToAdd.ClerkId,
-            Name = userToAdd.Name,
-            Email = userToAdd.Email
-        };
-
-        var userResponse = db.AddUser(newUser);
-        db.SaveChanges();
-        return CreatedAtAction(nameof(GetUserById), new { id = newUser.ClerkId }, userResponse);
+        var newUser = db.AddUser(userToAdd);
+        return CreatedAtAction(nameof(GetUserById), new { id = newUser.ClerkId }, (UserResponse)newUser);
     }
 
     [HttpPost("AddTag/{id}")]
