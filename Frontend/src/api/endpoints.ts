@@ -1,6 +1,6 @@
 import { paths } from './schema';
 import createClient from "openapi-fetch";
-import { ProjectFilter, ProjectResponse, UserResponse } from './types';
+import { ProjectFilter, ProjectResponse, Tag, UserResponse } from './types';
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
@@ -18,4 +18,15 @@ export const getUserById = async (id: string) => {
     })
 
     return response.data as UserResponse;
+}
+
+export const userAddTag = async (id: string, tag: Tag) => {
+    const response = await client.POST('/api/Users/AddTag/{id}', {
+        params: { path: { id } },
+        body: {
+            tagName: tag.tagValue
+        }
+    })
+
+    return response.data;
 }
