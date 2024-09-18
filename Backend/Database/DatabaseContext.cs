@@ -153,6 +153,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         };
         Descriptions.Add(description);
         Projects.Add(project);
+        user.Projects.Add(project);
         return (Statuses.Ok, project);
     }
 
