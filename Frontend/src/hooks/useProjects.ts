@@ -1,12 +1,35 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useUsers } from "../hooks"
 import { getProjectByProjectId, getProjects, getProjectsByUserId, createProject, Project } from "../api"
-import { ProjectFeedType } from "../types/types";
 
-export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
+type FeaturedProjects = {
+    type: 'featuredProjects'
+};
+
+type RecommendedProjectsForClientUser = {
+    type: 'recommendedProjectsForClientUser',
+}
+
+type ProjectsOwnedByClientUser = {
+    type: 'projectsOwnedByClientUser'
+}
+
+type ProjectById = {
+    type: 'projectById',
+    projectId: number
+}
+
+type Params =
+    FeaturedProjects |
+    RecommendedProjectsForClientUser |
+    ProjectsOwnedByClientUser |
+    ProjectById;
+
+export function useProjects(params: Params) {
     const { clientUser } = useUsers({ type: 'clientUser' })
     const queryClient = useQueryClient();
 
+    const projectId = params.type == 'projectById' && params.projectId;
     const queryKeyFeaturedProjects = ['projects', 'featured'];
     const queryKeyRecommendedProjects = ['projects', 'recommended'];
     const queryKeyUserProjects = ['projects', 'user'];
@@ -17,35 +40,35 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
         queryFn: async () => {
             return await getProjects();
         },
-        enabled: projectFeed == 'featured'
+        enabled: params.type == 'featuredProjects'
     });
 
-    const recommendedProjectsQuery = useQuery({
+    const recommendedProjectsForClientUserQuery = useQuery({
         queryKey: queryKeyRecommendedProjects,
         queryFn: async (): Promise<Project[]> => {
             if (!clientUser) return [];
 
             return await getProjects(clientUser.skillTags, clientUser.interestTags);
         },
-        enabled: !!clientUser && projectFeed == 'recommendedForUser'
+        enabled: params.type == 'recommendedProjectsForClientUser'
     });
 
-    const userProjectsQuery = useQuery({
+    const projectsOwnedByClientUserQuery = useQuery({
         queryKey: queryKeyUserProjects,
         queryFn: async () => {
             if (!clientUser) return;
             return await getProjectsByUserId(clientUser.id);
         },
-        enabled: !!clientUser && projectFeed == 'ownedByUser'
+        enabled: params.type == 'projectsOwnedByClientUser'
     });
 
-    const projectQuery = useQuery({
+    const projectByIdQuery = useQuery({
         queryKey: queryKeyProject,
         queryFn: async () => {
             if (!projectId) return;
             return await getProjectByProjectId(projectId);
         },
-        enabled: !!projectId,
+        enabled: params.type == 'projectById'
     });
 
     const createProjectInHook = async (
@@ -54,22 +77,16 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
         authorId: string
     ) => {
         const project = await createProject({ title, description, authorId });
-        const existingProjects = userProjectsQuery.data as Project[];
+        const existingProjects = projectsOwnedByClientUserQuery.data as Project[];
         queryClient.setQueryData(queryKeyUserProjects, [...existingProjects, project]);
         return project;
     };
 
-    const projects = () => {
-        switch (projectFeed) {
-            case 'featured': return featuredProjectsQuery.data as Project[];
-            case 'recommendedForUser': return recommendedProjectsQuery.data as Project[];
-            case 'ownedByUser': return userProjectsQuery.data as Project[];
-        }
-    }
-
     return {
-        projects: projects(),
-        project: projectQuery.data as Project,
+        featuredProjects: featuredProjectsQuery.data as Project[],
+        recommendedProjectsForClientUser: recommendedProjectsForClientUserQuery.data as Project[],
+        projectsOwnedByClientUser: projectsOwnedByClientUserQuery.data as Project[],
+        projectById: projectByIdQuery.data as Project,
         createProject: createProjectInHook
     }
 

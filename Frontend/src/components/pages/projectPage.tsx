@@ -1,25 +1,37 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { getRouteApi } from "@tanstack/react-router";
-import { useProjects } from "../../hooks";
-import { ProjectCard } from "../projects";
 
 export function ProjectPage() {
-    const Route = getRouteApi('/project/$id');
-    const id = Number.parseInt(Route.useParams().id);
-    const { projects, project } = useProjects('ownedByUser', id);
-
-    if (!project) {
-        return <p>{`Project (${id}) could not be found`}</p>
-    }
-
-    const ownedProject = projects ? projects.some(p => p.id == project.id) : false;
+    // const Route = getRouteApi('/project/$id');
+    // const id = Number.parseInt(Route.useParams().id);
+    // const { projects, project } = useProjects('ownedByUser', id);
 
     return (
-        <>
-            {ownedProject && <h2>Your project</h2>}
-            <ProjectCard project={project} />
-            {/* <UserTable projectId={project.id}/> */}
-        </>)
+        <><div className="hero bg-base-200 min-h-screen">
+            <div className="hero-content text-center">
+                <div className="max-w-md">
+                    <h1 className="text-5xl font-bold">Hello there</h1>
+                    <p className="py-6">
+                        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
+                        quasi. In deleniti eaque aut repudiandae et a id nisi.
+                    </p>
+                    <button className="btn btn-primary">Get Started</button>
+                </div>
+            </div>
+        </div>
+        </>);
+
+    // if (!project) {
+    //     return <p>{`Project (${id}) could not be found`}</p>
+    // }
+
+    // const ownedProject = projects ? projects.some(p => p.id == project.id) : false;
+
+    // return (
+    //     <>
+    //         {ownedProject && <h2>Your project</h2>}
+    //         <ProjectCard project={project} />
+    //         {/* <UserTable projectId={project.id}/> */}
+    //     </>)
 
 
     // return (

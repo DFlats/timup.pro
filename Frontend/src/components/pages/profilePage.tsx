@@ -33,7 +33,7 @@ export function ProfilePage() {
                         Edit Profile
                     </button>
 
-                    <ProjectFeed projectFeed={"ownedByUser"} />
+                    <ProjectFeed projectFeed={"projectsOwnedByClientUser"} />
                 </>
             }
         </>

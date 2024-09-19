@@ -8,18 +8,19 @@ interface Props {
 }
 
 export function ProjectFeed({ projectFeed }: Props) {
-    const { projects } = useProjects(projectFeed);
-
-    //console.log(projectFeed);
-    //console.log(projects);
+    const { featuredProjects, recommendedProjectsForClientUser, projectsOwnedByClientUser } = useProjects({ type: projectFeed });
+    const projects =
+        featuredProjects ??
+        recommendedProjectsForClientUser ??
+        projectsOwnedByClientUser;
 
     const heading = () => {
         switch (projectFeed) {
-            case 'featured':
+            case 'featuredProjects':
                 return 'Featured projects';
-            case 'recommendedForUser':
+            case 'recommendedProjectsForClientUser':
                 return 'Projects tailored for you';
-            case 'ownedByUser':
+            case 'projectsOwnedByClientUser':
                 return 'Your projects';
         }
     }

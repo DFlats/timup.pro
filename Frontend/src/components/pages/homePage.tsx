@@ -8,14 +8,13 @@ export function HomePage() {
 
     const projectFeed = (): ProjectFeedType => {
         if (clientUser)
-            return 'recommendedForUser'
+            return 'recommendedProjectsForClientUser'
         else
-            return 'featured'
+            return 'featuredProjects'
     }
 
     return (
         <>
-            <p>{projectFeed()}</p>
             <ProjectFeed projectFeed={projectFeed()} />
         </>
     );

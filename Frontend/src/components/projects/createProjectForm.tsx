@@ -12,7 +12,8 @@ type Inputs = {
 export function CreateProjectForm() {
     const { clientUser } = useUsers({ type: 'clientUser' });
     const navigate = useNavigate();
-    const { createProject } = useProjects('ownedByUser');
+    const { createProject } = useProjects({ type: 'projectsOwnedByClientUser' });
+
     const {
         register,
         handleSubmit,

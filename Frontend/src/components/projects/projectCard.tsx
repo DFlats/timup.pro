@@ -18,6 +18,7 @@ export function ProjectCard({ project }: Props) {
                 <img
                     src="https://storage.googleapis.com/pod_public/1300/141876.jpg"
                     alt="Floating Island" />
+
             </figure>
             <div className="card-body">
                 <h2 className="card-title">{project.title}</h2>
@@ -25,6 +26,7 @@ export function ProjectCard({ project }: Props) {
                 <TagContainer tags={project.skillTags} tagType={'skill'} />
                 <TagContainer tags={project.interestTags} tagType={'interest'} />
                 <div className="card-actions justify-end">
+                    <p>{`Initiated by ${project.authorName}`}</p>
                 </div>
             </div>
         </Link>
