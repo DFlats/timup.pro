@@ -18,9 +18,13 @@ export const getProjectsByFilter = async (skillTags?: string[], interestTags?: s
 }
 
 export const postProject = async (projectRequest: ProjectRequest) => {
-    await client.POST('/api/Projects', {
+   const response =  await client.POST('/api/Projects', {
         body: projectRequest
     });
+
+    if(!response.data) throw new Error("Response data does not exist");
+    
+    return response.data;
 }
 
 export const getRecommendedProjectsByUserId = async (userId: string) => {
