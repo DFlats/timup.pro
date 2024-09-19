@@ -22,7 +22,6 @@ export function useClientUser() {
 
             return await getUserByUserId(user.id);
         },
-        staleTime: Infinity,
         enabled: !!user
     });
 

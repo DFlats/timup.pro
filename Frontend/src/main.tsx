@@ -7,7 +7,14 @@ import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { DefaultCatchBoundary, NotFound } from './components/routing';
 import './index.css'
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const router = createRouter({
   routeTree,

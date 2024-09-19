@@ -46,7 +46,6 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
             return await getProjectByProjectId(projectId);
         },
         enabled: !!projectId,
-        staleTime: Infinity,
     });
 
     const createProjectInHook = async (
