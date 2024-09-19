@@ -72,7 +72,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.UpdateUser(requestBody) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => NoContent(),
+            DbErrorStatusCodes.NoContent => NoContent(),
             _ => StatusCode(500),
         };
     }

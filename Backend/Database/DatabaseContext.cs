@@ -283,7 +283,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
 
 
         SaveChanges();
-        return DbErrorStatusCodes.Ok;
+        return DbErrorStatusCodes.NoContent;
     }
 
        internal DbErrorStatusCodes UpdateUser(UserPatchRequest requestBody)
@@ -334,6 +334,6 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         }
 
         SaveChanges();
-        return DbErrorStatusCodes.Ok;
+        return DbErrorStatusCodes.NoContent;
     }
 }
