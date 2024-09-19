@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Backend.Controllers;
-using Backend.Dtos;
 
 namespace Backend.Models;
 public class Project

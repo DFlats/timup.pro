@@ -9,7 +9,7 @@ public record ProjectOverviewResponse(int Id, string Title, string AuthorId, int
 
         var skillTags = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
         var interestTags = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
-        var collabCount = project.Collaborators.Count();
+        var collabCount = project.Collaborators.Count;
 
         return new ProjectOverviewResponse(
             project.Id,

@@ -1,8 +1,5 @@
-using Backend.Controllers;
 using Backend.Dtos;
 using Backend.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -43,6 +40,43 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
                             .Select(p => (ProjectResponse) p)];
     }
 
+    internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests)
+    {
+
+        skills ??= [];
+        interests ??= [];
+
+        var projects = Projects
+            .Include(p => p.Author)
+            .Include(p => p.Description)
+            .ThenInclude(p => p.Tags)
+            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Select(p => (ProjectResponse)p)
+            .ToList();
+
+        return projects;
+    }
+
+    internal (DbErrorStatusCodes, List<ProjectResponse>?) GetRecommendedProjectsByUserId(string id)
+    {
+        var user = GetUserById(id);
+
+        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
+
+        var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
+        var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+
+        var projects = Projects
+            .Include(p => p.Author)
+            .Include(p => p.Description)
+            .ThenInclude(p => p.Tags)
+            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Select(p => (ProjectResponse)p)
+            .ToList();
+
+        return (DbErrorStatusCodes.Ok, projects);
+    }
+
     internal bool PopulateProjects(int count = 10)
     {
         try
@@ -73,28 +107,35 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return user;
     }
 
-    internal User AddUser(UserRequest userToAdd)
+    internal (DbErrorStatusCodes, User?) CreateUser(UserRequest userToAdd)
     {
-        var user = new User
+        if (Users.Any(u => u.ClerkId == userToAdd.ClerkId)) return (DbErrorStatusCodes.UserAlreadyExists, null);
+        try
         {
-            ClerkId = userToAdd.ClerkId,
-            Name = userToAdd.Name,
-            Email = userToAdd.Email
-        };
-
-        Users.Add(user);
-        SaveChanges();
-        return user;
+            var user = new User
+            {
+                ClerkId = userToAdd.ClerkId,
+                Name = userToAdd.Name,
+                Email = userToAdd.Email
+            };
+            Users.Add(user);
+            SaveChanges();
+            return (DbErrorStatusCodes.Ok, user);
+        }
+        catch
+        {
+            return (DbErrorStatusCodes.UserAlreadyExists, null);
+        }
     }
 
-    internal bool AddTagToUser(string id, TagRequest tagToAdd)
+    internal DbErrorStatusCodes AddTagToUser(string id, TagRequest tagToAdd)
     {
         var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
-        if (user is null) return false;
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
 
         if (user.Tags.FirstOrDefault(t => t.TagValue == tagToAdd.TagName && t.IsSkill == tagToAdd.IsSkill) == null)
         {
-            Tag newTag = new Tag
+            Tag newTag = new()
             {
                 TagValue = tagToAdd.TagName,
                 IsSkill = tagToAdd.IsSkill,
@@ -102,68 +143,37 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             };
             Tags.Add(newTag);
             user.Tags.Add(newTag);
-            return true;
+            SaveChanges();
+            return DbErrorStatusCodes.Ok;
         }
-        return true;
+        return DbErrorStatusCodes.TagAlreadyExists;
     }
 
-    internal bool RemoveTagFromUser(string id, TagRequest tagToRemove)
+    internal DbErrorStatusCodes RemoveTagFromUser(string id, TagRequest tagToRemove)
     {
         var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
-        if (user is null) return false;
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
 
         var tag = user.Tags.FirstOrDefault(t => t.TagValue == tagToRemove.TagName && t.IsSkill == tagToRemove.IsSkill);
         if (tag != null)
         {
             user.Tags.Remove(tag);
             Tags.Remove(tag);
-            return true;
+            SaveChanges();
+            return DbErrorStatusCodes.Ok;
         }
-        return false;
+        return DbErrorStatusCodes.TagNotFound;
     }
 
-    internal List<ProjectResponse> GetProjectsByFilter(string[] skills, string[] interests)
-    {
-        var projects = Projects
-            .Include(p => p.Author)
-            .Include(p => p.Description)
-            .ThenInclude(p => p.Tags)
-            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
-            .Select(p => (ProjectResponse)p)
-            .ToList();
-
-        return projects;
-    }
-
-    internal List<ProjectResponse> GetRecommendedProjectsByUserId(string id)
-    {
-        var user = GetUserById(id);
-
-        if (user is null) return [];
-
-        var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
-        var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
-
-        var projects = Projects
-            .Include(p => p.Author)
-            .Include(p => p.Description)
-            .ThenInclude(p => p.Tags)
-            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
-            .Select(p => (ProjectResponse)p)
-            .ToList();
-
-        return projects;
-    }
-
-    private static User? getUser(string userId, DbSet<User> Users)
+    private static User? GetUser(string userId, DbSet<User> Users)
     {
         return Users.FirstOrDefault(u => u.ClerkId == userId);
     }
 
-    internal (Statuses, Project?) CreateProject(ProjectRequest projectRequest)
+    internal (DbErrorStatusCodes, Project?) CreateProject(ProjectRequest projectRequest)
     {
-        User? user = getUser(projectRequest.AuthorId, Users);
-        if (user is null) return (Statuses.UserNotFound, null);
+        User? user = GetUser(projectRequest.AuthorId, Users);
+        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
         var description = new Description { Text = projectRequest.Description };
 
         var project = new Project
@@ -176,7 +186,8 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         Descriptions.Add(description);
         Projects.Add(project);
         user.Projects.Add(project);
-        return (Statuses.Ok, project);
+        SaveChanges();
+        return (DbErrorStatusCodes.Ok, project);
     }
 
     internal Project? GetProjectById(int id)
@@ -186,19 +197,19 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
                         .FirstOrDefault(p => p.Id == id);
     }
 
-    internal (Statuses, List<Project>?) GetProjectsByUserId(string id)
+    internal (DbErrorStatusCodes, List<Project>?) GetProjectsByUserId(string id)
     {
         var user = GetUserById(id);
-        if(user is null) return (Statuses.UserNotFound, null); 
-        return (Statuses.Ok, user.Projects);
+        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
+        return (DbErrorStatusCodes.Ok, user.Projects);
     }
 
 
-       internal (Statuses ,List<User>?) GetRecommendedUsersByProjectId(int id)
+    internal (DbErrorStatusCodes, List<User>?) GetRecommendedUsersByProjectId(int id)
     {
         var project = GetProjectById(id);
 
-        if (project is null) return (Statuses.ProjectNotFound, null);
+        if (project is null) return (DbErrorStatusCodes.ProjectNotFound, null);
 
         var interests = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
         var skills = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
@@ -208,15 +219,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
             .ToList();
 
-        return (Statuses.Ok, users);
+        return (DbErrorStatusCodes.Ok, users);
     }
 
-    public enum Statuses
-    {
-        UserNotFound,
-        ProjectNotFound,
-        TagAlreadyExists,
-        TagNotFound,
-        Ok
-    }
 }
