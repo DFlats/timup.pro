@@ -93,24 +93,6 @@ export const createUser = async (userRequest: UserRequest) => {
     });
 }
 
-export const addTagToUserByUserId = async (id: string, tagRequest: TagRequest) => {
-    await client.POST('/api/Users/AddTagToUserByUserId/{id}', {
-        params: { path: { id } },
-        body: tagRequest
-    })
-}
-
-export const removeTagFromUserByUserId = async (id: string, tagRequest: TagRequest) => {
-    await client.DELETE('/api/Users/RemoveTagFromUserByUserId/{id}', {
-        params: {
-            path: {
-                id
-            }
-        },
-        body: tagRequest
-    });
-}
-
 export const getRecommendedUsersByProjectId = async (projectId: number) => {
     const response = await client.GET('/api/Users/GetRecommendedUsersByProjectId/{id}', {
         params: {
