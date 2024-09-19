@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { TagType } from "../../types";
-import { Tag, TagProps } from "../../components/tags";
+import { PlusTag, Tag, TagProps } from "../../components/tags";
 
 interface Props {
     tags: string[],
@@ -40,6 +40,7 @@ export function TagContainer({ tags, tagType, onRemoveTag, size = 'full' }: Prop
                     {tags.length > 0 &&
                         tags.map(tag => <Tag key={tag} {...tagProps(tag)} />)
                     }
+                    <PlusTag />
                     {tags.length == 0 && noTagsTag()}
                 </div>
             </div>

@@ -1,7 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export function PlusTag() {
+    const [characters, setCharacters] = useState(1);
+
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleClick = () => {
@@ -10,7 +12,11 @@ export function PlusTag() {
     }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (inputRef.current && (e.key == 'Enter' || e.key == 'Tab')) {
+        if (!inputRef.current) return;
+
+        setCharacters(inputRef.current.value.length);
+
+        if (e.key == 'Enter' || e.key == 'Tab') {
             console.log(`New tag with value ${inputRef.current.value}`)
         }
     }
@@ -22,7 +28,10 @@ export function PlusTag() {
             <input
                 ref={inputRef}
                 placeholder="+"
-                className="input"
+                className="bg-transparent"
+                style={{
+                    width: `${characters}ch`
+                }}
                 onKeyDown={handleKeyDown} />
         </button>
     );
