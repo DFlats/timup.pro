@@ -19,7 +19,7 @@ export function UserTable({ projectId }: props) {
                         <th>Skills</th>
                     </tr>
                 </thead>
-                {users && users.map(user => <UserRow key={user.id} user={user} />)}
+                {users && users.map(user => <UserRow key={user.id} user={user} size='compact' />)}
             </table>
         </Link>
     )

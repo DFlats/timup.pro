@@ -22,8 +22,13 @@ export function ProjectPage() {
             : false;
 
     return (
-        <><div className="hero bg-base-200 min-h-screen">
-            <div className="hero-content text-center">
+        <><div
+            className="hero min-h-screen"
+            style={{
+                backgroundImage: "url(https://storage.googleapis.com/pod_public/1300/141876.jpg)",
+            }}>
+            <div className="hero-overlay bg-opacity-95"></div>
+            <div className="hero-content text-neutral-content text-center">
                 <div className="max-w-md">
                     <h1 className="text-5xl font-bold">{project.title}</h1>
                     <p className="py-6">{project.description}</p>
@@ -31,7 +36,6 @@ export function ProjectPage() {
                         <p>You are a part of this project</p>
                     }
                     <UserTable projectId={project.id} />
-                    <button className="btn btn-primary">Get Started</button>
                 </div>
             </div>
         </div>

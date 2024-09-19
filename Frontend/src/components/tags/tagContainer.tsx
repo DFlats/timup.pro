@@ -5,10 +5,11 @@ import { Tag, TagProps } from "../../components/tags";
 interface Props {
     tags: string[],
     tagType: TagType,
+    size?: 'compact' | 'full'
     onRemoveTag?: (tag: string, tagType: TagType) => void
 }
 
-export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
+export function TagContainer({ tags, tagType, onRemoveTag, size = 'full' }: Props) {
     const tagProps = (tag: string) => {
         return {
             tag,
@@ -33,7 +34,9 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
 
     return (
         <div className='rounded-xl bg-opacity-5 bg-white p-3 m-2'>
-            <h2>{heading()}</h2>
+            {size == 'full' &&
+                <h2>{heading()}</h2>
+            }
             <div className="flex flex-row flex-wrap">
                 {tags.length > 0 &&
                     tags.map(tag => <Tag key={tag} {...tagProps(tag)} />)
