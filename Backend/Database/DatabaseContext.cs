@@ -40,6 +40,43 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
                             .Select(p => (ProjectResponse) p)];
     }
 
+    internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests)
+    {
+
+        skills ??= [];
+        interests ??= [];
+
+        var projects = Projects
+            .Include(p => p.Author)
+            .Include(p => p.Description)
+            .ThenInclude(p => p.Tags)
+            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Select(p => (ProjectResponse)p)
+            .ToList();
+
+        return projects;
+    }
+
+    internal (DbErrorStatusCodes, List<ProjectResponse>?) GetRecommendedProjectsByUserId(string id)
+    {
+        var user = GetUserById(id);
+
+        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
+
+        var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
+        var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+
+        var projects = Projects
+            .Include(p => p.Author)
+            .Include(p => p.Description)
+            .ThenInclude(p => p.Tags)
+            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Select(p => (ProjectResponse)p)
+            .ToList();
+
+        return (DbErrorStatusCodes.Ok, projects);
+    }
+
     internal bool PopulateProjects(int count = 10)
     {
         try
@@ -126,43 +163,6 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             return DbErrorStatusCodes.Ok;
         }
         return DbErrorStatusCodes.TagNotFound;
-    }
-
-    internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests)
-    {
-
-        skills ??= [];
-        interests ??= [];
-
-        var projects = Projects
-            .Include(p => p.Author)
-            .Include(p => p.Description)
-            .ThenInclude(p => p.Tags)
-            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
-            .Select(p => (ProjectResponse)p)
-            .ToList();
-
-        return projects;
-    }
-
-    internal List<ProjectResponse> GetRecommendedProjectsByUserId(string id)
-    {
-        var user = GetUserById(id);
-
-        if (user is null) return [];
-
-        var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
-        var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
-
-        var projects = Projects
-            .Include(p => p.Author)
-            .Include(p => p.Description)
-            .ThenInclude(p => p.Tags)
-            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
-            .Select(p => (ProjectResponse)p)
-            .ToList();
-
-        return projects;
     }
 
     private static User? GetUser(string userId, DbSet<User> Users)

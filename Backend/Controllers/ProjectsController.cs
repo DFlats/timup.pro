@@ -24,10 +24,17 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return db.GetProjectsByFilter(skills, interests);
     }
 
-    [HttpGet("RecommendedProjects/{userId}")]
-    public List<ProjectResponse> GetRecommendedProjectsByUserId(string userId)
+    [HttpGet("GetRecommendedProjectsByUserId/{id:string}")]
+    public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string id)
     {
-        return db.GetRecommendedProjectsByUserId(userId);
+        (var status, var projects) = db.GetRecommendedProjectsByUserId(id);
+
+        return status switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.Ok => projects!,
+            _ => StatusCode(500),
+        };
     }
 
     [HttpPost("Populate")]
@@ -39,15 +46,17 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     [HttpPost]
     public IActionResult CreateProject(ProjectRequest projectRequest)
     {
-        var result = db.CreateProject(projectRequest);
-        if (result.Item1 == DbErrorStatusCodes.Ok)
-        {
-            return CreatedAtAction(nameof(GetProjectById), new { id = result.Item2!.Id }, (ProjectResponse)result.Item2);
-        }
-        return NotFound("User not found");
+        (var status, var project) = db.CreateProject(projectRequest);
+
+        return status switch {
+            DbErrorStatusCodes.UserNotFound => NotFound("Could not find a user for given project"),
+            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetProjectById), new { id = project!.Id }, (ProjectResponse)project),
+            _ => StatusCode(500),
+        };
+
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("GetProjectById/{id:int}")]
     public ActionResult<ProjectResponse> GetProjectById(int id)
     {
         var res = db.GetProjectById(id);
@@ -55,12 +64,18 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return (ProjectResponse)res;
     }
 
-    [HttpGet("ProjectsByUserId/id")]
+    [HttpGet("GetProjectsByUserId/{id:string}")]
     public ActionResult<List<ProjectOverviewResponse>> GetProjectsByUserId(string id)
     {
-        var projects = db.GetProjectsByUserId(id);
-        if (projects.Item1 != DbErrorStatusCodes.Ok) return NotFound("User not found");
-        return projects.Item2!.Select(p => (ProjectOverviewResponse)p).ToList();
+        (var status, var projects) = db.GetProjectsByUserId(id);
+
+        return status switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.Ok => projects!.Select(p => (ProjectOverviewResponse)p).ToList(),
+            _ => StatusCode(500),
+        };
+
     }
 
 }
