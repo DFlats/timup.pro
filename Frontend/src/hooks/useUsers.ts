@@ -4,7 +4,7 @@ import { getRecommendedUsersByProjectId } from "../api";
 export function useUsers(projectId: number) {
   console.log("PROJECT ID: " + projectId);
   // if (!projectId) return;
-  const queryKeyUser = ["project", projectId];
+  const queryKeyUser = ["user", "recommendedByProject", projectId];
 
   const userQuery = useQuery({
     queryKey: queryKeyUser,

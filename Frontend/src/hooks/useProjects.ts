@@ -7,9 +7,9 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
     const { clientUser } = useClientUser();
     const queryClient = useQueryClient();
 
-    const queryKeyFeaturedProjects = ['featuredProjects'];
-    const queryKeyRecommendedProjects = ['recommendedProjects'];
-    const queryKeyUserProjects = ["userProjects"];
+    const queryKeyFeaturedProjects = ['projects', 'featured'];
+    const queryKeyRecommendedProjects = ['projects', 'recommended'];
+    const queryKeyUserProjects = ['projects', 'user'];
     const queryKeyProject = ["project", projectId];
 
     const featuredProjectsQuery = useQuery({

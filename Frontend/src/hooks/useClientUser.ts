@@ -7,7 +7,7 @@ export function useClientUser() {
     const { user } = useUser();
     const queryClient = useQueryClient();
 
-    const queryKey = ['clientUser'];
+    const queryKey = ['user', 'client'];
 
     const clientUserQuery = useQuery({
         queryKey,
