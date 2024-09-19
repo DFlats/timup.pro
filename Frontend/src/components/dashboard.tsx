@@ -1,13 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { SignedIn, SignedOut, SignInButton, SignOutButton, SignUpButton } from "@clerk/clerk-react";
-import { useClientUser, useCreateProjectModal } from "../hooks";
+import { useClientUser } from "../hooks";
 import { Link } from "@tanstack/react-router";
 import { CreateProjectModal } from "./projects";
+import { openCreateProjectModal } from "../modalControllers";
 
 
 export function Dashboard() {
     const { clientUser } = useClientUser();
-    const { openCreateProjectModal } = useCreateProjectModal();
 
     const profileLink = clientUser ? (
         <Link to={`/profile/${clientUser.id}`}>

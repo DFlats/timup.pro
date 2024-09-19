@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useClientUser } from "../hooks"
-import { getProjectByProjectId, getProjects, getProjectsByUserId, createProject, Project, ProjectRequest } from "../api"
+import { getProjectByProjectId, getProjects, getProjectsByUserId, createProject, Project } from "../api"
 import { ProjectFeedType } from "../types/types";
 
 export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {

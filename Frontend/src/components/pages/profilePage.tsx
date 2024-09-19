@@ -3,7 +3,8 @@ import { getRouteApi } from "@tanstack/react-router";
 import { useClientUser, useUser } from "../../hooks";
 import { TagContainer } from "../../components/tags";
 import { ProjectFeed } from "../projects";
-import { EditUserModal, useEditUserModal } from "../users";
+import { EditUserModal } from "../users";
+import { openEditUserModal } from "../../modalControllers";
 
 export function ProfilePage() {
     const Route = getRouteApi('/profile/$userId');
@@ -11,8 +12,6 @@ export function ProfilePage() {
 
     const { user } = useUser(userId);
     const { clientUser } = useClientUser();
-
-    const { openEditUserModal } = useEditUserModal()
 
     if (!user) return;
 
