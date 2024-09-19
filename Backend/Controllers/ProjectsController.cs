@@ -50,14 +50,14 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
 
         return status switch {
             DbErrorStatusCodes.UserNotFound => NotFound("Could not find a user for given project"),
-            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetProjectById), new { id = project!.Id }, (ProjectResponse)project),
+            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetProjectByProjectId), new { id = project!.Id }, (ProjectResponse)project),
             _ => StatusCode(500),
         };
 
     }
 
-    [HttpGet("GetProjectById/{id}")]
-    public ActionResult<ProjectResponse> GetProjectById(int id)
+    [HttpGet("GetProjectByProjectId/{id}")]
+    public ActionResult<ProjectResponse> GetProjectByProjectId(int id)
     {
         var res = db.GetProjectById(id);
         if (res == null) return NotFound("Project was not found");
