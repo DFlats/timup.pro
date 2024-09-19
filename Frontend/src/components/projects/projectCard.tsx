@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 
+import { Link } from "@tanstack/react-router";
 import { Project } from "../../api";
 import { Tag } from "../tags";
 
@@ -14,7 +15,10 @@ export function ProjectCard({ project }: Props) {
             : null;
 
     return (
-        <div className="m-4 card bg-base-100 image-full w-96 shadow-xl">
+        <Link className="m-4 card bg-base-100 image-full w-96 shadow-xl" to='/project/$id' params={{
+            id: project.id.toString(),
+        }}
+        >
             <figure>
                 <img
                     src="https://storage.googleapis.com/pod_public/1300/141876.jpg"
@@ -29,6 +33,6 @@ export function ProjectCard({ project }: Props) {
                 <div className="card-actions justify-end">
                 </div>
             </div>
-        </div>
+         </Link>
     );
 }

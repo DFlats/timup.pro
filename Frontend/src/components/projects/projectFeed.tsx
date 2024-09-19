@@ -10,8 +10,8 @@ interface Props {
 export function ProjectFeed({ projectFeed }: Props) {
     const { projects } = useProjects(projectFeed);
 
-    console.log(projectFeed);
-    console.log(projects);
+    //console.log(projectFeed);
+    //console.log(projects);
 
     const heading = () => {
         switch (projectFeed) {
