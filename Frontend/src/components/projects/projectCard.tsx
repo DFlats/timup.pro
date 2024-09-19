@@ -22,7 +22,9 @@ export function ProjectCard({ project }: Props) {
             </figure>
             <div className="card-body">
                 <h2 className="card-title">{project.title}</h2>
-                <p>{project.description}</p>
+                <div className='max-w-full'>
+                    <p>{project.description}</p>
+                </div>
                 <TagContainer tags={project.skillTags} tagType={'skill'} />
                 <TagContainer tags={project.interestTags} tagType={'interest'} />
                 <div className="card-actions justify-end">
