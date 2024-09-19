@@ -4,7 +4,7 @@ import { Project, User, TagRequest, ProjectRequest, UserRequest } from './types'
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
-export const getProjectsByFilter = async (skillTags?: string[], interestTags?: string[]): Promise<Project[]> => {
+export const getProjects = async (skillTags?: string[], interestTags?: string[]): Promise<Project[]> => {
     const response = await client.GET('/api/Projects/GetProjects', {
         params: {
             query: {
@@ -17,7 +17,7 @@ export const getProjectsByFilter = async (skillTags?: string[], interestTags?: s
     return response.data as Project[];
 }
 
-export const postProject = async (projectRequest: ProjectRequest) => {
+export const createProject = async (projectRequest: ProjectRequest) => {
     const response = await client.POST('/api/Projects/CreateProject', {
         body: projectRequest
     });
@@ -43,7 +43,7 @@ export const getRecommendedProjectsByUserId = async (userId: string) => {
     return response.data as Project[];
 }
 
-export const getProjectById = async (projectId: number) => {
+export const getProjectByProjectId = async (projectId: number) => {
     const response = await client.GET('/api/Projects/GetProjectByProjectId/{id}', {
         params: {
             path: {
@@ -75,7 +75,11 @@ export const getProjectsByUserId = async (userId: string) => {
     return response.data as Project[];
 }
 
-export const getUserById = async (id: string): Promise<User> => {
+export const updateProject = async () => {
+    return;
+}
+
+export const getUserByUserId = async (id: string): Promise<User> => {
     const response = await client.GET('/api/Users/GetUserByUserId/{id}', {
         params: { path: { id } }
     });
@@ -87,20 +91,20 @@ export const getUserById = async (id: string): Promise<User> => {
     return response.data as User;
 }
 
-export const postUser = async (userRequest: UserRequest) => {
+export const createUser = async (userRequest: UserRequest) => {
     await client.POST('/api/Users/CreateUser', {
         body: userRequest
     });
 }
 
-export const addTagToUser = async (id: string, tagRequest: TagRequest) => {
+export const addTagToUserByUserId = async (id: string, tagRequest: TagRequest) => {
     await client.POST('/api/Users/AddTagToUserByUserId/{id}', {
         params: { path: { id } },
         body: tagRequest
     })
 }
 
-export const removeTagFromUser = async (id: string, tagRequest: TagRequest) => {
+export const removeTagFromUserByUserId = async (id: string, tagRequest: TagRequest) => {
     await client.DELETE('/api/Users/RemoveTagFromUserByUserId/{id}', {
         params: {
             path: {
@@ -111,7 +115,7 @@ export const removeTagFromUser = async (id: string, tagRequest: TagRequest) => {
     });
 }
 
-export const recommendedUsersByProjectId = async (projectId: number) => {
+export const getRecommendedUsersByProjectId = async (projectId: number) => {
     const response = await client.GET('/api/Users/GetRecommendedUsersByProjectId/{id}', {
         params: {
             path: {
@@ -125,5 +129,9 @@ export const recommendedUsersByProjectId = async (projectId: number) => {
     }
     console.log(response.data)
     return response.data as User[];
+}
+
+export const updateUser = async () => {
+    return;
 }
 

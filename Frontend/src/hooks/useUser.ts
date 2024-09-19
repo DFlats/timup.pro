@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUserById } from "../api";
+import { getUserByUserId } from "../api";
 
 export function useUser(userId: string) {
     const queryKeyUser = ["user", userId];
@@ -7,7 +7,7 @@ export function useUser(userId: string) {
     const userQuery = useQuery({
         queryKey: queryKeyUser,
         queryFn: async () => {
-            return await getUserById(userId);
+            return await getUserByUserId(userId);
         },
     });
 

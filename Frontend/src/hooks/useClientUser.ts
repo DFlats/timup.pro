@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { addTagToUser, getUserById, postUser, removeTagFromUser } from "../api";
+import { addTagToUserByUserId, getUserByUserId, createUser, removeTagFromUserByUserId } from "../api";
 import { TagType } from "../types";
 
 export function useClientUser() {
@@ -14,13 +14,13 @@ export function useClientUser() {
         queryFn: async () => {
             if (!user) throw new Error('Could not load clerk user');
 
-            await postUser({
+            await createUser({
                 clerkId: user.id,
                 email: user.primaryEmailAddress!.toString(),
                 name: user.fullName!
             });
 
-            return await getUserById(user.id);
+            return await getUserByUserId(user.id);
         },
         staleTime: Infinity,
         enabled: !!user
@@ -51,7 +51,7 @@ export function useClientUser() {
 
         const isSkill = tagType == 'skill';
 
-        await addTagToUser(clientUser.id, { tagName: tagText, isSkill });
+        await addTagToUserByUserId(clientUser.id, { tagName: tagText, isSkill });
 
         queryClient.setQueryData(queryKey, {
             ...clientUser,
@@ -67,7 +67,7 @@ export function useClientUser() {
 
         const isSkill = tagType == 'skill';
 
-        await removeTagFromUser(clientUser.id, { tagName: tagText, isSkill })
+        await removeTagFromUserByUserId(clientUser.id, { tagName: tagText, isSkill })
 
         queryClient.setQueryData(queryKey, {
             ...clientUser,

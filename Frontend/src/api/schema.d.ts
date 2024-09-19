@@ -196,6 +196,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Users/UpdateUser": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["Users_UpdateUser"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -255,6 +271,11 @@ export interface components {
         TagRequest: {
             tagName?: string;
             isSkill?: boolean;
+        };
+        UserPatchRequest: {
+            clerkId?: string;
+            skillTags?: string[] | null;
+            interestTags?: string[] | null;
         };
     };
     responses: never;
@@ -526,6 +547,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserResponse"][];
+                };
+            };
+        };
+    };
+    Users_UpdateUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserPatchRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
                 };
             };
         };

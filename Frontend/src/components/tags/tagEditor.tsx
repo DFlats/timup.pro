@@ -31,9 +31,16 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
         }
     }
 
+    const submitLabel = () => {
+        switch (tagType) {
+            case 'skill': return 'Add Skill';
+            case 'interest': return 'Add Interest'
+        }
+    }
+
     return (
         <div
-            className="flex flex-col">
+            className="my-4 gap-2 flex flex-col">
             <TagContainer
                 tags={tags}
                 tagType={tagType}
@@ -52,7 +59,7 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
                     ref={addSkillRef}
                     className='btn m-4'
                     onClick={handleAddTag}>
-                    Add Skill
+                    {submitLabel()}
                 </button>
             </div>
         </div>

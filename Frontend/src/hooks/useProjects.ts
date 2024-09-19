@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useClientUser } from "../hooks"
-import { getProjectById, getProjectsByFilter, getProjectsByUserId, postProject, Project } from "../api"
+import { getProjectByProjectId, getProjects, getProjectsByUserId, createProject, Project } from "../api"
 import { ProjectFeedType } from "../types/types";
 
 export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
@@ -15,7 +15,7 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
     const featuredProjectsQuery = useQuery({
         queryKey: queryKeyFeaturedProjects,
         queryFn: async () => {
-            return await getProjectsByFilter();
+            return await getProjects();
         },
         enabled: projectFeed == 'featured'
     });
@@ -25,7 +25,7 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
         queryFn: async (): Promise<Project[]> => {
             if (!clientUser) return [];
 
-            return await getProjectsByFilter(clientUser.skillTags, clientUser.interestTags);
+            return await getProjects(clientUser.skillTags, clientUser.interestTags);
         },
         enabled: !!clientUser && projectFeed == 'recommended'
     });
@@ -43,7 +43,7 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
         queryKey: queryKeyProject,
         queryFn: async () => {
             if (!projectId) return;
-            return await getProjectById(projectId);
+            return await getProjectByProjectId(projectId);
         },
         enabled: !!projectId,
         staleTime: Infinity,
@@ -54,7 +54,7 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
         description: string,
         authorId: string
     ) => {
-        const project = await postProject({ title, description, authorId });
+        const project = await createProject({ title, description, authorId });
         const existingProjects = userProjectsQuery.data as Project[];
         queryClient.setQueryData(queryKeyUserProjects, [...existingProjects, project]);
         return project;
