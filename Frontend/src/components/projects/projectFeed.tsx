@@ -17,9 +17,9 @@ export function ProjectFeed({ projectFeed }: Props) {
         switch (projectFeed) {
             case 'featured':
                 return 'Featured projects';
-            case 'recommended':
+            case 'recommendedForUser':
                 return 'Projects tailored for you';
-            case 'user':
+            case 'ownedByUser':
                 return 'Your projects';
         }
     }

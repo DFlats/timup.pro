@@ -1,2 +1,2 @@
-export type ProjectFeedType = 'featured' | 'recommended' | 'user';
+export type ProjectFeedType = 'featured' | 'recommendedForUser' | 'ownedByUser';
 export type TagType = 'skill' | 'interest';

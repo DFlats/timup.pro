@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
-import { useClientUser, useUser } from "../../hooks";
+import { useClientUser, useUsers } from "../../hooks";
 import { TagContainer } from "../../components/tags";
 import { ProjectFeed } from "../projects";
 import { EditUserModal } from "../users";
@@ -10,7 +10,7 @@ export function ProfilePage() {
     const Route = getRouteApi('/profile/$userId');
     const { userId } = Route.useParams();
 
-    const { user } = useUser(userId);
+    const { userById: user } = useUsers({ type: 'userId', userId });
     const { clientUser } = useClientUser();
 
     if (!user) return;
@@ -33,7 +33,7 @@ export function ProfilePage() {
                         Edit Profile
                     </button>
 
-                    <ProjectFeed projectFeed={"user"} />
+                    <ProjectFeed projectFeed={"ownedByUser"} />
                 </>
             }
         </>

@@ -12,7 +12,7 @@ type Inputs = {
 export function CreateProjectForm() {
     const { clientUser } = useClientUser();
     const navigate = useNavigate();
-    const { createProject } = useProjects('user');
+    const { createProject } = useProjects('ownedByUser');
     const {
         register,
         handleSubmit,
@@ -23,9 +23,9 @@ export function CreateProjectForm() {
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         if (!clientUser || !createProject) return;
         const createdProject = await createProject(data.title, data.description, clientUser.id);
-        const modal = document.getElementById(import.meta.env.VITE_CREATE_PROJECT_MODAL_ID)as HTMLDialogElement | null;
-        if(modal){
-        modal.close();
+        const modal = document.getElementById(import.meta.env.VITE_CREATE_PROJECT_MODAL_ID) as HTMLDialogElement | null;
+        if (modal) {
+            modal.close();
         }
         navigate({
             to: '/project/$id',

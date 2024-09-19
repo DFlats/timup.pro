@@ -27,7 +27,7 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
 
             return await getProjects(clientUser.skillTags, clientUser.interestTags);
         },
-        enabled: !!clientUser && projectFeed == 'recommended'
+        enabled: !!clientUser && projectFeed == 'recommendedForUser'
     });
 
     const userProjectsQuery = useQuery({
@@ -36,7 +36,7 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
             if (!clientUser) return;
             return await getProjectsByUserId(clientUser.id);
         },
-        enabled: !!clientUser && projectFeed == 'user'
+        enabled: !!clientUser && projectFeed == 'ownedByUser'
     });
 
     const projectQuery = useQuery({
@@ -62,8 +62,8 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
     const projects = () => {
         switch (projectFeed) {
             case 'featured': return featuredProjectsQuery.data as Project[];
-            case 'recommended': return recommendedProjectsQuery.data as Project[];
-            case 'user': return userProjectsQuery.data as Project[];
+            case 'recommendedForUser': return recommendedProjectsQuery.data as Project[];
+            case 'ownedByUser': return userProjectsQuery.data as Project[];
         }
     }
 

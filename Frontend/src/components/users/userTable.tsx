@@ -8,13 +8,10 @@ interface props {
 }
 
 export function UserTable({ projectId }: props) {
-    const { users } = useUsers(projectId);
-    console.log(users);
+    const { usersRecommendedForProject: users } = useUsers({ type: 'recommendedForProject', projectId });
+
     return (
-        <Link className="" to='/project/$id' params={{
-            id: projectId.toString(),
-        }}
-        >
+        <Link className="" to='/project/$id' params={{ id: projectId.toString() }}>
             <table className="table">
                 <thead>
                     <tr>
@@ -25,6 +22,5 @@ export function UserTable({ projectId }: props) {
                 {users && users.map(user => <UserRow key={user.id} user={user} />)}
             </table>
         </Link>
-
     )
 }

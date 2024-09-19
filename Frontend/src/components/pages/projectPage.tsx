@@ -6,7 +6,7 @@ import { ProjectCard } from "../projects";
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
     const id = Number.parseInt(Route.useParams().id);
-    const { projects, project } = useProjects('user', id);
+    const { projects, project } = useProjects('ownedByUser', id);
 
     if (!project) {
         return <p>{`Project (${id}) could not be found`}</p>

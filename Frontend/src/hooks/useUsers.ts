@@ -1,19 +1,41 @@
 import { useQuery } from "@tanstack/react-query";
-import { getRecommendedUsersByProjectId } from "../api";
+import { getRecommendedUsersByProjectId, getUserByUserId } from "../api";
 
-export function useUsers(projectId: number) {
-  console.log("PROJECT ID: " + projectId);
-  // if (!projectId) return;
-  const queryKeyUser = ["user", "recommendedByProject", projectId];
+type RecommendedForProject = {
+  type: 'recommendedForProject',
+  projectId: number
+}
 
-  const userQuery = useQuery({
-    queryKey: queryKeyUser,
+type UserId = {
+  type: 'userId',
+  userId: string
+}
+
+export function useUsers(params: RecommendedForProject | UserId) {
+  const userId = params.type == 'userId' ? params.userId : undefined;
+  const projectId = params.type == 'recommendedForProject' ? params.projectId : undefined;
+
+  const queryKeyRecommendedForProject = ["users", "recommendedForProject", projectId];
+  const queryKeyUserById = ["users", "byId", userId];
+
+  const recommendedForProjectQuery = useQuery({
+    queryKey: queryKeyRecommendedForProject,
     queryFn: async () => {
-      return await getRecommendedUsersByProjectId(projectId);
+      return await getRecommendedUsersByProjectId(projectId!);
     },
+    enabled: params.type == 'recommendedForProject'
+  });
+
+  const userByIdQuery = useQuery({
+    queryKey: queryKeyUserById,
+    queryFn: async () => {
+      return await getUserByUserId(userId!);
+    },
+    enabled: params.type == 'userId'
   });
 
   return {
-    users: userQuery.data,
+    userById: userByIdQuery.data,
+    usersRecommendedForProject: recommendedForProjectQuery.data,
   };
 }

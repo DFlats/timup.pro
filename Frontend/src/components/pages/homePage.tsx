@@ -8,7 +8,7 @@ export function HomePage() {
 
     const projectFeed = (): ProjectFeedType => {
         if (clientUser)
-            return 'recommended'
+            return 'recommendedForUser'
         else
             return 'featured'
     }
