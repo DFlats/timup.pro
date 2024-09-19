@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { addTagToUserByUserId, getUserByUserId, createUser, removeTagFromUserByUserId } from "../api";
+import { getUserByUserId, createUser, updateUser, UserPatchRequest } from "../api";
 import { TagType } from "../types";
 
 export function useClientUser() {
@@ -44,42 +44,43 @@ export function useClientUser() {
         return clientUserQuery.data?.interestTags ?? [] as string[]
     }
 
-    const addTag = async (tagText: string, tagType: TagType) => {
+    const updateTags = async (tagText: string, tagType: TagType, operation: 'add' | 'remove') => {
         const clientUser = clientUserQuery.data;
 
         if (!clientUser) return;
 
-        const isSkill = tagType == 'skill';
+        const calculateUpdatedTags = (): { updatedSkillTags?: string[], updatedInterestTags?: string[] } => {
+            if (operation == 'add' && tagType == 'skill')
+                return { updatedSkillTags: [...getSkillTags(), tagText] }
+            if (operation == 'add' && tagType == 'interest')
+                return { updatedInterestTags: [...getInterestTags(), tagText] }
+            if (operation == 'remove' && tagType == 'skill')
+                return { updatedSkillTags: [...getSkillTags(), tagText] }
+            if (operation == 'remove' && tagType == 'interest')
+                return { updatedInterestTags: [...getInterestTags(), tagText] }
+            return {}
+        }
 
-        await addTagToUserByUserId(clientUser.id, { tagName: tagText, isSkill });
+        const { updatedSkillTags, updatedInterestTags } = calculateUpdatedTags();
+
+        const request: UserPatchRequest = {
+            skillTags: updatedSkillTags,
+            interestTags: updatedInterestTags
+        };
+
+        await updateUser(request);
 
         queryClient.setQueryData(queryKey, {
             ...clientUser,
-            skillTags: isSkill ? [...getSkillTags(), tagText] : getSkillTags(),
-            interestTags: !isSkill ? [...getInterestTags(), tagText] : getInterestTags()
-        });
-    }
-
-    const removeTag = async (tagText: string, tagType: TagType) => {
-        const clientUser = clientUserQuery.data;
-
-        if (!clientUser) return;
-
-        const isSkill = tagType == 'skill';
-
-        await removeTagFromUserByUserId(clientUser.id, { tagName: tagText, isSkill })
-
-        queryClient.setQueryData(queryKey, {
-            ...clientUser,
-            skillTags: isSkill ? getSkillTags().filter(t => t != tagText) : getSkillTags(),
-            interestTags: !isSkill ? getInterestTags().filter(t => t != tagText) : getInterestTags()
+            skillTags: updatedSkillTags ?? getSkillTags(),
+            interestTags: updatedInterestTags ?? getInterestTags()
         });
     }
 
     return {
         clientUser: clientUserQuery.data,
-        addTag,
-        removeTag,
+        addTag: async (tagText: string, tagType: TagType) => updateTags(tagText, tagType, 'add'),
+        removeTag: async (tagText: string, tagType: TagType) => updateTags(tagText, tagType, 'remove'),
         setLocation
     }
 }

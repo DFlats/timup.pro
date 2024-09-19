@@ -30,12 +30,12 @@ export function Dashboard() {
             </SignedIn>
             <SignedOut>
                 <SignInButton mode='modal'>
-                    <button className="btn text-3xl">
+                    <button className="btn">
                         Sign In
                     </button>
                 </SignInButton>
                 <SignUpButton mode='modal'>
-                    <button className="btn text-3xl">
+                    <button className="btn">
                         Sign Up
                     </button>
                 </SignUpButton>
