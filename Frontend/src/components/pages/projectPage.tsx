@@ -8,20 +8,11 @@ export function ProjectPage() {
     const id = Number.parseInt(Route.useParams().id);
     const { projects, project } = useProjects('user', id);
 
-    //console.log("ProjectPage");
-    //console.log(project);
-    //console.log(projects);
-
     if (!project) {
         return <p>{`Project (${id}) could not be found`}</p>
     }
 
     const ownedProject = projects ? projects.some(p => p.id == project.id) : false;
-
-    // function handleModal() {
-    //     const modal = document.getElementById("create-project") as HTMLDialogElement;
-    //     modal.showModal();
-    // }
 
     return (
         <>

@@ -3,6 +3,7 @@ import { getRouteApi } from "@tanstack/react-router";
 import { useClientUser, useEditUserModal, useUser } from "../../hooks";
 import { TagContainer } from "../../components/tags";
 import { ProjectFeed } from "../projects";
+import { EditUserModal } from "../users";
 
 export function ProfilePage() {
     const Route = getRouteApi('/profile/$userId');
@@ -24,15 +25,16 @@ export function ProfilePage() {
             <h1>{finalUser.name}</h1>
             <TagContainer tags={finalUser.skillTags} tagType='skill' />
             <TagContainer tags={finalUser.interestTags} tagType='interest' />
+            <EditUserModal />
             {userIsClient &&
-            <>
-                <button
-                    className='btn'
-                    onClick={openEditUserModal}>
-                    Edit Profile
-                </button>
-                
-                <ProjectFeed projectFeed={"user"}/>
+                <>
+                    <button
+                        className='btn'
+                        onClick={openEditUserModal}>
+                        Edit Profile
+                    </button>
+
+                    <ProjectFeed projectFeed={"user"} />
                 </>
             }
         </>
