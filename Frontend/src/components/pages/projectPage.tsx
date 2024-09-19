@@ -10,11 +10,15 @@ export function ProjectPage() {
     const { project } = useProject(id);
     const { projects } = useProjects('user');
 
+    console.log("ProjectPage");
+    console.log(project);
+    console.log(projects);
+
     if (!project) {
         return <p>{`Project (${id}) could not be found`}</p>
     }
 
-    const ownedProject = projects.some(p => p.id == project.id);
+    const ownedProject = projects ? projects.some(p => p.id == project.id) : false;
 
     // function handleModal() {
     //     const modal = document.getElementById("create-project") as HTMLDialogElement;
