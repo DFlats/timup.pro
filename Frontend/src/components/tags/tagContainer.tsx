@@ -19,10 +19,15 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
 
     const heading = () => {
         switch (tagType) {
-            case 'skill':
-                return 'Skills'
-            case 'interest':
-                return 'Interests'
+            case 'skill': return 'Skills'
+            case 'interest': return 'Interests'
+        }
+    }
+
+    const noTagsTag = () => {
+        switch (tagType) {
+            case 'skill': return <Tag tag="Eager to learn!" tagType='skill' />
+            case 'interest': return <Tag tag="Curious about everything!" tagType='interest' />
         }
     }
 
@@ -30,7 +35,10 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
         <>
             <h2>{heading()}</h2>
             <div className="flex flex-row flex-wrap">
-                {tags.map(tag => <Tag key={tag} {...tagProps(tag)} />)}
+                {tags.length > 0 &&
+                    tags.map(tag => <Tag key={tag} {...tagProps(tag)} />)
+                }
+                {tags.length == 0 && noTagsTag()}
             </div>
         </>
     )
