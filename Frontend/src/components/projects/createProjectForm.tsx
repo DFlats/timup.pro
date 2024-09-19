@@ -2,17 +2,21 @@
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useProjects, useUsers } from "../../hooks";
 import { useNavigate } from "@tanstack/react-router";
+import { TagEditor } from "../tags";
+import { useState } from "react";
+import { TagType } from "../../types";
 
 type Inputs = {
     title: string;
     description: string;
 };
 
-
 export function CreateProjectForm() {
     const { clientUser } = useUsers({ type: 'clientUser' });
     const navigate = useNavigate();
     const { createProject } = useProjects({ type: 'projectsOwnedByClientUser' });
+    const [skillTags, setSkillTags] = useState<string[]>([]);
+    const [interestTags, setInterestTags] = useState<string[]>([]);
 
     const {
         register,
@@ -20,6 +24,26 @@ export function CreateProjectForm() {
         formState: { errors },
         reset
     } = useForm<Inputs>()
+
+    const handleAddTag = (tag: string, tagType: TagType) => {
+        switch (tagType) {
+            case 'skill':
+                setSkillTags([...skillTags, tag]);
+                break;
+            case 'interest':
+                setInterestTags([...interestTags, tag]);
+        }
+    }
+
+    const handleRemoveTag = (tag: string, tagType: TagType) => {
+        switch (tagType) {
+            case 'skill':
+                setSkillTags(skillTags.filter(t => t != tag));
+                break;
+            case 'interest':
+                setInterestTags(interestTags.filter(t => t != tag));
+        }
+    }
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         if (!clientUser || !createProject) return;
@@ -32,7 +56,6 @@ export function CreateProjectForm() {
             to: '/project/$id',
             params: { id: createdProject.id.toString() }
         })
-        reset();
     }
 
     if (!clientUser) return;
@@ -44,7 +67,16 @@ export function CreateProjectForm() {
 
             <label className="pt-8 pb-1" htmlFor="name">Description* {errors.description && <span>This field is required</span>}</label>
             <input className="input input-bordered input-primary w-full mb-10" {...register("description", { required: true })} />
-
+            <TagEditor
+                tags={skillTags}
+                tagType='skill'
+                onAddTag={handleAddTag}
+                onRemoveTag={handleRemoveTag} />
+            <TagEditor
+                tags={skillTags}
+                tagType='interest'
+                onAddTag={handleAddTag}
+                onRemoveTag={handleRemoveTag} />
             <button className="btn btn-primary mb-4 w-full" type="submit">Submit</button>
         </form>
     )

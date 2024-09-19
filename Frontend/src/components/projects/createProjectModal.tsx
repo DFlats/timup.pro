@@ -13,6 +13,7 @@ export function CreateProjectModal() {
                 </h3>
                 <CreateProjectForm />
             </div>
+        
             <form
                 method="dialog"
                 className="modal-backdrop">
