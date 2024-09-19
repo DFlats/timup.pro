@@ -37,11 +37,12 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("CreateProject")]
-    public IActionResult CreateProject(ProjectRequest projectRequest)
+    public ActionResult<ProjectResponse> CreateProject(ProjectRequest projectRequest)
     {
         (var status, var project) = db.CreateProject(projectRequest);
 
-        return status switch {
+        return status switch
+        {
             DbErrorStatusCodes.UserNotFound => NotFound("Could not find a user for given project"),
             DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetProjectByProjectId), new { id = project!.Id }, (ProjectResponse)project),
             _ => StatusCode(500),
@@ -66,6 +67,20 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.Ok => projects!.Select(p => (ProjectOverviewResponse)p).ToList(),
+            _ => StatusCode(500),
+        };
+    }
+
+    [HttpPatch("UpdateProject")]
+    public IActionResult UpdateProject(ProjectPatchRequest requestBody)
+    {
+        var status = db.UpdateProject(requestBody);
+
+        return status switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.UserNotAuthorized => Unauthorized("User not authorized"),
+            DbErrorStatusCodes.Ok => Ok("Project updated"),
             _ => StatusCode(500),
         };
     }

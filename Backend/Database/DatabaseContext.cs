@@ -222,4 +222,67 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return (DbErrorStatusCodes.Ok, users);
     }
 
+    internal DbErrorStatusCodes UpdateProject(ProjectPatchRequest requestBody)
+    {
+        var user = Users.
+        Include(u => u.Projects).ThenInclude(p => p.Progress)
+            .Include(u => u.Projects).ThenInclude(p => p.Description).ThenInclude(d => d.Tags)
+            .FirstOrDefault(u => u.ClerkId == requestBody.AuthorId);
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
+
+        var project = user.Projects.FirstOrDefault(p => p.Id == requestBody.ProjectId);
+        if (project is null) return DbErrorStatusCodes.UserNotAuthorized;
+
+        project.Title = requestBody.Title is not null ? requestBody.Title : project.Title;
+        project.Description.Text = requestBody.Description is not null ? requestBody.Description : project.Description.Text;
+
+        if (requestBody.SkillTags is not null)
+        {
+            project.Description.Tags
+                .Where(t => t.IsSkill == true)
+                .ToList()
+                .ForEach(t => project.Description.Tags
+                .Remove(t));
+
+            foreach (var skill in requestBody.SkillTags)
+            {
+                Tag newTag = new()
+                {
+                    TagValue = skill,
+                    IsSkill = true,
+                    UserId = requestBody.AuthorId
+                };
+                Tags.Add(newTag);
+                project.Description.Tags.Add(newTag);
+            }
+        }
+
+        if (requestBody.InterestTags is not null)
+        {
+            project.Description.Tags
+                .Where(t => t.IsSkill == false)
+                .ToList()
+                .ForEach(t => project.Description.Tags
+                .Remove(t));
+
+            foreach (var skill in requestBody.InterestTags)
+            {
+                Tag newTag = new()
+                {
+                    TagValue = skill,
+                    IsSkill = true,
+                    UserId = requestBody.AuthorId
+                };
+                Tags.Add(newTag);
+                project.Description.Tags.Add(newTag);
+            }
+        }
+
+        if (requestBody.IsCompleted is bool value) {
+            project.Progress.IsCompleted = value;
+        }
+
+        SaveChanges();
+        return DbErrorStatusCodes.Ok;
+    }
 }
