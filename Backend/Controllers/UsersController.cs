@@ -9,7 +9,7 @@ namespace Backend.Controllers;
 public class UsersController(DatabaseContext db) : ControllerBase
 {
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:string}")]
     public ActionResult<UserResponse> GetUserById(string id)
     {
         var user = db.GetUserById(id);
@@ -30,8 +30,8 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPost("AddTag/{id}")]
-    public IActionResult AddTagToUser(string id, TagRequest tagToAdd)
+    [HttpPost("AddTagToUserId/{id:string}")]
+    public IActionResult AddTagToUserId(string id, TagRequest tagToAdd)
     {
         return db.AddTagToUser(id, tagToAdd) switch
         {
@@ -42,8 +42,8 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpDelete("RemoveTag/{id}")]
-    public IActionResult RemoveTagFromUser(string id, TagRequest tagToRemove)
+    [HttpDelete("RemoveTagFromUserId/{id:string}")]
+    public IActionResult RemoveTagFromUserId(string id, TagRequest tagToRemove)
     {
         return db.RemoveTagFromUser(id, tagToRemove) switch
         {
@@ -54,10 +54,10 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("RecommendedUsers/{projectId}")]
-    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int projectId)
+    [HttpGet("GetRecommendedUsersForProjectId/{id:int}")]
+    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int id)
     {
-        (var status, var users) = db.GetRecommendedUsersByProjectId(projectId);
+        (var status, var users) = db.GetRecommendedUsersByProjectId(id);
 
         return status switch
         {
