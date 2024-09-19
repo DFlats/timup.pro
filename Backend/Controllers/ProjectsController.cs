@@ -10,20 +10,24 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
 {
 
     [HttpGet]
-    public List<ProjectResponse> GetProjects([FromQuery(Name = "interests")] string[]? interests, [FromQuery(Name = "skills")] string[]? skills)
+    public List<ProjectResponse> GetProjects
+    (
+        [FromQuery(Name = "interests")] string[]? interests,
+        [FromQuery(Name = "skills")] string[]? skills
+    )
     {
         if (skills?.Length == 0 && interests?.Length == 0)
         {
             return db.GetAllProjects();
         }
 
-        return db.GetProjectsByFilter(skills!, interests!);
+        return db.GetProjectsByFilter(skills, interests);
     }
 
     [HttpGet("RecommendedProjects/{userId}")]
     public List<ProjectResponse> GetRecommendedProjectsByUserId(string userId)
     {
-     return db.GetRecommendedProjectsByUserId(userId);
+        return db.GetRecommendedProjectsByUserId(userId);
     }
 
     [HttpPost("Populate")]
@@ -36,7 +40,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     public IActionResult CreateProject(ProjectRequest projectRequest)
     {
         var result = db.CreateProject(projectRequest);
-        if (result.Item1 == DatabaseContext.Statuses.Ok)
+        if (result.Item1 == DbErrorStatusCodes.Ok)
         {
             db.SaveChanges();
             return CreatedAtAction(nameof(GetProjectById), new { id = result.Item2!.Id }, (ProjectResponse)result.Item2);
@@ -56,7 +60,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     public ActionResult<List<ProjectOverviewResponse>> GetProjectsByUserId(string id)
     {
         var projects = db.GetProjectsByUserId(id);
-        if (projects.Item1 != DatabaseContext.Statuses.Ok) return NotFound("User not found");
+        if (projects.Item1 != DbErrorStatusCodes.Ok) return NotFound("User not found");
         return projects.Item2!.Select(p => (ProjectOverviewResponse)p).ToList();
     }
 

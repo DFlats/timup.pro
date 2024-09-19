@@ -94,7 +94,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
 
         if (user.Tags.FirstOrDefault(t => t.TagValue == tagToAdd.TagName && t.IsSkill == tagToAdd.IsSkill) == null)
         {
-            Tag newTag = new Tag
+            Tag newTag = new()
             {
                 TagValue = tagToAdd.TagName,
                 IsSkill = tagToAdd.IsSkill,
@@ -102,6 +102,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             };
             Tags.Add(newTag);
             user.Tags.Add(newTag);
+            SaveChanges();
             return true;
         }
         return true;
@@ -117,13 +118,18 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         {
             user.Tags.Remove(tag);
             Tags.Remove(tag);
+            SaveChanges();
             return true;
         }
         return false;
     }
 
-    internal List<ProjectResponse> GetProjectsByFilter(string[] skills, string[] interests)
+    internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests)
     {
+
+        skills ??= [];
+        interests ??= [];
+
         var projects = Projects
             .Include(p => p.Author)
             .Include(p => p.Description)
@@ -155,15 +161,15 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return projects;
     }
 
-    private static User? getUser(string userId, DbSet<User> Users)
+    private static User? GetUser(string userId, DbSet<User> Users)
     {
         return Users.FirstOrDefault(u => u.ClerkId == userId);
     }
 
-    internal (Statuses, Project?) CreateProject(ProjectRequest projectRequest)
+    internal (DbErrorStatusCodes, Project?) CreateProject(ProjectRequest projectRequest)
     {
-        User? user = getUser(projectRequest.AuthorId, Users);
-        if (user is null) return (Statuses.UserNotFound, null);
+        User? user = GetUser(projectRequest.AuthorId, Users);
+        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
         var description = new Description { Text = projectRequest.Description };
 
         var project = new Project
@@ -176,7 +182,8 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         Descriptions.Add(description);
         Projects.Add(project);
         user.Projects.Add(project);
-        return (Statuses.Ok, project);
+        SaveChanges();
+        return (DbErrorStatusCodes.Ok, project);
     }
 
     internal Project? GetProjectById(int id)
@@ -186,19 +193,19 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
                         .FirstOrDefault(p => p.Id == id);
     }
 
-    internal (Statuses, List<Project>?) GetProjectsByUserId(string id)
+    internal (DbErrorStatusCodes, List<Project>?) GetProjectsByUserId(string id)
     {
         var user = GetUserById(id);
-        if(user is null) return (Statuses.UserNotFound, null); 
-        return (Statuses.Ok, user.Projects);
+        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
+        return (DbErrorStatusCodes.Ok, user.Projects);
     }
 
 
-       internal (Statuses ,List<User>?) GetRecommendedUsersByProjectId(int id)
+    internal (DbErrorStatusCodes, List<User>?) GetRecommendedUsersByProjectId(int id)
     {
         var project = GetProjectById(id);
 
-        if (project is null) return (Statuses.ProjectNotFound, null);
+        if (project is null) return (DbErrorStatusCodes.ProjectNotFound, null);
 
         var interests = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
         var skills = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
@@ -208,15 +215,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
             .ToList();
 
-        return (Statuses.Ok, users);
+        return (DbErrorStatusCodes.Ok, users);
     }
 
-    public enum Statuses
-    {
-        UserNotFound,
-        ProjectNotFound,
-        TagAlreadyExists,
-        TagNotFound,
-        Ok
-    }
 }
