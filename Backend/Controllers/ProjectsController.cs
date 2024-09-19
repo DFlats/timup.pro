@@ -24,7 +24,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return db.GetProjectsByFilter(skills, interests);
     }
 
-    [HttpGet("GetRecommendedProjectsByUserId/{id:string}")]
+    [HttpGet("GetRecommendedProjectsByUserId/{id}")]
     public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string id)
     {
         (var status, var projects) = db.GetRecommendedProjectsByUserId(id);
@@ -56,7 +56,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
 
     }
 
-    [HttpGet("GetProjectById/{id:int}")]
+    [HttpGet("GetProjectById/{id}")]
     public ActionResult<ProjectResponse> GetProjectById(int id)
     {
         var res = db.GetProjectById(id);
@@ -64,7 +64,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return (ProjectResponse)res;
     }
 
-    [HttpGet("GetProjectsByUserId/{id:string}")]
+    [HttpGet("GetProjectsByUserId/{id}")]
     public ActionResult<List<ProjectOverviewResponse>> GetProjectsByUserId(string id)
     {
         (var status, var projects) = db.GetProjectsByUserId(id);
