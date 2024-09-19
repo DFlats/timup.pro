@@ -12,8 +12,10 @@ export function UserRow({ user, size = 'full' }: Props) {
         <tbody>
             <tr className="hover">
                 <td>{user.name}</td>
-                <TagContainer tags={user.skillTags} tagType={"skill"} size={size} />
-                <TagContainer tags={user.interestTags} tagType={"interest"} size={size} />
+                <td>
+                    <TagContainer tags={user.skillTags} tagType={"skill"} size={size} />
+                    <TagContainer tags={user.interestTags} tagType={"interest"} size={size} />
+                </td>
             </tr>
         </tbody>
     )

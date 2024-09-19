@@ -9,6 +9,7 @@ interface Props {
 
 export function ProjectFeed({ projectFeed }: Props) {
     const { featuredProjects, recommendedProjectsForClientUser, projectsOwnedByClientUser } = useProjects({ type: projectFeed });
+    
     const projects =
         featuredProjects ??
         recommendedProjectsForClientUser ??
@@ -24,7 +25,7 @@ export function ProjectFeed({ projectFeed }: Props) {
                 return 'Your projects';
         }
     }
-
+    
     return (
         <div className="p-12 w-screen flex flex-col items-center justify-center">
             <h1 className='text-4xl mb-8'>{heading()}</h1>

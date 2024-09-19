@@ -32,17 +32,28 @@ export function TagContainer({ tags, tagType, onRemoveTag, size = 'full' }: Prop
         }
     }
 
-    return (
-        <div className='rounded-xl bg-opacity-5 bg-white p-3 m-2'>
-            {size == 'full' &&
+    if (size == 'full') {
+        return (
+            <div className='rounded-xl bg-opacity-5 bg-white p-3 m-2'>
                 <h2>{heading()}</h2>
-            }
+                <div className="flex flex-row flex-wrap">
+                    {tags.length > 0 &&
+                        tags.map(tag => <Tag key={tag} {...tagProps(tag)} />)
+                    }
+                    {tags.length == 0 && noTagsTag()}
+                </div>
+            </div>
+        )
+    }
+
+    if (size == 'compact') {
+        return (
             <div className="flex flex-row flex-wrap">
                 {tags.length > 0 &&
                     tags.map(tag => <Tag key={tag} {...tagProps(tag)} />)
                 }
                 {tags.length == 0 && noTagsTag()}
             </div>
-        </div>
-    )
+        )
+    }
 }
