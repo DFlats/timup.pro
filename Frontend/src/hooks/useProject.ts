@@ -1,17 +1,33 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProjectById } from "../api";
+import { getProjectById, postProject, Project, recommendedUsersByProjectId } from "../api";
+import { useProjects } from "./useProjects";
 
-export function useProject(id: number) {
-    const queryKeyProject = ["idProject", id];
+export function useProject(id?: number) {
+  const queryKeyProject = ["project", id];
 
-    const projectQuery = useQuery({
-        queryKey: queryKeyProject,
-        queryFn: async () => {
-            return await getProjectById(id);
-        },
-    });
+  const { addUserProject } = useProjects('user');
 
-    return {
-        project: projectQuery.data
-    }
+  const projectQuery = useQuery({
+    queryKey: queryKeyProject,
+    queryFn: async () => {
+      if (!id) return;
+      return await getProjectById(id);
+    },
+    enabled: !!id,
+    staleTime: Infinity,
+  });
+
+  const createProject = async (
+    title: string,
+    description: string,
+    authorId: string
+  ) => {
+    const responseProject = await postProject({ title, description, authorId });
+
+  };
+
+  return {
+    project: projectQuery.data,
+    createProject,
+  };
 }

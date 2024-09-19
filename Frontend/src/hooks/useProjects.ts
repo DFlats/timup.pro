@@ -1,10 +1,11 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useClientUser } from "../hooks"
 import { getProjectsByFilter, getProjectsByUserId, Project } from "../api"
 import { ProjectFeedType } from "../types/types";
 
 export function useProjects(projectFeed: ProjectFeedType) {
     const { clientUser } = useClientUser();
+    const queryClient = useQueryClient();
 
     const queryKeyFeaturedProjects = ['featuredProjects'];
     const queryKeyRecommendedProjects = ['recommendedProjects'];
@@ -37,6 +38,12 @@ export function useProjects(projectFeed: ProjectFeedType) {
         enabled: !!clientUser && projectFeed == 'user'
     });
 
+    const addUserProject = (project: Project) => {
+        const existingProjects = userProjectsQuery.data as Project[];
+        queryClient.setQueryData(queryKeyUserProjects, [...existingProjects, project]);
+    }
+
+
     switch (projectFeed) {
         case 'featured':
             return {
@@ -48,7 +55,8 @@ export function useProjects(projectFeed: ProjectFeedType) {
             }
         case 'user':
             return {
-                projects: userProjectsQuery.data as Project[]
+                projects: userProjectsQuery.data as Project[],
+                addUserProject
             }
     }
 }
