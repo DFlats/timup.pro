@@ -2,8 +2,6 @@
 import { getRouteApi } from "@tanstack/react-router";
 import { useProjects } from "../../hooks";
 import { ProjectCard } from "../projects";
-import { UserTable } from "../users";
-
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');

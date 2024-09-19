@@ -1,6 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useUsers } from "../../hooks";
-import { UserRow } from ".";
 import { Link } from "@tanstack/react-router";
 
 interface props {
