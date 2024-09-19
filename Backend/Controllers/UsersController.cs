@@ -65,4 +65,15 @@ public class UsersController(DatabaseContext db) : ControllerBase
             _ => StatusCode(500),
         };
     }
+
+    [HttpPatch("UpdateUser")]
+    public IActionResult UpdateUser(UserPatchRequest requestBody)
+    {
+        return db.UpdateUser(requestBody) switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.Ok => NoContent(),
+            _ => StatusCode(500),
+        };
+    }
 }

@@ -270,7 +270,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
                 Tag newTag = new()
                 {
                     TagValue = skill,
-                    IsSkill = true,
+                    IsSkill = false,
                     UserId = requestBody.AuthorId
                 };
                 Tags.Add(newTag);
@@ -280,6 +280,57 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
 
         if (requestBody.IsCompleted is bool value) {
             project.Progress.IsCompleted = value;
+        }
+
+        SaveChanges();
+        return DbErrorStatusCodes.Ok;
+    }
+
+       internal DbErrorStatusCodes UpdateUser(UserPatchRequest requestBody)
+    {
+        var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == requestBody.ClerkId);
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
+
+        if (requestBody.SkillTags is not null)
+        {
+            user.Tags
+                .Where(t => t.IsSkill == true)
+                .ToList()
+                .ForEach(t => user.Tags
+                .Remove(t));
+
+            foreach (var skill in requestBody.SkillTags)
+            {
+                Tag newTag = new()
+                {
+                    TagValue = skill,
+                    IsSkill = true,
+                    UserId = requestBody.ClerkId
+                };
+                Tags.Add(newTag);
+                user.Tags.Add(newTag);
+            }
+        }
+
+        if (requestBody.InterestTags is not null)
+        {
+            user.Tags
+                .Where(t => t.IsSkill == false)
+                .ToList()
+                .ForEach(t => user.Tags
+                .Remove(t));
+
+            foreach (var skill in requestBody.InterestTags)
+            {
+                Tag newTag = new()
+                {
+                    TagValue = skill,
+                    IsSkill = false,
+                    UserId = requestBody.ClerkId
+                };
+                Tags.Add(newTag);
+                user.Tags.Add(newTag);
+            }
         }
 
         SaveChanges();
