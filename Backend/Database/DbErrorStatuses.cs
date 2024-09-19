@@ -8,5 +8,6 @@ public enum DbErrorStatusCodes
     TagNotFound,
     Ok,
     UserAlreadyExists,
-    UserNotAuthorized
+    UserNotAuthorized,
+    NoContent
 }

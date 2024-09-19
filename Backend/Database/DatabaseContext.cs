@@ -266,11 +266,11 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
                 .ForEach(t => project.Description.Tags
                 .Remove(t));
 
-            foreach (var skill in requestBody.InterestTags)
+            foreach (var interest in requestBody.InterestTags)
             {
                 Tag newTag = new()
                 {
-                    TagValue = skill,
+                    TagValue = interest,
                     IsSkill = false,
                     UserId = requestBody.AuthorId
                 };
@@ -283,7 +283,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
 
 
         SaveChanges();
-        return DbErrorStatusCodes.Ok;
+        return DbErrorStatusCodes.NoContent;
     }
 
        internal DbErrorStatusCodes UpdateUser(UserPatchRequest requestBody)
@@ -320,11 +320,11 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
                 .ForEach(t => user.Tags
                 .Remove(t));
 
-            foreach (var skill in requestBody.InterestTags)
+            foreach (var interest in requestBody.InterestTags)
             {
                 Tag newTag = new()
                 {
-                    TagValue = skill,
+                    TagValue = interest,
                     IsSkill = false,
                     UserId = requestBody.ClerkId
                 };
@@ -334,6 +334,6 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         }
 
         SaveChanges();
-        return DbErrorStatusCodes.Ok;
+        return DbErrorStatusCodes.NoContent;
     }
 }
