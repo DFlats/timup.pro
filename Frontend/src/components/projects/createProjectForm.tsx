@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { SubmitHandler, useForm } from "react-hook-form"
-import { useClientUser, useProjects } from "../../hooks";
+import { useProjects, useUsers } from "../../hooks";
 import { useNavigate } from "@tanstack/react-router";
 
 type Inputs = {
@@ -10,7 +10,7 @@ type Inputs = {
 
 
 export function CreateProjectForm() {
-    const { clientUser } = useClientUser();
+    const { clientUser } = useUsers({ type: 'clientUser' });
     const navigate = useNavigate();
     const { createProject } = useProjects('ownedByUser');
     const {

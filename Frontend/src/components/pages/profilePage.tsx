@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
-import { useClientUser, useUsers } from "../../hooks";
+import { useUsers } from "../../hooks";
 import { TagContainer } from "../../components/tags";
 import { ProjectFeed } from "../projects";
 import { EditUserModal } from "../users";
@@ -11,7 +11,7 @@ export function ProfilePage() {
     const { userId } = Route.useParams();
 
     const { userById: user } = useUsers({ type: 'userId', userId });
-    const { clientUser } = useClientUser();
+    const { clientUser } = useUsers({ type: 'clientUser' });
 
     if (!user) return;
 
