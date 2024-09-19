@@ -2,6 +2,7 @@
 import { getRouteApi } from "@tanstack/react-router";
 import { useProjects } from "../../hooks";
 import { ProjectCard } from "../projects";
+import { UserTable } from "../users";
 
 
 export function ProjectPage() {
@@ -9,9 +10,9 @@ export function ProjectPage() {
     const id = Number.parseInt(Route.useParams().id);
     const { projects, project } = useProjects('user', id);
 
-    console.log("ProjectPage");
-    console.log(project);
-    console.log(projects);
+    //console.log("ProjectPage");
+    //console.log(project);
+    //console.log(projects);
 
     if (!project) {
         return <p>{`Project (${id}) could not be found`}</p>
@@ -28,6 +29,7 @@ export function ProjectPage() {
         <>
             {ownedProject && <h2>Your project</h2>}
             <ProjectCard project={project} />
+            {/* <UserTable projectId={project.id}/> */}
         </>)
 
 

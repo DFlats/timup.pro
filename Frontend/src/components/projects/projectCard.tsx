@@ -33,6 +33,6 @@ export function ProjectCard({ project }: Props) {
                 <div className="card-actions justify-end">
                 </div>
             </div>
-        </Link>
+         </Link>
     );
 }
