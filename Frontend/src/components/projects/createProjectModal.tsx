@@ -2,6 +2,7 @@
 import { CreateProjectForm } from "../../components/projects";
 
 export function CreateProjectModal() {
+
     return (
         <dialog 
         id={import.meta.env.VITE_CREATE_PROJECT_MODAL_ID} 
