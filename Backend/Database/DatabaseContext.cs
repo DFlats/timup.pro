@@ -194,6 +194,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     {
         return Projects.Include(p => p.Description).ThenInclude(d => d.Tags)
                         .Include(p => p.Author)
+                        .Include(P => P.Progress)
                         .FirstOrDefault(p => p.Id == id);
     }
 
@@ -278,9 +279,8 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             }
         }
 
-        if (requestBody.IsCompleted is bool value) {
-            project.Progress.IsCompleted = value;
-        }
+        project.Progress.IsCompleted = requestBody.IsCompleted ?? project.Progress.IsCompleted;
+
 
         SaveChanges();
         return DbErrorStatusCodes.Ok;
