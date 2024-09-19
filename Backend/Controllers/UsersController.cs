@@ -9,15 +9,15 @@ namespace Backend.Controllers;
 public class UsersController(DatabaseContext db) : ControllerBase
 {
 
-    [HttpGet("{id}")]
-    public ActionResult<UserResponse> GetUserById(string id)
+    [HttpGet("GetUserByUserId/{id}")]
+    public ActionResult<UserResponse> GetUserByUserId(string id)
     {
         var user = db.GetUserById(id);
         if (user is null) return NotFound("User not found");
         return (UserResponse)user;
     }
 
-    [HttpPost]
+    [HttpPost("CreateUser")]
     public IActionResult CreateUser(UserRequest userToAdd)
     {
         (var status, var user) = db.CreateUser(userToAdd);
@@ -25,13 +25,13 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return status switch
         {
             DbErrorStatusCodes.UserAlreadyExists => Conflict("User already exists"),
-            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetUserById), new { id = user!.ClerkId }, (UserResponse)user),
+            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetUserByUserId), new { id = user!.ClerkId }, (UserResponse)user),
             _ => StatusCode(500),
         };
     }
 
-    [HttpPost("AddTagToUserId/{id}")]
-    public IActionResult AddTagToUserId(string id, TagRequest tagToAdd)
+    [HttpPost("AddTagToUserByUserId/{id}")]
+    public IActionResult AddTagToUserByUserId(string id, TagRequest tagToAdd)
     {
         return db.AddTagToUser(id, tagToAdd) switch
         {
@@ -42,8 +42,8 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpDelete("RemoveTagFromUserId/{id}")]
-    public IActionResult RemoveTagFromUserId(string id, TagRequest tagToRemove)
+    [HttpDelete("RemoveTagFromUserByUserId/{id}")]
+    public IActionResult RemoveTagFromUserByUserId(string id, TagRequest tagToRemove)
     {
         return db.RemoveTagFromUser(id, tagToRemove) switch
         {
@@ -54,7 +54,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("GetRecommendedUsersForProjectId/{id}")]
+    [HttpGet("GetRecommendedUsersByProjectId/{id}")]
     public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int id)
     {
         (var status, var users) = db.GetRecommendedUsersByProjectId(id);

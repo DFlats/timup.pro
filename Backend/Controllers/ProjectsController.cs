@@ -9,7 +9,7 @@ namespace Backend.Controllers;
 public class ProjectsController(DatabaseContext db) : ControllerBase
 {
 
-    [HttpGet]
+    [HttpGet("GetProjects")]
     public List<ProjectResponse> GetProjects
     (
         [FromQuery(Name = "interests")] string[]? interests,
@@ -37,13 +37,13 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPost("Populate")]
+    [HttpPost("PopulateProjects")]
     public IActionResult PopulateProjects()
     {
         return Ok(db.PopulateProjects());
     }
 
-    [HttpPost]
+    [HttpPost("CreateProject")]
     public IActionResult CreateProject(ProjectRequest projectRequest)
     {
         (var status, var project) = db.CreateProject(projectRequest);
