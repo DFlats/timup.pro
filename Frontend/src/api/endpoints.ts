@@ -1,6 +1,6 @@
 import { paths } from './schema';
 import createClient from "openapi-fetch";
-import { Project, User, TagRequest, ProjectRequest, UserRequest } from './types';
+import { Project, User, TagRequest, ProjectRequest, UserRequest, UserPatchRequest, ProjectPatchRequest } from './types';
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
@@ -26,9 +26,7 @@ export const getRecommendedProjectsByUserId = async (userId: string) => {
         }
     });
 
-    if (!response.data) {
-        throw new Error("Response data does not exist");
-    }
+    if (!response.data) throw new Error(response.error);
 
     return response.data as Project[];
 }
@@ -38,7 +36,7 @@ export const createProject = async (projectRequest: ProjectRequest) => {
         body: projectRequest
     });
 
-    if (!response.data) throw new Error("Response data does not exist");
+    if (!response.data) throw new Error(response.error);
 
     return response.data as Project;
 }
@@ -52,9 +50,7 @@ export const getProjectByProjectId = async (projectId: number) => {
         }
     });
 
-    if (!response.data) {
-        throw new Error('Response data does not exist');
-    }
+    if (!response.data) throw new Error(response.error);
 
     return response.data as Project;
 }
@@ -68,15 +64,15 @@ export const getProjectsByUserId = async (userId: string) => {
         }
     })
 
-    if (!response.data) {
-        throw new Error(response.error);
-    }
+    if (!response.data) throw new Error(response.error);
 
     return response.data as Project[];
 }
 
-export const updateProject = async () => {
-    return;
+export const updateProject = async (projectPatchRequest: ProjectPatchRequest) => {
+    await client.PATCH('/api/Projects/UpdateProject', {
+        body: projectPatchRequest
+    });
 }
 
 export const getUserByUserId = async (id: string): Promise<User> => {
@@ -131,7 +127,9 @@ export const getRecommendedUsersByProjectId = async (projectId: number) => {
     return response.data as User[];
 }
 
-export const updateUser = async () => {
-    return;
+export const updateUser = async (userPatchRequest: UserPatchRequest) => {
+    await client.PATCH('/api/Users/UpdateUser', {
+        body: userPatchRequest
+    });
 }
 
