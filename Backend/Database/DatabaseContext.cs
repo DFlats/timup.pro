@@ -77,7 +77,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return (DbErrorStatusCodes.Ok, projects);
     }
 
-    internal bool PopulateProjects(int count = 10)
+    internal bool PopulateProjects(int count = 1000)
     {
         try
         {
