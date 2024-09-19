@@ -18,12 +18,12 @@ export const getProjectsByFilter = async (skillTags?: string[], interestTags?: s
 }
 
 export const postProject = async (projectRequest: ProjectRequest) => {
-   const response =  await client.POST('/api/Projects/CreateProject', {
+    const response = await client.POST('/api/Projects/CreateProject', {
         body: projectRequest
     });
 
-    if(!response.data) throw new Error("Response data does not exist");
-    
+    if (!response.data) throw new Error("Response data does not exist");
+
     return response.data;
 }
 
@@ -54,8 +54,6 @@ export const getProjectById = async (projectId: number) => {
     if (!response.data) {
         throw new Error('getProjectsById: No data');
     }
-
-    console.log(response.data)
 
     return response.data as Project;
 }
@@ -100,6 +98,7 @@ export const addTagToUser = async (id: string, tagRequest: TagRequest) => {
         body: tagRequest
     })
 }
+
 export const removeTagFromUser = async (id: string, tagRequest: TagRequest) => {
     await client.DELETE('/api/Users/RemoveTagFromUserByUserId/{id}', {
         params: {
@@ -126,3 +125,4 @@ export const recommendedUsersByProjectId = async (projectId: number) => {
 
     return response.data as User[];
 }
+
