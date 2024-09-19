@@ -1,15 +1,12 @@
 using Backend.Models;
 using Bogus;
-using Bogus.Generators;
 
 namespace Backend.Database;
 
 public class DbSeeder()
 {
-    static readonly string[] tags = ["Data", "Art", "C#", "Tim", "JS", "Java"];
     public static (List<Project>, List<User>, List<Tag>) GenerateProjects(int count)
     {
-
         List<Project> _projects = [];
         List<User> _users = [];
         List<Tag> _tags = [];
@@ -24,18 +21,34 @@ public class DbSeeder()
 
             Random random = new();
 
-            int index1 = random.Next(tags.Length);
-            int index2 = random.Next(tags.Length);
+            int skillsAmount = random.Next(6);
+            int interestsAmount = random.Next(6);
 
-            var tagFaker = new Faker<Tag>()
-                .RuleFor(t => t.TagValue, v => tags[index1])
-                .RuleFor(t => t.IsSkill, v => true);
+            List<Tag> fakedTags = [];
 
-            var tagFake2r = new Faker<Tag>()
-                .RuleFor(t => t.TagValue, v => tags[index2])
-                .RuleFor(t => t.IsSkill, v => false);
+            List<string> skills = ["Data", "Art", "C#", "Tim", "JS", "Java"];
+            for (int j = 0; j < skillsAmount; j++)
+            {
+                int index = random.Next(skills.Count);
+                var tagFaker = new Faker<Tag>()
+                    .RuleFor(t => t.TagValue, v => skills[index])
+                    .RuleFor(t => t.IsSkill, v => true);
 
-            List<Tag> fakedTags = [tagFaker.Generate(), tagFake2r.Generate()];
+                fakedTags.Add(tagFaker.Generate());
+                skills.RemoveAt(index);
+            }
+
+            List<string> interests = ["Data", "Art", "C#", "Tim", "JS", "Java"];
+            for (int j = 0; j < interestsAmount; j++)
+            {
+                int index = random.Next(interests.Count);
+                var tagFake2r = new Faker<Tag>()
+                    .RuleFor(t => t.TagValue, v => interests[index])
+                    .RuleFor(t => t.IsSkill, v => false);
+
+                fakedTags.Add(tagFake2r.Generate());
+                interests.RemoveAt(index);
+            }
 
             var descriptionFaker = new Faker<Description>()
                 .RuleFor(d => d.Text, f => f.Lorem.Paragraph())
