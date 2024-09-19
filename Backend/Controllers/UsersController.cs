@@ -1,6 +1,5 @@
 using Backend.Database;
 using Backend.Dtos;
-using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -19,47 +18,52 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult AddUser(UserRequest userToAdd)
+    public IActionResult CreateUser(UserRequest userToAdd)
     {
-        var user = db.GetUserById(userToAdd.ClerkId);
-        if (user is not null)
-        {
-            return Conflict("User already exists");
-        }
+        (var status, var user) = db.CreateUser(userToAdd);
 
-        var newUser = db.AddUser(userToAdd);
-        return CreatedAtAction(nameof(GetUserById), new { id = newUser.ClerkId }, (UserResponse)newUser);
+        return status switch
+        {
+            DbErrorStatusCodes.UserAlreadyExists => Conflict("User already exists"),
+            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetUserById), new { id = user!.ClerkId }, (UserResponse)user),
+            _ => StatusCode(500),
+        };
     }
 
     [HttpPost("AddTag/{id}")]
     public IActionResult AddTagToUser(string id, TagRequest tagToAdd)
     {
-        var success = db.AddTagToUser(id, tagToAdd);
-        if (success)
+        return db.AddTagToUser(id, tagToAdd) switch
         {
-            db.SaveChanges();
-            return Ok();
-        }
-        return NotFound();
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.TagAlreadyExists => Conflict("Tag already exists"),
+            DbErrorStatusCodes.Ok => Ok("Tag added"),
+            _ => StatusCode(500),
+        };
     }
 
     [HttpDelete("RemoveTag/{id}")]
     public IActionResult RemoveTagFromUser(string id, TagRequest tagToRemove)
     {
-        var success = db.RemoveTagFromUser(id, tagToRemove);
-        if (success)
+        return db.RemoveTagFromUser(id, tagToRemove) switch
         {
-            db.SaveChanges();
-            return Ok();
-        }
-        return NotFound();
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.TagNotFound => NotFound("Tag not found"),
+            DbErrorStatusCodes.Ok => Ok("Tag removed"),
+            _ => StatusCode(500),
+        };
     }
 
     [HttpGet("RecommendedUsers/{projectId}")]
     public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int projectId)
     {
-        var res = db.GetRecommendedUsersByProjectId(projectId);
-        if (res.Item1 == DatabaseContext.Statuses.ProjectNotFound) return NotFound("Project not found");
-        return res.Item2!.Select(u => (UserResponse)u).ToList();
+        (var status, var users) = db.GetRecommendedUsersByProjectId(projectId);
+
+        return status switch
+        {
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.Ok => users!.Select(u => (UserResponse)u).ToList(),
+            _ => StatusCode(500),
+        };
     }
 }

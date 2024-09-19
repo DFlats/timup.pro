@@ -1,8 +1,5 @@
-using Backend.Controllers;
 using Backend.Dtos;
 using Backend.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -73,24 +70,31 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return user;
     }
 
-    internal User AddUser(UserRequest userToAdd)
+    internal (DbErrorStatusCodes, User?) CreateUser(UserRequest userToAdd)
     {
-        var user = new User
+        if (Users.Any(u => u.ClerkId == userToAdd.ClerkId)) return (DbErrorStatusCodes.UserAlreadyExists, null);
+        try
         {
-            ClerkId = userToAdd.ClerkId,
-            Name = userToAdd.Name,
-            Email = userToAdd.Email
-        };
-
-        Users.Add(user);
-        SaveChanges();
-        return user;
+            var user = new User
+            {
+                ClerkId = userToAdd.ClerkId,
+                Name = userToAdd.Name,
+                Email = userToAdd.Email
+            };
+            Users.Add(user);
+            SaveChanges();
+            return (DbErrorStatusCodes.Ok, user);
+        }
+        catch
+        {
+            return (DbErrorStatusCodes.UserAlreadyExists, null);
+        }
     }
 
-    internal bool AddTagToUser(string id, TagRequest tagToAdd)
+    internal DbErrorStatusCodes AddTagToUser(string id, TagRequest tagToAdd)
     {
         var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
-        if (user is null) return false;
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
 
         if (user.Tags.FirstOrDefault(t => t.TagValue == tagToAdd.TagName && t.IsSkill == tagToAdd.IsSkill) == null)
         {
@@ -103,15 +107,15 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             Tags.Add(newTag);
             user.Tags.Add(newTag);
             SaveChanges();
-            return true;
+            return DbErrorStatusCodes.Ok;
         }
-        return true;
+        return DbErrorStatusCodes.TagAlreadyExists;
     }
 
-    internal bool RemoveTagFromUser(string id, TagRequest tagToRemove)
+    internal DbErrorStatusCodes RemoveTagFromUser(string id, TagRequest tagToRemove)
     {
         var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
-        if (user is null) return false;
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
 
         var tag = user.Tags.FirstOrDefault(t => t.TagValue == tagToRemove.TagName && t.IsSkill == tagToRemove.IsSkill);
         if (tag != null)
@@ -119,9 +123,9 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
             user.Tags.Remove(tag);
             Tags.Remove(tag);
             SaveChanges();
-            return true;
+            return DbErrorStatusCodes.Ok;
         }
-        return false;
+        return DbErrorStatusCodes.TagNotFound;
     }
 
     internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests)

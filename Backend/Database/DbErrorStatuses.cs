@@ -6,5 +6,6 @@ public enum DbErrorStatusCodes
     ProjectNotFound,
     TagAlreadyExists,
     TagNotFound,
-    Ok
+    Ok,
+    UserAlreadyExists
 }

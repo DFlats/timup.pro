@@ -42,7 +42,6 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         var result = db.CreateProject(projectRequest);
         if (result.Item1 == DbErrorStatusCodes.Ok)
         {
-            db.SaveChanges();
             return CreatedAtAction(nameof(GetProjectById), new { id = result.Item2!.Id }, (ProjectResponse)result.Item2);
         }
         return NotFound("User not found");
