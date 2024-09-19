@@ -8,7 +8,6 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class UsersController(DatabaseContext db) : ControllerBase
 {
-
     [HttpGet("GetUserByUserId/{id}")]
     public ActionResult<UserResponse> GetUserByUserId(string id)
     {

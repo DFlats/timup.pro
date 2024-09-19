@@ -8,7 +8,6 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class ProjectsController(DatabaseContext db) : ControllerBase
 {
-
     [HttpGet("GetProjects")]
     public List<ProjectResponse> GetProjects
     (
@@ -35,12 +34,6 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.Ok => projects!,
             _ => StatusCode(500),
         };
-    }
-
-    [HttpPost("PopulateProjects")]
-    public IActionResult PopulateProjects()
-    {
-        return Ok(db.PopulateProjects());
     }
 
     [HttpPost("CreateProject")]
@@ -75,7 +68,5 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.Ok => projects!.Select(p => (ProjectOverviewResponse)p).ToList(),
             _ => StatusCode(500),
         };
-
     }
-
 }
