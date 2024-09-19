@@ -1,7 +1,5 @@
 export * from './useClientUser'
 export * from './useGoogleMaps'
-export * from './useClientUserModal'
 export * from './useProjects'
 export * from './useUsers'
 export * from './useUser'
-export * from './useCreateProjectModal'

@@ -2,11 +2,10 @@
 import { CreateProjectForm } from "../../components/projects";
 
 export function CreateProjectModal() {
-
     return (
-        <dialog 
-        id={import.meta.env.VITE_CREATE_PROJECT_MODAL_ID} 
-        className="modal">
+        <dialog
+            id={import.meta.env.VITE_CREATE_PROJECT_MODAL_ID}
+            className="modal">
             <div className="modal-box">
                 <h3
                     className="font-bold text-3xl text-center p-8">
@@ -23,4 +22,15 @@ export function CreateProjectModal() {
             </form>
         </dialog>
     )
+}
+
+export function openCreateProjectModal() {
+    const modal = document.getElementById(import.meta.env.VITE_CREATE_PROJECT_MODAL_ID) as HTMLDialogElement;
+
+    if (!modal) {
+        console.error('Could not find dialog element')
+        return;
+    }
+
+    modal.showModal();
 }

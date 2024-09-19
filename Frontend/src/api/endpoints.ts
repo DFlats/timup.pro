@@ -123,7 +123,7 @@ export const getRecommendedUsersByProjectId = async (projectId: number) => {
     if (!response.data) {
         throw new Error(response.error);
     }
-    console.log(response.data)
+
     return response.data as User[];
 }
 

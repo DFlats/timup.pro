@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useClientUser } from "../hooks"
-import { getProjectByProjectId, getProjects, getProjectsByUserId, createProject, Project } from "../api"
+import { getProjectByProjectId, getProjects, getProjectsByUserId, createProject, Project, ProjectRequest } from "../api"
 import { ProjectFeedType } from "../types/types";
 
 export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
@@ -49,7 +49,7 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
         staleTime: Infinity,
     });
 
-    const createProject = async (
+    const createProjectInHook = async (
         title: string,
         description: string,
         authorId: string
@@ -60,20 +60,18 @@ export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
         return project;
     };
 
-    switch (projectFeed) {
-        case 'featured':
-            return {
-                projects: featuredProjectsQuery.data as Project[]
-            }
-        case 'recommended':
-            return {
-                projects: recommendedProjectsQuery.data as Project[]
-            }
-        case 'user':
-            return {
-                projects: userProjectsQuery.data as Project[],
-                project: projectQuery.data as Project,
-                createProject
-            }
+    const projects = () => {
+        switch (projectFeed) {
+            case 'featured': return featuredProjectsQuery.data as Project[];
+            case 'recommended': return recommendedProjectsQuery.data as Project[];
+            case 'user': return userProjectsQuery.data as Project[];
+        }
     }
+
+    return {
+        projects: projects(),
+        project: projectQuery.data as Project,
+        createProject: createProjectInHook
+    }
+
 }

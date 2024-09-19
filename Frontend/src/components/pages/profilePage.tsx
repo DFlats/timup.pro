@@ -1,9 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
-import { useClientUser, useEditUserModal, useUser } from "../../hooks";
+import { useClientUser, useUser } from "../../hooks";
 import { TagContainer } from "../../components/tags";
 import { ProjectFeed } from "../projects";
-import { EditUserModal } from "../users";
+import { EditUserModal, useEditUserModal } from "../users";
 
 export function ProfilePage() {
     const Route = getRouteApi('/profile/$userId');
