@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Backend.Models;
 
 namespace Backend.Dtos;
