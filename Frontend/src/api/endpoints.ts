@@ -17,16 +17,6 @@ export const getProjects = async (skillTags?: string[], interestTags?: string[])
     return response.data as Project[];
 }
 
-export const createProject = async (projectRequest: ProjectRequest) => {
-    const response = await client.POST('/api/Projects/CreateProject', {
-        body: projectRequest
-    });
-
-    if (!response.data) throw new Error("Response data does not exist");
-
-    return response.data as Project;
-}
-
 export const getRecommendedProjectsByUserId = async (userId: string) => {
     const response = await client.GET('/api/Projects/GetProjectsByUserId/{id}', {
         params: {
@@ -41,6 +31,16 @@ export const getRecommendedProjectsByUserId = async (userId: string) => {
     }
 
     return response.data as Project[];
+}
+
+export const createProject = async (projectRequest: ProjectRequest) => {
+    const response = await client.POST('/api/Projects/CreateProject', {
+        body: projectRequest
+    });
+
+    if (!response.data) throw new Error("Response data does not exist");
+
+    return response.data as Project;
 }
 
 export const getProjectByProjectId = async (projectId: number) => {
