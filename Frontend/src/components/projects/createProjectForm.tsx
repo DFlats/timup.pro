@@ -5,6 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { TagEditor } from "../tags";
 import { useState } from "react";
 import { TagType } from "../../types";
+import { updateProject } from "../../api";
 
 type Inputs = {
     title: string;
@@ -47,15 +48,20 @@ export function CreateProjectForm() {
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         if (!clientUser || !createProject) return;
+
         const createdProject = await createProject(data.title, data.description, clientUser.id);
-        const modal = document.getElementById(import.meta.env.VITE_CREATE_PROJECT_MODAL_ID) as HTMLDialogElement | null;
-        if (modal) {
-            modal.close();
-        }
+
+        await updateProject({ skillTags, interestTags });
+
+        const modal: HTMLDialogElement = document.getElementById(import.meta.env.VITE_CREATE_PROJECT_MODAL_ID) as HTMLDialogElement;
+        modal?.close();
+
         navigate({
             to: '/project/$id',
             params: { id: createdProject.id.toString() }
-        })
+        });
+
+        reset();
     }
 
     if (!clientUser) return;
