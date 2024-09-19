@@ -1,8 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useUsers } from "../../hooks";
-import { UserCard } from ".";
+import { UserRow } from ".";
 
-export function UserGallery() {
+export function UserTable() {
     const { users } = useUsers();
 
     return (
@@ -13,7 +13,7 @@ export function UserGallery() {
                     <th>Skills</th>
                 </tr>
             </thead>
-            {users.map(user => <UserCard key={user.id} user={user} />)}
+            {users.map(user => <UserRow key={user.id} user={user} />)}
         </table>
     )
 }

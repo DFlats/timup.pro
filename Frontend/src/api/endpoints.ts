@@ -24,7 +24,7 @@ export const postProject = async (projectRequest: ProjectRequest) => {
 
     if (!response.data) throw new Error("Response data does not exist");
 
-    return response.data;
+    return response.data as Project;
 }
 
 export const getRecommendedProjectsByUserId = async (userId: string) => {
@@ -39,6 +39,7 @@ export const getRecommendedProjectsByUserId = async (userId: string) => {
     if (!response.data) {
         throw new Error(response.error);
     }
+
     return response.data as Project[];
 }
 
