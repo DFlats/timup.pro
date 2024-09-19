@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { UserRow } from "../../components/users";
 import { useUsers } from "../../hooks";
 import { Link } from "@tanstack/react-router";
 
@@ -21,7 +22,7 @@ export function UserTable({ projectId }: props) {
                         <th>Skills</th>
                     </tr>
                 </thead>
-                {/* {users && users.map(user => <UserRow key={user.id} user={user} />)} */}
+                {users && users.map(user => <UserRow key={user.id} user={user} />)}
             </table>
         </Link>
 
