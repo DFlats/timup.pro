@@ -24,6 +24,13 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
         inputSkillRef.current.focus();
     }
 
+    const placeHolder = () => {
+        switch (tagType) {
+            case 'skill': return 'What are you good at?';
+            case 'interest': return 'What are you interested in?'
+        }
+    }
+
     return (
         <div
             className="flex flex-col">
@@ -37,7 +44,7 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
                 <input
                     ref={inputSkillRef}
                     type='text'
-                    placeholder="What else are you good at?"
+                    placeholder={placeHolder()}
                     className="input input-bordered w-full max-w-xs"
                 />
 
