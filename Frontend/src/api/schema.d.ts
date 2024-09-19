@@ -100,6 +100,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Projects/UpdateProject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["Projects_UpdateProject"];
+        trace?: never;
+    };
     "/api/Users/GetUserByUserId/{id}": {
         parameters: {
             query?: never;
@@ -214,6 +230,16 @@ export interface components {
             interestTags?: string[];
             isCompleted?: boolean;
         };
+        ProjectPatchRequest: {
+            /** Format: int32 */
+            projectId?: number;
+            authorId?: string;
+            title?: string | null;
+            description?: string | null;
+            skillTags?: string[] | null;
+            interestTags?: string[] | null;
+            isCompleted?: boolean | null;
+        };
         UserResponse: {
             id?: string;
             name?: string;
@@ -319,7 +345,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/octet-stream": string;
+                    "application/json": components["schemas"]["ProjectResponse"];
                 };
             };
         };
@@ -362,6 +388,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProjectOverviewResponse"][];
+                };
+            };
+        };
+    };
+    Projects_UpdateProject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectPatchRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
                 };
             };
         };

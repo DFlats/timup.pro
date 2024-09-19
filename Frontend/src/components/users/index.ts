@@ -1,3 +1,3 @@
 export * from './editUserModal'
-export * from './userCard'
-export * from './userGallery'
+export * from './userRow'
+export * from './userTable'

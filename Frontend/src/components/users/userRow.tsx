@@ -5,7 +5,7 @@ interface Props {
     user: User
 }
 
-export function UserCard({ user }: Props) {
+export function UserRow({ user }: Props) {
     return (
         <tbody>
             <tr className="hover">

@@ -1,15 +1,16 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useClientUser } from "../hooks"
-import { getProjectsByFilter, getProjectsByUserId, Project } from "../api"
+import { getProjectById, getProjectsByFilter, getProjectsByUserId, postProject, Project } from "../api"
 import { ProjectFeedType } from "../types/types";
 
-export function useProjects(projectFeed: ProjectFeedType) {
+export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
     const { clientUser } = useClientUser();
     const queryClient = useQueryClient();
 
     const queryKeyFeaturedProjects = ['featuredProjects'];
     const queryKeyRecommendedProjects = ['recommendedProjects'];
     const queryKeyUserProjects = ["userProjects"];
+    const queryKeyProject = ["project", projectId];
 
     const featuredProjectsQuery = useQuery({
         queryKey: queryKeyFeaturedProjects,
@@ -38,11 +39,26 @@ export function useProjects(projectFeed: ProjectFeedType) {
         enabled: !!clientUser && projectFeed == 'user'
     });
 
-    const addUserProject = (project: Project) => {
+    const projectQuery = useQuery({
+        queryKey: queryKeyProject,
+        queryFn: async () => {
+            if (!projectId) return;
+            return await getProjectById(projectId);
+        },
+        enabled: !!projectId,
+        staleTime: Infinity,
+    });
+
+    const createProject = async (
+        title: string,
+        description: string,
+        authorId: string
+    ) => {
+        const project = await postProject({ title, description, authorId });
         const existingProjects = userProjectsQuery.data as Project[];
         queryClient.setQueryData(queryKeyUserProjects, [...existingProjects, project]);
-    }
-
+        return project;
+    };
 
     switch (projectFeed) {
         case 'featured':
@@ -56,7 +72,8 @@ export function useProjects(projectFeed: ProjectFeedType) {
         case 'user':
             return {
                 projects: userProjectsQuery.data as Project[],
-                addUserProject
+                project: projectQuery.data as Project,
+                createProject
             }
     }
 }

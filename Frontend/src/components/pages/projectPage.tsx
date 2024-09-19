@@ -1,14 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
-import { useProject, useProjects } from "../../hooks";
+import { useProjects } from "../../hooks";
 import { ProjectCard } from "../projects";
 
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
     const id = Number.parseInt(Route.useParams().id);
-    const { project } = useProject(id);
-    const { projects } = useProjects('user');
+    const { projects, project } = useProjects('user', id);
 
     console.log("ProjectPage");
     console.log(project);
