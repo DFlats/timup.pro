@@ -19,7 +19,7 @@ export function Dashboard() {
         <div className="flex items-center justify-center">
             <SignedIn>
                 {profileLink}
-
+                <button className='btn'>Create Project</button>
                 <SignOutButton>
                     <button className='mx-4 btn text-3xl'>Sign Out</button>
                 </SignOutButton>
