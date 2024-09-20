@@ -43,7 +43,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("CreateProject")]
-    [ProducesResponseType(typeof(ProjectResponse), 200)]
+    [ProducesResponseType(typeof(ProjectResponse), 201)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public ActionResult<ProjectResponse> CreateProject(ProjectRequest projectRequest)
