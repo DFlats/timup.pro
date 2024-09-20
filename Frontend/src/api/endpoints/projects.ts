@@ -15,7 +15,7 @@ export const getProjects = async (skillTags: string[] = [], interestTags: string
     if (!data || (!response.ok && error))
         throw error;
 
-    data.map(projectResponse => mapRawProjectResponseToProject(projectResponse));
+    return data.map(projectResponse => mapRawProjectResponseToProject(projectResponse));
 }
 
 export const getRecommendedProjectsByUserId = async (userId: string, page?: number) => {

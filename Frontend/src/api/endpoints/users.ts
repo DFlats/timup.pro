@@ -18,7 +18,7 @@ export const getUsers = async (skillTags: string[] = [], interestTags: string[] 
     return data.map(userResponse => mapUserResponseToUser(userResponse)) as User[];
 }
 
-export const getRecommendedUsersByProjectId = async (projectId: number, page: number) => {
+export const getRecommendedUsersByProjectId = async (projectId: number, page?: number) => {
     const { response, data, error } = await client.GET('/api/Users/GetRecommendedUsersByProjectId/{id}', {
         params: {
             path: {
