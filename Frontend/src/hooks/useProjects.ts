@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useUsers } from "../hooks"
-import { getProjectByProjectId, getProjects, getProjectsByUserId, createProject, Project } from "../api"
+import { getProjectByProjectId, getProjects, getProjectsByUserId, createProject, ProjectResponse } from "../api"
 
 type FeaturedProjects = {
     type: 'featuredProjects'
@@ -45,7 +45,7 @@ export function useProjects(params: Params) {
 
     const recommendedProjectsForClientUserQuery = useQuery({
         queryKey: queryKeyRecommendedProjects,
-        queryFn: async (): Promise<Project[]> => {
+        queryFn: async (): Promise<ProjectResponse[]> => {
             if (!clientUser) return [];
 
             return await getProjects(clientUser.skillTags, clientUser.interestTags);
@@ -77,16 +77,16 @@ export function useProjects(params: Params) {
         authorId: string
     ) => {
         const project = await createProject({ title, description, authorId });
-        const existingProjects = projectsOwnedByClientUserQuery.data as Project[];
+        const existingProjects = projectsOwnedByClientUserQuery.data as ProjectResponse[];
         queryClient.setQueryData(queryKeyUserProjects, [...existingProjects, project]);
         return project;
     };
 
     return {
-        featuredProjects: featuredProjectsQuery.data as Project[],
-        recommendedProjectsForClientUser: recommendedProjectsForClientUserQuery.data as Project[],
-        projectsOwnedByClientUser: projectsOwnedByClientUserQuery.data as Project[],
-        projectById: projectByIdQuery.data as Project,
+        featuredProjects: featuredProjectsQuery.data as ProjectResponse[],
+        recommendedProjectsForClientUser: recommendedProjectsForClientUserQuery.data as ProjectResponse[],
+        projectsOwnedByClientUser: projectsOwnedByClientUserQuery.data as ProjectResponse[],
+        projectById: projectByIdQuery.data as ProjectResponse,
         createProject: createProjectInHook
     }
 

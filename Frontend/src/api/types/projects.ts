@@ -1,16 +1,16 @@
 import { components } from "../schema";
 
-// components['schemas']['ProjectResponse']
-export type Project = {
+export type ProjectResponse = {
     id: number;
     title: string;
     authorName: string;
     authorId: string;
-    collaborators: IdName[]
+    collaborators: components['schemas']['ValueTupleOfStringAndString'][]
     description: string;
     skillTags: string[];
     interestTags: string[];
     isCompleted: boolean;
+    invitedUsersIds: string[];
 }
 
 // components['schemas']['ProjectRequest']
@@ -43,8 +43,6 @@ export type ProjectPatchRequest = {
     isCompleted?: boolean;
 }
 
-export type IdName = Required<components['schemas']['ValueTupleOfStringAndString']>
-
 export function mapRawProjectResponseToProject(projectResponse: components['schemas']['ProjectResponse']) {
     return {
         id: projectResponse.id!,
@@ -56,6 +54,7 @@ export function mapRawProjectResponseToProject(projectResponse: components['sche
         description: projectResponse.description!,
         skillTags: projectResponse.skillTags!,
         interestTags: projectResponse.interestTags!,
-        isCompleted: projectResponse.isCompleted!
-    } as Project;
+        isCompleted: projectResponse.isCompleted!,
+        invitedUsersIds: projectResponse.invitedUsers!
+    } as ProjectResponse;
 }
