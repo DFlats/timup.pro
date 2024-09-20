@@ -21,13 +21,14 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
             return db.GetAllProjects(page);
         }
 
-        return db.GetProjectsByFilter(skills, interests);
+        return db.GetProjectsByFilter(skills, interests, page);
     }
 
     [HttpGet("GetRecommendedProjectsByUserId/{id}")]
-    public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string id)
+    public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string id,
+        [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var projects) = db.GetRecommendedProjectsByUserId(id);
+        (var status, var projects) = db.GetRecommendedProjectsByUserId(id, page);
 
         return status switch
         {
