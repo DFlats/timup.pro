@@ -86,7 +86,7 @@ export function CreateProjectForm() {
                 onAddTag={handleAddTag}
                 onRemoveTag={handleRemoveTag} />
             <TagEditor
-                tags={skillTags}
+                tags={interestTags}
                 tagType='interest'
                 onAddTag={handleAddTag}
                 onRemoveTag={handleRemoveTag} />
