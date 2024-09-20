@@ -42,23 +42,6 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPost("CreateProject")]
-    [ProducesResponseType(typeof(ProjectResponse), 201)]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(500)]
-    public ActionResult<ProjectResponse> CreateProject(ProjectRequest projectRequest)
-    {
-        (var status, var project) = db.CreateProject(projectRequest);
-
-        return status switch
-        {
-            DbErrorStatusCodes.UserNotFound => NotFound("Could not find a user for given project"),
-            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetProjectByProjectId), new { id = project!.Id }, (ProjectResponse)project),
-            _ => StatusCode(500),
-        };
-
-    }
-
     [HttpGet("GetProjectByProjectId/{id}")]
     [ProducesResponseType(typeof(ProjectResponse), 200)]
     [ProducesResponseType(404)]
@@ -85,6 +68,23 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         };
     }
 
+    [HttpPost("CreateProject")]
+    [ProducesResponseType(typeof(ProjectResponse), 201)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public ActionResult<ProjectResponse> CreateProject(ProjectRequest projectRequest)
+    {
+        (var status, var project) = db.CreateProject(projectRequest);
+
+        return status switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("Could not find a user for given project"),
+            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetProjectByProjectId), new { id = project!.Id }, (ProjectResponse)project),
+            _ => StatusCode(500),
+        };
+
+    }
+
     [HttpPatch("UpdateProject")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
@@ -98,7 +98,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.UserNotAuthorized => Unauthorized("User not authorized"),
-            DbErrorStatusCodes.NoContent => NoContent(),
+            DbErrorStatusCodes.Ok => Ok("Project updated"),
             _ => StatusCode(500),
         };
     }

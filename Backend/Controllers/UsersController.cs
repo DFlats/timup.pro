@@ -25,6 +25,22 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.GetUsersByFilter(skills, interests, page);
     }
 
+    [HttpGet("GetRecommendedUsersByProjectId/{id}")]
+    [ProducesResponseType(typeof(List<UserResponse>), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int id, [FromQuery(Name = "page")] int? page = 1)
+    {
+        (var status, var users) = db.GetRecommendedUsersByProjectId(id, page);
+
+        return status switch
+        {
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.Ok => users!.Select(u => (UserResponse)u).ToList(),
+            _ => StatusCode(500),
+        };
+    }
+
     [HttpGet("GetUserByUserId/{id}")]
     [ProducesResponseType(typeof(UserResponse), 200)]
     [ProducesResponseType(404)]
@@ -82,22 +98,6 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("GetRecommendedUsersByProjectId/{id}")]
-    [ProducesResponseType(typeof(List<UserResponse>), 200)]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(500)]
-    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int id, [FromQuery(Name = "page")] int? page = 1)
-    {
-        (var status, var users) = db.GetRecommendedUsersByProjectId(id, page);
-
-        return status switch
-        {
-            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
-            DbErrorStatusCodes.Ok => users!.Select(u => (UserResponse)u).ToList(),
-            _ => StatusCode(500),
-        };
-    }
-
     [HttpPatch("UpdateUser")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
@@ -107,7 +107,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.UpdateUser(requestBody) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.NoContent => NoContent(),
+            DbErrorStatusCodes.Ok => Ok("User updated"),
             _ => StatusCode(500),
         };
     }
