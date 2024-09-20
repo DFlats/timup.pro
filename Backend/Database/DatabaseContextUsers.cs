@@ -1,5 +1,6 @@
 using Backend.Dtos;
 using Backend.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -174,8 +175,16 @@ public partial class DatabaseContext
 
     internal DbErrorStatusCodes DeleteUser(string userId)
     {
-        var user = Users.FirstOrDefault(u => u.ClerkId == userId);
+        var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == userId);
         if (user is null) return DbErrorStatusCodes.UserNotFound;
+        var projects = Projects.Where(p => p.AuthorId == userId);
+        if (projects is not null)
+        {
+            foreach (var p in projects)
+            {
+                Projects.Remove(p);
+            }
+        }
         Users.Remove(user);
         SaveChanges();
         return DbErrorStatusCodes.Ok;
