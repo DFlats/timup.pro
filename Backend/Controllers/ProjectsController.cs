@@ -26,13 +26,13 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return db.GetProjectsByFilter(skills, interests, page);
     }
 
-    [HttpGet("GetRecommendedProjectsByUserId/{id}")]
+    [HttpGet("GetRecommendedProjectsByUserId/{userId}")]
     [ProducesResponseType(typeof(List<ProjectResponse>), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string id, [FromQuery(Name = "page")] int? page = 1)
+    public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string userId, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var projects) = db.GetRecommendedProjectsByUserId(id, page);
+        (var status, var projects) = db.GetRecommendedProjectsByUserId(userId, page);
 
         return status switch
         {
@@ -42,23 +42,23 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("GetProjectByProjectId/{id}")]
+    [HttpGet("GetProjectByProjectId/{projectId}")]
     [ProducesResponseType(typeof(ProjectResponse), 200)]
     [ProducesResponseType(404)]
-    public ActionResult<ProjectResponse> GetProjectByProjectId(int id)
+    public ActionResult<ProjectResponse> GetProjectByProjectId(int projectId)
     {
-        var res = db.GetProjectById(id);
+        var res = db.GetProjectById(projectId);
         if (res == null) return NotFound("Project was not found");
         return (ProjectResponse)res;
     }
 
-    [HttpGet("GetProjectsByUserId/{id}")]
+    [HttpGet("GetProjectsByUserId/{userId}")]
     [ProducesResponseType(typeof(List<ProjectOverviewResponse>), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public ActionResult<List<ProjectOverviewResponse>> GetProjectsByUserId(string id)
+    public ActionResult<List<ProjectOverviewResponse>> GetProjectsByUserId(string userId)
     {
-        (var status, var projects) = db.GetProjectsByUserId(id);
+        (var status, var projects) = db.GetProjectsByUserId(userId);
 
         return status switch
         {
@@ -103,7 +103,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpDelete("DeleteProject/{authorId}/{projectId}")]
+    [HttpDelete("DeleteProjectByAuthorIdAndProjectId/{authorId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(401)]
