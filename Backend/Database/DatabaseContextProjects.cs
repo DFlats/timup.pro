@@ -18,21 +18,17 @@ public partial class DatabaseContext
 
     internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests, int? page = 1)
     {
-
         skills ??= [];
         interests ??= [];
 
-        var projects = Projects
+        return [.. Projects
             .Include(p => p.Author)
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
-            .Select(p => (ProjectResponse)p)
-            .ToList();
-
-        return projects;
+            .Select(p => (ProjectResponse)p)];
     }
 
     internal (DbErrorStatusCodes, List<ProjectResponse>?) GetRecommendedProjectsByUserId(string id, int? page = 1)
@@ -153,7 +149,7 @@ public partial class DatabaseContext
 
 
         SaveChanges();
-        return DbErrorStatusCodes.NoContent;
+        return DbErrorStatusCodes.Ok;
     }
 
     private bool AddUserToProject(User user, Project project)
@@ -164,5 +160,15 @@ public partial class DatabaseContext
         user.Projects.Add(project);
         SaveChanges();
         return true;
+    }
+
+    internal DbErrorStatusCodes DeleteProject(string authorId, int projectId)
+    {
+        var project = Projects.FirstOrDefault(p => p.Id == projectId);
+        if (project is null) return DbErrorStatusCodes.UserNotFound;
+        if (project.AuthorId != authorId) return DbErrorStatusCodes.UserNotAuthorized;
+        Projects.Remove(project);
+        SaveChanges();
+        return DbErrorStatusCodes.Ok;
     }
 }
