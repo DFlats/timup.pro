@@ -171,4 +171,13 @@ public partial class DatabaseContext
         SaveChanges();
         return DbErrorStatusCodes.Ok;
     }
+
+    internal DbErrorStatusCodes DeleteUser(string userId)
+    {
+        var user = Users.FirstOrDefault(u => u.ClerkId == userId);
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
+        Users.Remove(user);
+        SaveChanges();
+        return DbErrorStatusCodes.Ok;
+    }
 }

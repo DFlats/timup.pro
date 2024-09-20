@@ -80,4 +80,18 @@ public class UsersController(DatabaseContext db) : ControllerBase
             _ => StatusCode(500),
         };
     }
+
+    [HttpDelete("DeleteUser/{userId}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public IActionResult DeleteUser(string userId)
+    {
+        return db.DeleteUser(userId) switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.Ok => Ok("User deleted"),
+            _ => StatusCode(500),
+        };
+    }
 }
