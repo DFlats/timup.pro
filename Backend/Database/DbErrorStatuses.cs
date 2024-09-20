@@ -9,5 +9,10 @@ public enum DbErrorStatusCodes
     Ok,
     UserAlreadyExists,
     UserNotAuthorized,
-    NoContent
+    NoContent,
+    UserAlreadyInProject,
+    UserIsAlreadyOwner,
+    UserNotFoundInProject,
+    UserAlreadyInvited,
+    NoInviteFound,
 }

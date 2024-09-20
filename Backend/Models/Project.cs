@@ -16,4 +16,5 @@ public class Project
     [Required]
     public Description Description { get; set; } = null!;
     public Progress Progress { get; set; } = new Progress();
+    public List<ProjectInvite> ProjectInvites { get; set; } = [];
 }
