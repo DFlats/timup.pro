@@ -336,4 +336,94 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         SaveChanges();
         return DbErrorStatusCodes.NoContent;
     }
+
+    internal bool AddUserToProject(User user, Project project)
+    {
+        if (project.AuthorId == user.ClerkId) return false;
+        if (project.Collaborators.Any(u => u.ClerkId == user.ClerkId)) return false;
+        project.Collaborators.Add(user);
+        user.Projects.Add(project);
+        SaveChanges();
+        return true;
+    }
+
+    internal bool RemoveCollaboratorFromProject(User user, Project project)
+    {
+        if (project.AuthorId == user.ClerkId) return false;
+        if (!project.Collaborators.Any(u => u.ClerkId == user.ClerkId)) return false;
+        project.Collaborators.Remove(user);
+        user.Projects.Remove(project);
+        SaveChanges();
+        return true;
+    }
+
+    internal DbErrorStatusCodes HandleJoinProjectRequest(string userId, int projectId)
+    {
+        var user = GetUserById(userId);
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
+
+        var project = GetProjectById(projectId);
+        if (project is null) return DbErrorStatusCodes.ProjectNotFound;
+
+        if (project.AuthorId == userId) return DbErrorStatusCodes.UserAlreadyInProject;
+
+        if(project.Collaborators.Any(u => u.ClerkId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
+
+        AddUserToProject(user, project);
+
+        return DbErrorStatusCodes.Ok;
+    }
+
+    internal DbErrorStatusCodes HandleLeaveProjectRequest(string userId, int projectId)
+    {
+        var user = GetUserById(userId);
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
+
+        var project = GetProjectById(projectId);
+        if (project is null) return DbErrorStatusCodes.ProjectNotFound;
+
+        if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
+
+        if (!project.Collaborators.Any(u => u.ClerkId == userId)) return DbErrorStatusCodes.UserNotFoundInProject;
+
+        RemoveCollaboratorFromProject(user, project);
+
+        return DbErrorStatusCodes.Ok;
+    }
+
+    internal DbErrorStatusCodes HandleKickUserRequest(string userId, int projectId)
+    {
+        var user = GetUserById(userId);
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
+
+        var project = GetProjectById(projectId);
+        if (project is null) return DbErrorStatusCodes.ProjectNotFound;
+
+        if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
+
+        if (!project.Collaborators.Any(u => u.ClerkId == userId)) return DbErrorStatusCodes.UserNotFoundInProject;
+
+        RemoveCollaboratorFromProject(user, project);
+
+        return DbErrorStatusCodes.Ok;
+    }
+
+    internal DbErrorStatusCodes InviteToProject(string userId, int projectId)
+    {
+        var user = GetUserById(userId);
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
+
+        var project = GetProjectById(projectId);
+        if (project is null) return DbErrorStatusCodes.ProjectNotFound;
+
+        if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
+
+        if (project.Collaborators.Any(u => u.ClerkId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
+
+        AddUserToProject(user, project);
+
+        return DbErrorStatusCodes.Ok;
+    }
+
+    
 }
