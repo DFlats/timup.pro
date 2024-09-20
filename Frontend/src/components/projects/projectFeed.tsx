@@ -8,12 +8,24 @@ interface Props {
 }
 
 export function ProjectFeed({ projectFeed }: Props) {
-    const { featuredProjects, recommendedProjectsForClientUser, projectsOwnedByClientUser } = useProjects({ type: projectFeed });
+    const maxProjectsInFeed = 10;
 
-    const projects =
-        featuredProjects ??
-        (recommendedProjectsForClientUser ??
-            projectsOwnedByClientUser);
+    const {
+        featuredProjects,
+        recommendedProjectsForClientUser,
+        projectsOwnedByClientUser
+    } = useProjects({ type: projectFeed });
+
+
+    let projects =
+        (featuredProjects ??
+            (recommendedProjectsForClientUser ??
+                projectsOwnedByClientUser));
+
+    if (!projects) return;
+
+    if (projects.length > maxProjectsInFeed)
+        projects = projects.slice(0, maxProjectsInFeed);
 
     const heading = () => {
         switch (projectFeed) {
