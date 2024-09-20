@@ -102,7 +102,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpDelete("DeleteProjectByAuthorIdAndProjectId/{authorId}/{projectId}")]
+    [HttpDelete("DeleteProjectByAuthorIdByProjectId/{authorId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(401)]

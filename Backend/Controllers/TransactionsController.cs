@@ -7,7 +7,7 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class TransactionsController(DatabaseContext db) : ControllerBase
 {
-    [HttpPost("JoinProjectRequestByUserIdAndProjectId/{userId}/{projectId}")]
+    [HttpPost("JoinProjectRequestByUserIdByProjectId/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
@@ -25,7 +25,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPut("JoinProjectRequestByUserIdProjectIdAndAuthorId/Accept/{userId}/{projectId}/{authorId}")]
+    [HttpPut("JoinProjectRequestByUserIdByProjectIdByAuthorId/Accept/{userId}/{projectId}/{authorId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(401)]
@@ -46,7 +46,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPut("JoinProjectRequestByUserIdProjectIdAndAuthorId/Deny/{userId}/{projectId}/{authorId}")]
+    [HttpPut("JoinProjectRequestByUserIdByProjectIdByAuthorId/Deny/{userId}/{projectId}/{authorId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(401)]
@@ -64,7 +64,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPost("InviteUserToProjectByUserIdProjectIdAndAuthorId/{userId}/{projectId}/{authorId}")]
+    [HttpPost("InviteUserToProjectByUserIdByProjectIdByAuthorId/{userId}/{projectId}/{authorId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(401)]
@@ -84,7 +84,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPut("InviteUserToProjectByUserIdAndProjectId/Accept/{userId}/{projectId}")]
+    [HttpPut("InviteUserToProjectByUserIdByProjectId/Accept/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
@@ -104,7 +104,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPut("InviteUserToProjectByUserIdAndProjectId/Deny/{userId}/{projectId}")]
+    [HttpPut("InviteUserToProjectByUserIdByProjectId/Deny/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -121,7 +121,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpDelete("LeaveProjectRequestByUserIdAndProjectId/{userId}/{projectId}")]
+    [HttpDelete("LeaveProjectRequestByUserIdByProjectId/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
@@ -138,7 +138,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpDelete("KickUserFromProjectByUserIdProjectIdAndAuthorId/{userId}/{projectId}/{authorId}")]
+    [HttpDelete("KickUserFromProjectByUserIdByProjectIdByAuthorId/{userId}/{projectId}/{authorId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(401)]
