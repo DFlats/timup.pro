@@ -6,8 +6,6 @@ namespace Backend.Database;
 
 public partial class DatabaseContext
 {
-    private readonly int _pageSize = 10;
-
     internal List<ProjectResponse> GetAllProjects(int? page = 1)
     {
         return [.. Projects.Include(p => p.Author)
