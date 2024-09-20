@@ -6,19 +6,15 @@ namespace Backend.Database;
 
 public partial class DatabaseContext
 {
-    private readonly int _pageSize = 10;
-
-    internal List<ProjectResponse> GetAllProjects(int? page = 1)
+    internal List<ProjectResponse> GetAllProjects()
     {
         return [.. Projects.Include(p => p.Author)
                             .Include(p => p.Description)
                             .ThenInclude(p => p.Tags)
-                            .Skip(((int)page! - 1) * _pageSize)
-                            .Take(_pageSize)
                             .Select(p => (ProjectResponse) p)];
     }
 
-    internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests, int? page = 1)
+    internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests)
     {
 
         skills ??= [];
@@ -29,15 +25,13 @@ public partial class DatabaseContext
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
-            .Skip(((int)page! - 1) * _pageSize)
-            .Take(_pageSize)
             .Select(p => (ProjectResponse)p)
             .ToList();
 
         return projects;
     }
 
-    internal (DbErrorStatusCodes, List<ProjectResponse>?) GetRecommendedProjectsByUserId(string id, int? page = 1)
+    internal (DbErrorStatusCodes, List<ProjectResponse>?) GetRecommendedProjectsByUserId(string id)
     {
         var user = GetUserById(id);
 
@@ -51,8 +45,6 @@ public partial class DatabaseContext
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
-            .Skip(((int)page! - 1) * _pageSize)
-            .Take(_pageSize)
             .Select(p => (ProjectResponse)p)
             .ToList();
 
