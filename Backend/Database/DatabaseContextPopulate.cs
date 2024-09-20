@@ -2,11 +2,11 @@ namespace Backend.Database;
 
 public partial class DatabaseContext
 {
-    internal bool PopulateProjects(int count = 1000)
+    internal bool PopulateDatabase(int count = 1000)
     {
         try
         {
-            var (seededProjects, seededUsers, seededTags) = DbSeeder.GenerateProjects(count);
+            var (seededProjects, seededUsers, seededTags) = DbSeeder.GenerateData(count);
             Console.WriteLine("hello");
 
             Users.AddRange(seededUsers);

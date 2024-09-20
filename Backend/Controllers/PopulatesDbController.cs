@@ -10,6 +10,6 @@ public class PopulatesController(DatabaseContext db) : ControllerBase
     [HttpPost("PopulateDatabase")]
     public IActionResult PopulateDatabase()
     {
-        return Ok(db.PopulateProjects());
+        return Ok(db.PopulateDatabase());
     }
 }

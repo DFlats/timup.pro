@@ -5,7 +5,7 @@ namespace Backend.Database;
 
 public class DbSeeder()
 {
-    public static (List<Project>, List<User>, List<Tag>) GenerateProjects(int count)
+    public static (List<Project>, List<User>, List<Tag>) GenerateData(int count)
     {
         List<Project> _projects = [];
         List<User> _users = [];
@@ -17,7 +17,8 @@ public class DbSeeder()
             var userFaker = new Faker<User>()
                 .RuleFor(u => u.ClerkId, f => authorId)
                 .RuleFor(u => u.Name, f => f.Name.FirstName())
-                .RuleFor(u => u.Email, f => f.Internet.Email());
+                .RuleFor(u => u.Email, f => f.Internet.Email())
+                .RuleFor(u => u.Projects, f => []);
 
             Random random = new();
 
@@ -50,6 +51,8 @@ public class DbSeeder()
                 interests.RemoveAt(index);
             }
 
+            userFaker.RuleFor(u => u.Tags, f => fakedTags);
+
             var descriptionFaker = new Faker<Description>()
                 .RuleFor(d => d.Text, f => f.Lorem.Paragraph())
                 .RuleFor(d => d.Tags, f => fakedTags);
@@ -60,11 +63,14 @@ public class DbSeeder()
                 .RuleFor(p => p.Title, f => f.Lorem.Sentance())
                 .RuleFor(p => p.Author, f => fakedUser)
                 .RuleFor(p => p.AuthorId, (f, p) => authorId)
-                // .RuleFor(p => p.Collaborators, f => userFaker.Generate(3))
                 .RuleFor(p => p.Description, f => descriptionFaker.Generate())
                 .RuleFor(p => p.Progress, f => new Progress());
 
-            _projects.Add(projectFaker.Generate());
+            var fakedProject = projectFaker.Generate();
+
+            fakedUser.Projects.Add(fakedProject);
+
+            _projects.Add(fakedProject);
             _users.Add(fakedUser);
             _tags.AddRange(fakedTags);
         }
