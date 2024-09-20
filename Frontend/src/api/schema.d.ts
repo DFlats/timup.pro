@@ -116,6 +116,134 @@ export interface paths {
         patch: operations["Projects_UpdateProject"];
         trace?: never;
     };
+    "/api/Transactions/HandleJoinProjectRequest/{userId}/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["Transactions_HandleJoinProjectRequest"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Transactions/HandleJoinProjectRequest/Accept/{userId}/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Transactions_HandleAcceptJoinProjectInviteRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Transactions/HandleJoinProjectRequest/Deny/{userId}/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Transactions_HandleDeclineProjectInviteRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Transactions/HandleLeaveProjectRequest/{userId}/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["Transactions_HandleLeaveProjectRequest"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Transactions/HandleKickUserFromProject/{userId}/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["Transactions_HandleKickUserFromProject"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Transactions/HandleInviteUserToProject/{userId}/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Transactions_HandleInviteUserToProject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Transactions/HandleInviteUserToProject/Accept/{userId}/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Transactions_HandleInviteUserToProjectAccept"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Transactions/HandleInviteUserToProject/Deny/{userId}/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Transactions_HandleInviteUserToProjectDeny"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Users/GetUserByUserId/{id}": {
         parameters: {
             query?: never;
@@ -227,6 +355,7 @@ export interface components {
             skillTags?: string[];
             interestTags?: string[];
             isCompleted?: boolean;
+            invitedUsers?: string[];
         };
         ValueTupleOfStringAndString: Record<string, never>;
         ProjectRequest: {
@@ -310,6 +439,7 @@ export interface operations {
             query?: {
                 interests?: string[] | null;
                 skills?: string[] | null;
+                page?: number;
             };
             header?: never;
             path?: never;
@@ -329,7 +459,9 @@ export interface operations {
     };
     Projects_GetRecommendedProjectsByUserId: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+            };
             header?: never;
             path: {
                 id: string;
@@ -425,6 +557,182 @@ export interface operations {
                 "application/json": components["schemas"]["ProjectPatchRequest"];
             };
         };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Transactions_HandleJoinProjectRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Transactions_HandleAcceptJoinProjectInviteRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Transactions_HandleDeclineProjectInviteRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Transactions_HandleLeaveProjectRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Transactions_HandleKickUserFromProject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Transactions_HandleInviteUserToProject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Transactions_HandleInviteUserToProjectAccept: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Transactions_HandleInviteUserToProjectDeny: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
                 headers: {
@@ -532,7 +840,9 @@ export interface operations {
     };
     Users_GetRecommendedUsersByProjectId: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+            };
             header?: never;
             path: {
                 id: number;
