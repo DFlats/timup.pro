@@ -7,7 +7,7 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class TransactionsController(DatabaseContext db) : ControllerBase
 {
-    [HttpGet("HandleJoinProjectRequest/{userId}/{projectId}")]
+    [HttpPut("HandleJoinProjectRequest/{userId}/{projectId}")]
     public IActionResult HandleJoinProjectRequest(string userId, int projectId)
     {
         return db.HandleJoinProjectRequest(userId, projectId) switch
@@ -21,7 +21,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("HandleJoinProjectRequest/Accept/{userId}/{projectId}")]
+    [HttpPost("HandleJoinProjectRequest/Accept/{userId}/{projectId}")]
     public IActionResult HandleAcceptJoinProjectInviteRequest(string userId, int projectId)
     {
         return db.HandleAcceptProjectInviteRequest(userId, projectId) switch
@@ -36,7 +36,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("HandleJoinProjectRequest/Deny/{userId}/{projectId}")]
+    [HttpPost("HandleJoinProjectRequest/Deny/{userId}/{projectId}")]
     public IActionResult HandleDeclineProjectInviteRequest(string userId, int projectId)
     {
         return db.HandleDeclineProjectInviteRequest(userId, projectId) switch
@@ -49,7 +49,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("HandleLeaveProjectRequest/{userId}/{projectId}")]
+    [HttpPut("HandleLeaveProjectRequest/{userId}/{projectId}")]
     public IActionResult HandleLeaveProjectRequest(string userId, int projectId)
     {
         return db.HandleLeaveProjectRequest(userId, projectId) switch
@@ -62,7 +62,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("HandleKickUserFromProject/{userId}/{projectId}")]
+    [HttpPut("HandleKickUserFromProject/{userId}/{projectId}")]
     public IActionResult HandleKickUserFromProject(string userId, int projectId)
     {
         return db.HandleKickUserRequest(userId, projectId) switch
@@ -76,7 +76,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("HandleInviteUserToProject/{userId}/{projectId}")]
+    [HttpPost("HandleInviteUserToProject/{userId}/{projectId}")]
     public IActionResult HandleInviteUserToProject(string userId, int projectId)
     {
         return db.InviteToProject(userId, projectId) switch
@@ -90,7 +90,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("HandleInviteUserToProject/Accept/{userId}/{projectId}")]
+    [HttpPost("HandleInviteUserToProject/Accept/{userId}/{projectId}")]
     public IActionResult HandleInviteUserToProjectAccept(string userId, int projectId)
     {
         return db.HandleInviteUserToProjectAccept(userId, projectId) switch
@@ -106,7 +106,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("HandleInviteUserToProject/Deny/{userId}/{projectId}")]
+    [HttpPost("HandleInviteUserToProject/Deny/{userId}/{projectId}")]
     public IActionResult HandleInviteUserToProjectDeny(string userId, int projectId)
     {
         return db.HandleInviteUserToProjectDeny(userId, projectId) switch
