@@ -33,10 +33,11 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
     [ProducesResponseType(500)]
     public IActionResult HandleAcceptJoinProjectInviteRequest(string userId, int projectId, string authorId)
     {
-        return db.HandleAcceptProjectInviteRequest(userId, projectId) switch
+        return db.HandleAcceptProjectInviteRequest(userId, projectId, authorId) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserNotAuthorized => Unauthorized("User is not project owner"),
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
             DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
@@ -52,10 +53,11 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
     [ProducesResponseType(500)]
     public IActionResult HandleDeclineProjectInviteRequest(string userId, int projectId, string authorId)
     {
-        return db.HandleDeclineProjectInviteRequest(userId, projectId) switch
+        return db.HandleDeclineProjectInviteRequest(userId, projectId, authorId) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserNotAuthorized => Unauthorized("User is not project owner"),
             DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
             DbErrorStatusCodes.Ok => Ok("User declined project invite"),
             _ => StatusCode(500),
@@ -70,10 +72,11 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
     [ProducesResponseType(500)]
     public IActionResult HandleInviteUserToProject(string userId, int projectId, string authorId)
     {
-        return db.InviteToProject(userId, projectId) switch
+        return db.InviteToProject(userId, projectId, authorId) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserNotAuthorized => Unauthorized("User is not project owner"),
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
             DbErrorStatusCodes.Ok => Ok("User invited to project"),
@@ -143,10 +146,11 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
     [ProducesResponseType(500)]
     public IActionResult HandleKickUserFromProject(string userId, int projectId, string authorId)
     {
-        return db.HandleKickUserRequest(userId, projectId) switch
+        return db.HandleKickUserRequest(userId, projectId, authorId) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserNotAuthorized => Unauthorized("User is not project owner"),
             DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
             DbErrorStatusCodes.Ok => Ok("User kicked from project"),

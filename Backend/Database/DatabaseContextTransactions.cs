@@ -44,13 +44,15 @@ public partial class DatabaseContext
         SaveChanges();
     }
 
-    internal DbErrorStatusCodes HandleAcceptProjectInviteRequest(string userId, int projectId)
+    internal DbErrorStatusCodes HandleAcceptProjectInviteRequest(string userId, int projectId, string authorId)
     {
         var user = GetUserById(userId);
         if (user is null) return DbErrorStatusCodes.UserNotFound;
 
         var project = GetProjectById(projectId);
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
+
+        if (project.AuthorId != authorId) return DbErrorStatusCodes.UserNotAuthorized;
 
         if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
@@ -74,13 +76,15 @@ public partial class DatabaseContext
         }
     }
 
-    internal object HandleDeclineProjectInviteRequest(string userId, int projectId)
+    internal object HandleDeclineProjectInviteRequest(string userId, int projectId, string authorId)
     {
         var user = GetUserById(userId);
         if (user is null) return DbErrorStatusCodes.UserNotFound;
 
         var project = GetProjectById(projectId);
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
+
+        if (project.AuthorId != authorId) return DbErrorStatusCodes.UserNotAuthorized;
 
         if (!project.ProjectInvites.Any(p => p.User.ClerkId == userId)) return DbErrorStatusCodes.UserNotFoundInProject;
 
@@ -106,13 +110,15 @@ public partial class DatabaseContext
         return DbErrorStatusCodes.Ok;
     }
 
-    internal DbErrorStatusCodes HandleKickUserRequest(string userId, int projectId)
+    internal DbErrorStatusCodes HandleKickUserRequest(string userId, int projectId, string authorId)
     {
         var user = GetUserById(userId);
         if (user is null) return DbErrorStatusCodes.UserNotFound;
 
         var project = GetProjectById(projectId);
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
+
+        if (project.AuthorId != authorId) return DbErrorStatusCodes.UserNotAuthorized;
 
         if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
@@ -123,13 +129,15 @@ public partial class DatabaseContext
         return DbErrorStatusCodes.Ok;
     }
 
-    internal DbErrorStatusCodes InviteToProject(string userId, int projectId)
+    internal DbErrorStatusCodes InviteToProject(string userId, int projectId, string authorId)
     {
         var user = GetUserById(userId);
         if (user is null) return DbErrorStatusCodes.UserNotFound;
 
         var project = GetProjectById(projectId);
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
+
+        if (project.AuthorId != authorId) return DbErrorStatusCodes.UserNotAuthorized;
 
         if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
