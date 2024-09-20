@@ -7,7 +7,7 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class TransactionsController(DatabaseContext db) : ControllerBase
 {
-    [HttpPost("JoinProjectRequest/{userId}/{projectId}")]
+    [HttpPost("JoinProjectRequestByUserIdAndProjectId/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
@@ -25,12 +25,13 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPut("JoinProjectRequest/Accept/{userId}/{projectId}")]
+    [HttpPut("JoinProjectRequestByUserIdProjectIdAndAuthorId/Accept/{userId}/{projectId}/{authorId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
+    [ProducesResponseType(401)]
     [ProducesResponseType(409)]
     [ProducesResponseType(500)]
-    public IActionResult HandleAcceptJoinProjectInviteRequest(string userId, int projectId)
+    public IActionResult HandleAcceptJoinProjectInviteRequest(string userId, int projectId, string authorId)
     {
         return db.HandleAcceptProjectInviteRequest(userId, projectId) switch
         {
@@ -44,11 +45,12 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPut("JoinProjectRequest/Deny/{userId}/{projectId}")]
+    [HttpPut("JoinProjectRequestByUserIdProjectIdAndAuthorId/Deny/{userId}/{projectId}/{authorId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
+    [ProducesResponseType(401)]
     [ProducesResponseType(500)]
-    public IActionResult HandleDeclineProjectInviteRequest(string userId, int projectId)
+    public IActionResult HandleDeclineProjectInviteRequest(string userId, int projectId, string authorId)
     {
         return db.HandleDeclineProjectInviteRequest(userId, projectId) switch
         {
@@ -60,12 +62,13 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPost("InviteUserToProject/{userId}/{projectId}")]
+    [HttpPost("InviteUserToProjectByUserIdProjectIdAndAuthorId/{userId}/{projectId}/{authorId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
+    [ProducesResponseType(401)]
     [ProducesResponseType(409)]
     [ProducesResponseType(500)]
-    public IActionResult HandleInviteUserToProject(string userId, int projectId)
+    public IActionResult HandleInviteUserToProject(string userId, int projectId, string authorId)
     {
         return db.InviteToProject(userId, projectId) switch
         {
@@ -78,7 +81,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPut("InviteUserToProject/Accept/{userId}/{projectId}")]
+    [HttpPut("InviteUserToProjectByUserIdAndProjectId/Accept/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
@@ -98,7 +101,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPut("InviteUserToProject/Deny/{userId}/{projectId}")]
+    [HttpPut("InviteUserToProjectByUserIdAndProjectId/Deny/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -115,7 +118,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpDelete("LeaveProjectRequest/{userId}/{projectId}")]
+    [HttpDelete("LeaveProjectRequestByUserIdAndProjectId/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
@@ -132,12 +135,13 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpDelete("KickUserFromProject/{userId}/{projectId}")]
+    [HttpDelete("KickUserFromProjectByUserIdProjectIdAndAuthorId/{userId}/{projectId}/{authorId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
+    [ProducesResponseType(401)]
     [ProducesResponseType(409)]
     [ProducesResponseType(500)]
-    public IActionResult HandleKickUserFromProject(string userId, int projectId)
+    public IActionResult HandleKickUserFromProject(string userId, int projectId, string authorId)
     {
         return db.HandleKickUserRequest(userId, projectId) switch
         {
