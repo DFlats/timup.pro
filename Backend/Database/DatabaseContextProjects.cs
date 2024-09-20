@@ -149,7 +149,7 @@ public partial class DatabaseContext
 
 
         SaveChanges();
-        return DbErrorStatusCodes.NoContent;
+        return DbErrorStatusCodes.Ok;
     }
 
     private bool AddUserToProject(User user, Project project)

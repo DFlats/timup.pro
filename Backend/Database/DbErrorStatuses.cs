@@ -4,7 +4,6 @@ public enum DbErrorStatusCodes
 {
     FatalError,
     Ok,
-    NoContent,
     UserNotFound,
     ProjectNotFound,
     TagAlreadyExists,

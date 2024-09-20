@@ -7,7 +7,7 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class TransactionsController(DatabaseContext db) : ControllerBase
 {
-    [HttpPut("HandleJoinProjectRequest/{userId}/{projectId}")]
+    [HttpPost("JoinProjectRequest/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
@@ -25,7 +25,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPost("HandleJoinProjectRequest/Accept/{userId}/{projectId}")]
+    [HttpPut("JoinProjectRequest/Accept/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
@@ -44,7 +44,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPost("HandleJoinProjectRequest/Deny/{userId}/{projectId}")]
+    [HttpPut("JoinProjectRequest/Deny/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -60,42 +60,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPut("HandleLeaveProjectRequest/{userId}/{projectId}")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(409)]
-    [ProducesResponseType(500)]
-    public IActionResult HandleLeaveProjectRequest(string userId, int projectId)
-    {
-        return db.HandleLeaveProjectRequest(userId, projectId) switch
-        {
-            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
-            DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
-            DbErrorStatusCodes.Ok => Ok("User left project"),
-            _ => StatusCode(500),
-        };
-    }
-
-    [HttpPut("HandleKickUserFromProject/{userId}/{projectId}")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(409)]
-    [ProducesResponseType(500)]
-    public IActionResult HandleKickUserFromProject(string userId, int projectId)
-    {
-        return db.HandleKickUserRequest(userId, projectId) switch
-        {
-            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
-            DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
-            DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
-            DbErrorStatusCodes.Ok => Ok("User kicked from project"),
-            _ => StatusCode(500),
-        };
-    }
-
-    [HttpPost("HandleInviteUserToProject/{userId}/{projectId}")]
+    [HttpPost("InviteUserToProject/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
@@ -113,7 +78,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPost("HandleInviteUserToProject/Accept/{userId}/{projectId}")]
+    [HttpPut("InviteUserToProject/Accept/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
@@ -133,7 +98,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPost("HandleInviteUserToProject/Deny/{userId}/{projectId}")]
+    [HttpPut("InviteUserToProject/Deny/{userId}/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -150,4 +115,38 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
+    [HttpDelete("LeaveProjectRequest/{userId}/{projectId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
+    public IActionResult HandleLeaveProjectRequest(string userId, int projectId)
+    {
+        return db.HandleLeaveProjectRequest(userId, projectId) switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
+            DbErrorStatusCodes.Ok => Ok("User left project"),
+            _ => StatusCode(500),
+        };
+    }
+
+    [HttpDelete("KickUserFromProject/{userId}/{projectId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
+    public IActionResult HandleKickUserFromProject(string userId, int projectId)
+    {
+        return db.HandleKickUserRequest(userId, projectId) switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
+            DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
+            DbErrorStatusCodes.Ok => Ok("User kicked from project"),
+            _ => StatusCode(500),
+        };
+    }
 }
