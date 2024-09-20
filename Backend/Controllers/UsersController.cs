@@ -8,6 +8,22 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 public class UsersController(DatabaseContext db) : ControllerBase
 {
+    [HttpGet("GetUsers")]
+    public List<UserResponse> GetUsers
+    (
+        [FromQuery(Name = "interests")] string[]? interests,
+        [FromQuery(Name = "skills")] string[]? skills,
+        [FromQuery(Name = "page")] int? page = 1
+    )
+    {
+        if (skills?.Length == 0 && interests?.Length == 0)
+        {
+            return db.GetAllUsers(page);
+        }
+
+        return db.GetUsersByFilter(skills, interests, page);
+    }
+
     [HttpGet("GetUserByUserId/{id}")]
     public ActionResult<UserResponse> GetUserByUserId(string id)
     {

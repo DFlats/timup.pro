@@ -6,6 +6,29 @@ namespace Backend.Database;
 
 public partial class DatabaseContext
 {
+    internal List<UserResponse> GetAllUsers(int? page = 1)
+    {
+        return [.. Users
+            .Include(u => u.Tags)
+            .Skip(((int)page! - 1) * _pageSize)
+            .Take(_pageSize)
+            .Select(u => (UserResponse) u)];
+    }
+
+    internal List<UserResponse> GetUsersByFilter(string[]? skills, string[]? interests, int? page = 1)
+    {
+
+        skills ??= [];
+        interests ??= [];
+
+        return [.. Users
+            .Include(u => u.Tags)
+            .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Skip(((int)page! - 1) * _pageSize)
+            .Take(_pageSize)
+            .Select(u => (UserResponse)u)];
+    }
+
     internal User? GetUserById(string id)
     {
         var user = Users
