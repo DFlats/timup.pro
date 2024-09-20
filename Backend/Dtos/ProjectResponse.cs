@@ -2,7 +2,7 @@ using Backend.Models;
 
 namespace Backend.Dtos;
 
-public record ProjectResponse(int Id, string Title, string AuthorName, string AuthorId, (string, string)[] Collaborators, string Description, string[] SkillTags, string[] InterestTags, bool IsCompleted)
+public record ProjectResponse(int Id, string Title, string AuthorName, string AuthorId, (string, string)[] Collaborators, string Description, string[] SkillTags, string[] InterestTags, bool IsCompleted, string[] InvitedUsers)
 {
     public static implicit operator ProjectResponse(Project project)
     {
@@ -10,6 +10,8 @@ public record ProjectResponse(int Id, string Title, string AuthorName, string Au
         var collaborators = project.Collaborators.Select(c => (c.Name, c.ClerkId)).ToArray();
         var skillTags = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
         var interestTags = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
+
+        var invitedUsers = project.ProjectInvites.Select(i => i.User.ClerkId).ToArray();
 
         return new ProjectResponse(
             project.Id,
@@ -20,7 +22,8 @@ public record ProjectResponse(int Id, string Title, string AuthorName, string Au
             project.Description.Text,
             skillTags,
             interestTags,
-            project.Progress.IsCompleted
+            project.Progress.IsCompleted,
+            invitedUsers
         );
 
     }

@@ -10,7 +10,6 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
     public DbSet<Progress> Progresses { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<Description> Descriptions { get; set; }
-
     public DbSet<ProjectInvite> ProjectInvites { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -197,6 +196,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         return Projects.Include(p => p.Description).ThenInclude(d => d.Tags)
                         .Include(p => p.Author)
                         .Include(P => P.Progress)
+                        .Include(p => p.ProjectInvites).ThenInclude(i => i.User)
                         .FirstOrDefault(p => p.Id == id);
     }
 
@@ -539,7 +539,7 @@ public class DatabaseContext(DbContextOptions options) : DbContext(options)
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
 
         if (!user.ProjectInvites.Any(p => p.Project.Id == project.Id)) return DbErrorStatusCodes.NoInviteFound;
-        
+
         UserRemoveProjectInvite(user, project);
 
         return DbErrorStatusCodes.Ok;
