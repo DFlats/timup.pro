@@ -68,7 +68,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPatch("UpdateUser")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public IActionResult UpdateUser(UserPatchRequest requestBody)
@@ -82,7 +82,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpDelete("DeleteUser/{userId}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public IActionResult DeleteUser(string userId)

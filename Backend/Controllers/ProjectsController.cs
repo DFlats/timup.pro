@@ -86,7 +86,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPatch("UpdateProject")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(401)]
     [ProducesResponseType(500)]
@@ -104,7 +104,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpDelete("DeleteProject/{authorId}/{projectId}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(401)]
     [ProducesResponseType(500)]
