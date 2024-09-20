@@ -72,10 +72,12 @@ export function useClientUser() {
         const { updatedSkillTags, updatedInterestTags } = calculateUpdatedTags();
 
         const request: UserPatchRequest = {
-            id: clientUser.id,
+            clerkId: clientUser.id,
             skillTags: updatedSkillTags,
             interestTags: updatedInterestTags
         };
+
+        console.log(request);
 
         await endpoints.users.updateUser(request);
 

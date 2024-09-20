@@ -48,15 +48,13 @@ export const getUserByUserId = async (id: string) => {
 }
 
 export const createUser = async (userRequest: UserRequest) => {
-    const { response, error } = await client.POST('/api/Users/CreateUser', {
+    await client.POST('/api/Users/CreateUser', {
         body: userRequest
     });
-
-    if (!response.ok && error)
-        throw error;
 }
 
 export const updateUser = async (userPatchRequest: UserPatchRequest) => {
+    console.log(userPatchRequest);
     const { response, error } = await client.PATCH('/api/Users/UpdateUser', {
         body: userPatchRequest
     });

@@ -18,7 +18,7 @@ export type UserRequest = {
 
 // components['schemas']['UserPatchRequest'];
 export type UserPatchRequest = {
-    id: string;
+    clerkId: string;
     skillTags?: string[];
     interestTags?: string[];
 }
