@@ -18,21 +18,17 @@ public partial class DatabaseContext
 
     internal List<ProjectResponse> GetProjectsByFilter(string[]? skills, string[]? interests, int? page = 1)
     {
-
         skills ??= [];
         interests ??= [];
 
-        var projects = Projects
+        return [.. Projects
             .Include(p => p.Author)
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
-            .Select(p => (ProjectResponse)p)
-            .ToList();
-
-        return projects;
+            .Select(p => (ProjectResponse)p)];
     }
 
     internal (DbErrorStatusCodes, List<ProjectResponse>?) GetRecommendedProjectsByUserId(string id, int? page = 1)
