@@ -12,7 +12,7 @@ interface Props {
 
 export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
     const inputSkillRef = useRef<HTMLInputElement>(null);
-    const [inputValue, setInputValue] = useState<string>('');  // Track input value with state
+    const [inputValue, setInputValue] = useState<string>('');
 
     const handleAddTag = () => {
         const value = inputSkillRef!.current?.value;
@@ -20,8 +20,8 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
 
         onAddTag(value, tagType);
 
-        setInputValue('');  // Clear input value after adding the tag
-        inputSkillRef.current!.value = '';  // Reset the ref value
+        setInputValue('');
+        inputSkillRef.current!.value = ''; 
         inputSkillRef.current!.focus();
     }
 
@@ -40,7 +40,7 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
     }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);  // Update the input value in state on change
+        setInputValue(e.target.value); 
     }
 
     return (
@@ -56,13 +56,13 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
                     ref={inputSkillRef}
                     type='text'
                     value={inputValue}
-                    onChange={handleInputChange}  // Handle input changes
+                    onChange={handleInputChange} 
                     placeholder={placeHolder()}
                     className="input input-bordered w-full max-w-xs"
                 />
 
                 <button
-                    className={`btn m-4 ${inputValue === '' ? 'btn-disabled' : ''}`}  // Disable button if input is empty
+                    className={`btn m-4 ${inputValue === '' ? 'btn-disabled' : ''}`}  
                     onClick={handleAddTag}
                 >
                     {submitLabel()}
