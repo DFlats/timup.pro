@@ -21,6 +21,34 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
+    [HttpGet("HandleJoinProjectRequest/Accept/{userId}/{projectId}")]
+    public IActionResult HandleAcceptJoinProjectInviteRequest(string userId, int projectId)
+    {
+        return db.HandleAcceptProjectInviteRequest(userId, projectId) switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
+            DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
+            DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
+            DbErrorStatusCodes.Ok => Ok("User accepted p    roject invite"),
+            _ => StatusCode(500),
+        };
+    }
+
+    [HttpGet("HandleJoinProjectRequest/Deny/{userId}/{projectId}")]
+    public IActionResult HandleDeclineProjectInviteRequest(string userId, int projectId)
+    {
+        return db.HandleDeclineProjectInviteRequest(userId, projectId) switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
+            DbErrorStatusCodes.Ok => Ok("User declined project invite"),
+            _ => StatusCode(500),
+        };
+    }
+
     [HttpGet("HandleLeaveProjectRequest/{userId}/{projectId}")]
     public IActionResult HandleLeaveProjectRequest(string userId, int projectId)
     {
@@ -34,8 +62,8 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("HandleKickUserRequest/{userId}/{projectId}")]
-    public IActionResult HandleKickUserRequest(string userId, int projectId)
+    [HttpGet("HandleKickUserFromProject/{userId}/{projectId}")]
+    public IActionResult HandleKickUserFromProject(string userId, int projectId)
     {
         return db.HandleKickUserRequest(userId, projectId) switch
         {
@@ -48,8 +76,8 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("InviteToProject/{userId}/{projectId}")]
-    public IActionResult InviteToProject(string userId, int projectId)
+    [HttpGet("HandleInviteUserToProject/{userId}/{projectId}")]
+    public IActionResult HandleInviteUserToProject(string userId, int projectId)
     {
         return db.InviteToProject(userId, projectId) switch
         {
@@ -58,6 +86,36 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
             DbErrorStatusCodes.Ok => Ok("User invited to project"),
+            _ => StatusCode(500),
+        };
+    }
+
+    [HttpGet("HandleInviteUserToProject/Accept/{userId}/{projectId}")]
+    public IActionResult HandleInviteUserToProjectAccept(string userId, int projectId)
+    {
+        return db.HandleInviteUserToProjectAccept(userId, projectId) switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
+            DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
+            DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
+            DbErrorStatusCodes.NoInviteFound => NotFound("No invite found"),
+            DbErrorStatusCodes.Ok => Ok("User accepted project invite"),
+            _ => StatusCode(500),
+        };
+    }
+
+    [HttpGet("HandleInviteUserToProject/Deny/{userId}/{projectId}")]
+    public IActionResult HandleInviteUserToProjectDeny(string userId, int projectId)
+    {
+        return db.HandleInviteUserToProjectDeny(userId, projectId) switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
+            DbErrorStatusCodes.NoInviteFound => NotFound("No invite found"),
+            DbErrorStatusCodes.Ok => Ok("User declined project invite"),
             _ => StatusCode(500),
         };
     }

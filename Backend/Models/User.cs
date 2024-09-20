@@ -11,4 +11,5 @@ public class User
     public string Email { get; set; } = null!;
     public List<Project> Projects { get; set; } = [];
     public List<Tag> Tags { get; set; } = [];
+    public List<ProjectInvite> ProjectInvites { get; set; } = [];
 }

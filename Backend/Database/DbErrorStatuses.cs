@@ -13,4 +13,6 @@ public enum DbErrorStatusCodes
     UserAlreadyInProject,
     UserIsAlreadyOwner,
     UserNotFoundInProject,
+    UserAlreadyInvited,
+    NoInviteFound,
 }
