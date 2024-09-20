@@ -67,37 +67,6 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpPost("AddTagToUserByUserId/{id}")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(409)]
-    [ProducesResponseType(500)]
-    public IActionResult AddTagToUserByUserId(string id, TagRequest tagToAdd)
-    {
-        return db.AddTagToUser(id, tagToAdd) switch
-        {
-            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.TagAlreadyExists => Conflict("Tag already exists"),
-            DbErrorStatusCodes.Ok => Ok("Tag added"),
-            _ => StatusCode(500),
-        };
-    }
-
-    [HttpDelete("RemoveTagFromUserByUserId/{id}")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(500)]
-    public IActionResult RemoveTagFromUserByUserId(string id, TagRequest tagToRemove)
-    {
-        return db.RemoveTagFromUser(id, tagToRemove) switch
-        {
-            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.TagNotFound => NotFound("Tag not found"),
-            DbErrorStatusCodes.Ok => Ok("Tag removed"),
-            _ => StatusCode(500),
-        };
-    }
-
     [HttpPatch("UpdateUser")]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]
