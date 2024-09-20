@@ -54,9 +54,9 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet("GetRecommendedUsersByProjectId/{id}")]
-    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int id)
+    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int id, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var users) = db.GetRecommendedUsersByProjectId(id);
+        (var status, var users) = db.GetRecommendedUsersByProjectId(id, page);
 
         return status switch
         {

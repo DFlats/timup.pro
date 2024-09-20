@@ -12,21 +12,22 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     public List<ProjectResponse> GetProjects
     (
         [FromQuery(Name = "interests")] string[]? interests,
-        [FromQuery(Name = "skills")] string[]? skills
+        [FromQuery(Name = "skills")] string[]? skills,
+        [FromQuery(Name = "page")] int? page = 1
     )
     {
         if (skills?.Length == 0 && interests?.Length == 0)
         {
-            return db.GetAllProjects();
+            return db.GetAllProjects(page);
         }
 
-        return db.GetProjectsByFilter(skills, interests);
+        return db.GetProjectsByFilter(skills, interests, page);
     }
 
     [HttpGet("GetRecommendedProjectsByUserId/{id}")]
-    public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string id)
+    public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string id, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var projects) = db.GetRecommendedProjectsByUserId(id);
+        (var status, var projects) = db.GetRecommendedProjectsByUserId(id, page);
 
         return status switch
         {
