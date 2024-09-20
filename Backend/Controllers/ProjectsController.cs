@@ -1,4 +1,3 @@
-using Azure.Messaging;
 using Backend.Database;
 using Backend.Dtos;
 using Microsoft.AspNetCore.Mvc;
