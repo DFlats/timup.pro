@@ -12,8 +12,8 @@ export const handleJoinProjectRequestAccept = async (userId: string, projectId: 
     });
 }
 
-export const handleJoinProjectRequestDeny = async (userId: string, projectId: number) => {
-    await client.POST('/api/Transactions/HandleJoinProjectRequest/Deny/{userId}/{projectId}', {
+export const handleLeaveProjectRequest = async (userId: string, projectId: number) => {
+    await client.PUT('/api/Transactions/HandleLeaveProjectRequest/{userId}/{projectId}', {
         params: { path: { userId, projectId } }
     });
 }
