@@ -1,11 +1,35 @@
 using Backend.Dtos;
 using Backend.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
 
 public partial class DatabaseContext
 {
+    internal List<UserResponse> GetAllUsers(int? page = 1)
+    {
+        return [.. Users
+            .Include(u => u.Tags)
+            .Skip(((int)page! - 1) * _pageSize)
+            .Take(_pageSize)
+            .Select(u => (UserResponse) u)];
+    }
+
+    internal List<UserResponse> GetUsersByFilter(string[]? skills, string[]? interests, int? page = 1)
+    {
+
+        skills ??= [];
+        interests ??= [];
+
+        return [.. Users
+            .Include(u => u.Tags)
+            .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Skip(((int)page! - 1) * _pageSize)
+            .Take(_pageSize)
+            .Select(u => (UserResponse)u)];
+    }
+
     internal User? GetUserById(string id)
     {
         var user = Users
@@ -146,6 +170,23 @@ public partial class DatabaseContext
         }
 
         SaveChanges();
-        return DbErrorStatusCodes.NoContent;
+        return DbErrorStatusCodes.Ok;
+    }
+
+    internal DbErrorStatusCodes DeleteUser(string userId)
+    {
+        var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == userId);
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
+        var projects = Projects.Where(p => p.AuthorId == userId);
+        if (projects is not null)
+        {
+            foreach (var p in projects)
+            {
+                Projects.Remove(p);
+            }
+        }
+        Users.Remove(user);
+        SaveChanges();
+        return DbErrorStatusCodes.Ok;
     }
 }
