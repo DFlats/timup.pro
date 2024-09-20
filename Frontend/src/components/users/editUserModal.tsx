@@ -1,9 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useClientUser } from "../../hooks";
+import { useUsers } from "../../hooks";
 import { TagEditor } from "../tags";
 
 export function EditUserModal() {
-    const { clientUser, addTag, removeTag } = useClientUser();
+    const {
+        clientUser,
+        addTagToClientUser,
+        removeTagFromClientUser
+    } = useUsers({ type: 'clientUser' });
 
     if (!clientUser) return;
 
@@ -15,13 +19,13 @@ export function EditUserModal() {
                     <TagEditor
                         tags={clientUser.skillTags}
                         tagType='skill'
-                        onAddTag={addTag}
-                        onRemoveTag={removeTag} />
+                        onAddTag={addTagToClientUser}
+                        onRemoveTag={removeTagFromClientUser} />
                     <TagEditor
                         tags={clientUser.interestTags}
                         tagType='interest'
-                        onAddTag={addTag}
-                        onRemoveTag={removeTag} />
+                        onAddTag={addTagToClientUser}
+                        onRemoveTag={removeTagFromClientUser} />
                 </div>
                 <form method="dialog" className="modal-backdrop">
                     <button>close</button>

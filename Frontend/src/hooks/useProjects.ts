@@ -1,79 +1,93 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { useClientUser } from "../hooks"
-import { getProjectById, getProjectsByFilter, getProjectsByUserId, postProject, Project } from "../api"
-import { ProjectFeedType } from "../types/types";
+import { useUsers } from "../hooks"
+import { getProjectByProjectId, getProjects, getProjectsByUserId, createProject, Project } from "../api"
 
-export function useProjects(projectFeed: ProjectFeedType, projectId?: number) {
-    const { clientUser } = useClientUser();
+type FeaturedProjects = {
+    type: 'featuredProjects'
+};
+
+type RecommendedProjectsForClientUser = {
+    type: 'recommendedProjectsForClientUser',
+}
+
+type ProjectsOwnedByClientUser = {
+    type: 'projectsOwnedByClientUser'
+}
+
+type ProjectById = {
+    type: 'projectById',
+    projectId: number
+}
+
+type Params =
+    FeaturedProjects |
+    RecommendedProjectsForClientUser |
+    ProjectsOwnedByClientUser |
+    ProjectById;
+
+export function useProjects(params: Params) {
+    const { clientUser } = useUsers({ type: 'clientUser' })
     const queryClient = useQueryClient();
 
-    const queryKeyFeaturedProjects = ['featuredProjects'];
-    const queryKeyRecommendedProjects = ['recommendedProjects'];
-    const queryKeyUserProjects = ["userProjects"];
+    const projectId = params.type == 'projectById' && params.projectId;
+    const queryKeyFeaturedProjects = ['projects', 'featured'];
+    const queryKeyRecommendedProjects = ['projects', 'recommended'];
+    const queryKeyUserProjects = ['projects', 'user'];
     const queryKeyProject = ["project", projectId];
 
     const featuredProjectsQuery = useQuery({
         queryKey: queryKeyFeaturedProjects,
         queryFn: async () => {
-            return await getProjectsByFilter();
+            return await getProjects();
         },
-        enabled: projectFeed == 'featured'
+        enabled: params.type == 'featuredProjects'
     });
 
-    const recommendedProjectsQuery = useQuery({
+    const recommendedProjectsForClientUserQuery = useQuery({
         queryKey: queryKeyRecommendedProjects,
         queryFn: async (): Promise<Project[]> => {
             if (!clientUser) return [];
 
-            return await getProjectsByFilter(clientUser.skillTags, clientUser.interestTags);
+            return await getProjects(clientUser.skillTags, clientUser.interestTags);
         },
-        enabled: !!clientUser && projectFeed == 'recommended'
+        enabled: params.type == 'recommendedProjectsForClientUser'
     });
 
-    const userProjectsQuery = useQuery({
+    const projectsOwnedByClientUserQuery = useQuery({
         queryKey: queryKeyUserProjects,
         queryFn: async () => {
             if (!clientUser) return;
             return await getProjectsByUserId(clientUser.id);
         },
-        enabled: !!clientUser && projectFeed == 'user'
+        enabled: params.type == 'projectsOwnedByClientUser'
     });
 
-    const projectQuery = useQuery({
+    const projectByIdQuery = useQuery({
         queryKey: queryKeyProject,
         queryFn: async () => {
             if (!projectId) return;
-            return await getProjectById(projectId);
+            return await getProjectByProjectId(projectId);
         },
-        enabled: !!projectId,
-        staleTime: Infinity,
+        enabled: params.type == 'projectById'
     });
 
-    const createProject = async (
+    const createProjectInHook = async (
         title: string,
         description: string,
         authorId: string
     ) => {
-        const project = await postProject({ title, description, authorId });
-        const existingProjects = userProjectsQuery.data as Project[];
+        const project = await createProject({ title, description, authorId });
+        const existingProjects = projectsOwnedByClientUserQuery.data as Project[];
         queryClient.setQueryData(queryKeyUserProjects, [...existingProjects, project]);
         return project;
     };
 
-    switch (projectFeed) {
-        case 'featured':
-            return {
-                projects: featuredProjectsQuery.data as Project[]
-            }
-        case 'recommended':
-            return {
-                projects: recommendedProjectsQuery.data as Project[]
-            }
-        case 'user':
-            return {
-                projects: userProjectsQuery.data as Project[],
-                project: projectQuery.data as Project,
-                createProject
-            }
+    return {
+        featuredProjects: featuredProjectsQuery.data as Project[],
+        recommendedProjectsForClientUser: recommendedProjectsForClientUserQuery.data as Project[],
+        projectsOwnedByClientUser: projectsOwnedByClientUserQuery.data as Project[],
+        projectById: projectByIdQuery.data as Project,
+        createProject: createProjectInHook
     }
+
 }

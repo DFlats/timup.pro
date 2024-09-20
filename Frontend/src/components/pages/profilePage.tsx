@@ -1,17 +1,17 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
-import { useClientUser, useEditUserModal, useUser } from "../../hooks";
+import { useUsers } from "../../hooks";
 import { TagContainer } from "../../components/tags";
 import { ProjectFeed } from "../projects";
+import { EditUserModal } from "../users";
+import { openEditUserModal } from "../../modalControllers";
 
 export function ProfilePage() {
     const Route = getRouteApi('/profile/$userId');
     const { userId } = Route.useParams();
 
-    const { user } = useUser(userId);
-    const { clientUser } = useClientUser();
-
-    const { openEditUserModal } = useEditUserModal()
+    const { userById: user } = useUsers({ type: 'userId', userId });
+    const { clientUser } = useUsers({ type: 'clientUser' });
 
     if (!user) return;
 
@@ -24,15 +24,16 @@ export function ProfilePage() {
             <h1>{finalUser.name}</h1>
             <TagContainer tags={finalUser.skillTags} tagType='skill' />
             <TagContainer tags={finalUser.interestTags} tagType='interest' />
+            <EditUserModal />
             {userIsClient &&
-            <>
-                <button
-                    className='btn'
-                    onClick={openEditUserModal}>
-                    Edit Profile
-                </button>
-                
-                <ProjectFeed projectFeed={"user"}/>
+                <>
+                    <button
+                        className='btn'
+                        onClick={openEditUserModal}>
+                        Edit Profile
+                    </button>
+
+                    <ProjectFeed projectFeed={"projectsOwnedByClientUser"} />
                 </>
             }
         </>

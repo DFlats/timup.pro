@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { TagContainer } from '../../components/tags';
 import { TagType } from '../../types';
 
@@ -12,7 +12,7 @@ interface Props {
 
 export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
     const inputSkillRef = useRef<HTMLInputElement>(null);
-    const addSkillRef = useRef<HTMLButtonElement>(null);
+    const [inputValue, setInputValue] = useState<string>('');
 
     const handleAddTag = () => {
         const value = inputSkillRef!.current?.value;
@@ -20,13 +20,31 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
 
         onAddTag(value, tagType);
 
-        inputSkillRef.current.value = '';
-        inputSkillRef.current.focus();
+        setInputValue('');
+        inputSkillRef.current!.value = ''; 
+        inputSkillRef.current!.focus();
+    }
+
+    const placeHolder = () => {
+        switch (tagType) {
+            case 'skill': return 'What are you good at?';
+            case 'interest': return 'What are you interested in?';
+        }
+    }
+
+    const submitLabel = () => {
+        switch (tagType) {
+            case 'skill': return 'Add Skill';
+            case 'interest': return 'Add Interest';
+        }
+    }
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.target.value); 
     }
 
     return (
-        <div
-            className="flex flex-col">
+        <div className="my-4 gap-2 flex flex-col">
             <TagContainer
                 tags={tags}
                 tagType={tagType}
@@ -37,17 +55,19 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
                 <input
                     ref={inputSkillRef}
                     type='text'
-                    placeholder="What else are you good at?"
+                    value={inputValue}
+                    onChange={handleInputChange} 
+                    placeholder={placeHolder()}
                     className="input input-bordered w-full max-w-xs"
                 />
 
                 <button
-                    ref={addSkillRef}
-                    className='btn m-4'
-                    onClick={handleAddTag}>
-                    Add Skill
+                    className={`btn m-4 ${inputValue === '' ? 'btn-disabled' : ''}`}  
+                    onClick={handleAddTag}
+                >
+                    {submitLabel()}
                 </button>
             </div>
         </div>
     );
-}
+}   

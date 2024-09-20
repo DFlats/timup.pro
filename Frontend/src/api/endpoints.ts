@@ -1,10 +1,35 @@
-import { paths } from './schema';
 import createClient from "openapi-fetch";
-import { Project, User, TagRequest, ProjectRequest, UserRequest } from './types';
+import { components, paths } from './schema';
+import { Project, User, ProjectRequest, UserRequest, UserPatchRequest, ProjectPatchRequest } from './types';
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
-export const getProjectsByFilter = async (skillTags?: string[], interestTags?: string[]): Promise<Project[]> => {
+const mapRawProjectResponseToProject = (projectResponse: components['schemas']['ProjectResponse']) => {
+    return {
+        id: projectResponse.id!,
+        title: projectResponse.title!,
+        authorName: projectResponse.authorName!,
+        authorId: projectResponse.authorId!,
+        //TODO: Figure out how NameId works
+        collaborators: [],
+        description: projectResponse.description!,
+        skillTags: projectResponse.skillTags!,
+        interestTags: projectResponse.interestTags!,
+        isCompleted: projectResponse.isCompleted!
+    } as Project;
+}
+
+const mapUserResponseToUser = (userResponse: components['schemas']['UserResponse']) => {
+    return {
+        id: userResponse.id!,
+        name: userResponse.name!,
+        email: userResponse.email!,
+        interestTags: userResponse.interestTags!,
+        skillTags: userResponse.skillTags!
+    } as User;
+}
+
+export const getProjects = async (skillTags?: string[], interestTags?: string[]) => {
     const response = await client.GET('/api/Projects/GetProjects', {
         params: {
             query: {
@@ -14,17 +39,9 @@ export const getProjectsByFilter = async (skillTags?: string[], interestTags?: s
         }
     });
 
-    return response.data as Project[];
-}
+    if (!response.data) throw new Error(response.error);
 
-export const postProject = async (projectRequest: ProjectRequest) => {
-    const response = await client.POST('/api/Projects/CreateProject', {
-        body: projectRequest
-    });
-
-    if (!response.data) throw new Error("Response data does not exist");
-
-    return response.data as Project;
+    return response.data.map(projectResponse => mapRawProjectResponseToProject(projectResponse));
 }
 
 export const getRecommendedProjectsByUserId = async (userId: string) => {
@@ -36,14 +53,22 @@ export const getRecommendedProjectsByUserId = async (userId: string) => {
         }
     });
 
-    if (!response.data) {
-        throw new Error(response.error);
-    }
+    if (!response.data) throw new Error(response.error);
 
-    return response.data as Project[];
+    return response.data.map(projectResponse => mapRawProjectResponseToProject(projectResponse))
 }
 
-export const getProjectById = async (projectId: number) => {
+export const createProject = async (projectRequest: ProjectRequest) => {
+    const response = await client.POST('/api/Projects/CreateProject', {
+        body: projectRequest
+    });
+
+    if (!response.data) throw new Error(response.error);
+
+    return mapRawProjectResponseToProject(response.data);
+}
+
+export const getProjectByProjectId = async (projectId: number) => {
     const response = await client.GET('/api/Projects/GetProjectByProjectId/{id}', {
         params: {
             path: {
@@ -52,11 +77,9 @@ export const getProjectById = async (projectId: number) => {
         }
     });
 
-    if (!response.data) {
-        throw new Error('getProjectsById: No data');
-    }
+    if (!response.data) throw new Error(response.error);
 
-    return response.data as Project;
+    return mapRawProjectResponseToProject(response.data);
 }
 
 export const getProjectsByUserId = async (userId: string) => {
@@ -68,14 +91,18 @@ export const getProjectsByUserId = async (userId: string) => {
         }
     })
 
-    if (!response.data) {
-        throw new Error(response.error);
-    }
+    if (!response.data) throw new Error(response.error);
 
-    return response.data as Project[];
+    return response.data.map(projectResponse => mapRawProjectResponseToProject(projectResponse))
 }
 
-export const getUserById = async (id: string): Promise<User> => {
+export const updateProject = async (projectPatchRequest: ProjectPatchRequest) => {
+    await client.PATCH('/api/Projects/UpdateProject', {
+        body: projectPatchRequest
+    });
+}
+
+export const getUserByUserId = async (id: string): Promise<User> => {
     const response = await client.GET('/api/Users/GetUserByUserId/{id}', {
         params: { path: { id } }
     });
@@ -84,34 +111,16 @@ export const getUserById = async (id: string): Promise<User> => {
         throw new Error(response.error);
     }
 
-    return response.data as User;
+    return mapUserResponseToUser(response.data);
 }
 
-export const postUser = async (userRequest: UserRequest) => {
+export const createUser = async (userRequest: UserRequest) => {
     await client.POST('/api/Users/CreateUser', {
         body: userRequest
     });
 }
 
-export const addTagToUser = async (id: string, tagRequest: TagRequest) => {
-    await client.POST('/api/Users/AddTagToUserByUserId/{id}', {
-        params: { path: { id } },
-        body: tagRequest
-    })
-}
-
-export const removeTagFromUser = async (id: string, tagRequest: TagRequest) => {
-    await client.DELETE('/api/Users/RemoveTagFromUserByUserId/{id}', {
-        params: {
-            path: {
-                id
-            }
-        },
-        body: tagRequest
-    });
-}
-
-export const recommendedUsersByProjectId = async (projectId: number) => {
+export const getRecommendedUsersByProjectId = async (projectId: number) => {
     const response = await client.GET('/api/Users/GetRecommendedUsersByProjectId/{id}', {
         params: {
             path: {
@@ -123,7 +132,13 @@ export const recommendedUsersByProjectId = async (projectId: number) => {
     if (!response.data) {
         throw new Error(response.error);
     }
-    console.log(response.data)
-    return response.data as User[];
+
+    return response.data.map(userResponse => mapUserResponseToUser(userResponse));
+}
+
+export const updateUser = async (userPatchRequest: UserPatchRequest) => {
+    await client.PATCH('/api/Users/UpdateUser', {
+        body: userPatchRequest
+    });
 }
 

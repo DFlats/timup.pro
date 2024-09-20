@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { UserRow } from "../../components/users";
 import { useUsers } from "../../hooks";
 import { Link } from "@tanstack/react-router";
 
@@ -7,13 +8,10 @@ interface props {
 }
 
 export function UserTable({ projectId }: props) {
-    const { users } = useUsers(projectId);
-    console.log(users);
+    const { usersRecommendedForProject: users } = useUsers({ type: 'recommendedForProject', projectId });
+
     return (
-        <Link className="" to='/project/$id' params={{
-            id: projectId.toString(),
-        }}
-        >
+        <Link className="" to='/project/$id' params={{ id: projectId.toString() }}>
             <table className="table">
                 <thead>
                     <tr>
@@ -21,9 +19,8 @@ export function UserTable({ projectId }: props) {
                         <th>Skills</th>
                     </tr>
                 </thead>
-                {/* {users && users.map(user => <UserRow key={user.id} user={user} />)} */}
+                {users && users.map(user => <UserRow key={user.id} user={user} size='compact' />)}
             </table>
         </Link>
-
     )
 }

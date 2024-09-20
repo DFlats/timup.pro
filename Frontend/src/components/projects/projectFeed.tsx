@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useProjects } from "../../hooks";
-import { ProjectCard } from "..";
+import { NewProjectCard, ProjectCard } from "..";
 import { ProjectFeedType } from "../../types/types";
 
 interface Props {
@@ -8,18 +8,32 @@ interface Props {
 }
 
 export function ProjectFeed({ projectFeed }: Props) {
-    const { projects } = useProjects(projectFeed);
+    const maxProjectsInFeed = 10;
 
-    //console.log(projectFeed);
-    //console.log(projects);
+    const {
+        featuredProjects,
+        recommendedProjectsForClientUser,
+        projectsOwnedByClientUser
+    } = useProjects({ type: projectFeed });
+
+
+    let projects =
+        (featuredProjects ??
+            (recommendedProjectsForClientUser ??
+                projectsOwnedByClientUser));
+
+    if (!projects) return;
+
+    if (projects.length > maxProjectsInFeed)
+        projects = projects.slice(0, maxProjectsInFeed);
 
     const heading = () => {
         switch (projectFeed) {
-            case 'featured':
+            case 'featuredProjects':
                 return 'Featured projects';
-            case 'recommended':
+            case 'recommendedProjectsForClientUser':
                 return 'Projects tailored for you';
-            case 'user':
+            case 'projectsOwnedByClientUser':
                 return 'Your projects';
         }
     }
@@ -28,6 +42,9 @@ export function ProjectFeed({ projectFeed }: Props) {
         <div className="p-12 w-screen flex flex-col items-center justify-center">
             <h1 className='text-4xl mb-8'>{heading()}</h1>
             <div className='flex flex-row flex-wrap'>
+                {projectFeed == 'projectsOwnedByClientUser' &&
+                    <NewProjectCard />
+                }
                 {projects && projects.map(project => <ProjectCard key={project.id} project={project} />)}
             </div>
         </div>

@@ -1,44 +1,51 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
 import { useProjects } from "../../hooks";
-import { ProjectCard } from "../projects";
+import { NotFound } from "../routing";
+import { UserTable } from "../users";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
-    const id = Number.parseInt(Route.useParams().id);
-    const { projects, project } = useProjects('user', id);
-
-    //console.log("ProjectPage");
-    //console.log(project);
-    //console.log(projects);
+    const projectId = Number.parseInt(Route.useParams().id);
+    const { projectById: project } = useProjects({ type: 'projectById', projectId });
+    const { projectsOwnedByClientUser } = useProjects({ type: 'projectsOwnedByClientUser' });
 
     if (!project) {
-        return <p>{`Project (${id}) could not be found`}</p>
+        return (<NotFound>
+            <p>{`Sorry, project with id ${projectId} doesn't exist ${String.raw`¯\_(ツ)_/¯`}`}</p>
+        </NotFound>)
     }
 
-    const ownedProject = projects ? projects.some(p => p.id == project.id) : false;
-
-    // function handleModal() {
-    //     const modal = document.getElementById("create-project") as HTMLDialogElement;
-    //     modal.showModal();
-    // }
+    const clientOwnsProject =
+        projectsOwnedByClientUser
+            ? projectsOwnedByClientUser.some(p => p.id == project.id)
+            : false;
 
     return (
-        <>
-            {ownedProject && <h2>Your project</h2>}
-            <ProjectCard project={project} />
-            {/* <UserTable projectId={project.id}/> */}
-        </>)
+        <><div
+            className="hero min-h-screen"
+            style={{
+                backgroundImage: "url(https://storage.googleapis.com/pod_public/1300/141876.jpg)",
+            }}>
+            <div className="hero-overlay bg-opacity-95"></div>
+            <div className="hero-content text-neutral-content text-center">
+                <div className="max-w-md">
+                    <h1 className="text-5xl font-bold">{project.title}</h1>
+                    <p className="py-6">{project.description}</p>
+                    {clientOwnsProject &&
+                        <p>You are a part of this project</p>
+                    }
+                    <UserTable projectId={project.id} />
+                </div>
+            </div>
+        </div>
+        </>);
 
 
     // return (
     //     <>
-    //         <h1 className='text-4xl mb-8'>Projects you are in</h1>
-    //         {projects?.map(project => <ProjectCard key={project.title} project={project} />)}
-    //         <button onClick={handleModal} className="button button-primary flex justify-center items-center m-4 w-96 h-96 shadow-xl">
-    //             <div className="text-8xl">+</div>
-    //         </button>
-    //         <CreateProjectModal />
-    //     </>
-    // );
+    //         {ownedProject && <h2>Your project</h2>}
+    //         <ProjectCard project={project} />
+    //         {/* <UserTable projectId={project.id}/> */}
+    //     </>)
 }
