@@ -68,7 +68,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPatch("UpdateUser")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public IActionResult UpdateUser(UserPatchRequest requestBody)
@@ -77,6 +77,20 @@ public class UsersController(DatabaseContext db) : ControllerBase
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.Ok => Ok("User updated"),
+            _ => StatusCode(500),
+        };
+    }
+
+    [HttpDelete("DeleteUser/{userId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public IActionResult DeleteUser(string userId)
+    {
+        return db.DeleteUser(userId) switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.Ok => Ok("User deleted"),
             _ => StatusCode(500),
         };
     }
