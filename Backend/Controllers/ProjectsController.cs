@@ -12,12 +12,13 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     public List<ProjectResponse> GetProjects
     (
         [FromQuery(Name = "interests")] string[]? interests,
-        [FromQuery(Name = "skills")] string[]? skills
+        [FromQuery(Name = "skills")] string[]? skills,
+        [FromQuery(Name = "page")] int? page = 1
     )
     {
         if (skills?.Length == 0 && interests?.Length == 0)
         {
-            return db.GetAllProjects();
+            return db.GetAllProjects(page);
         }
 
         return db.GetProjectsByFilter(skills, interests);

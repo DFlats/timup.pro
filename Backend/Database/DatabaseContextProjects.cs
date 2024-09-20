@@ -6,11 +6,14 @@ namespace Backend.Database;
 
 public partial class DatabaseContext
 {
-    internal List<ProjectResponse> GetAllProjects()
+    private readonly int _pageSize = 10;
+    internal List<ProjectResponse> GetAllProjects(int? page = 1)
     {
         return [.. Projects.Include(p => p.Author)
                             .Include(p => p.Description)
                             .ThenInclude(p => p.Tags)
+                            .Skip(((int)page! - 1) * _pageSize)
+                            .Take(_pageSize)
                             .Select(p => (ProjectResponse) p)];
     }
 
