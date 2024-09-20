@@ -1,6 +1,5 @@
 using Backend.Dtos;
 using Backend.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -78,6 +77,7 @@ public partial class DatabaseContext
         var users = Users
             .Include(u => u.Tags)
             .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .OrderByDescending(p => p.Tags.Count(t => skills.Contains(t.TagValue) && t.IsSkill))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
             .ToList();
