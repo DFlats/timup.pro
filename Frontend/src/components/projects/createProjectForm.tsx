@@ -51,7 +51,12 @@ export function CreateProjectForm() {
 
         const createdProject = await createProject(data.title, data.description, clientUser.id);
 
-        await updateProject({ skillTags, interestTags });
+        await updateProject({
+            authorId: clientUser.id,
+            projectId: createdProject.id,
+            skillTags,
+            interestTags
+        });
 
         const modal: HTMLDialogElement = document.getElementById(import.meta.env.VITE_CREATE_PROJECT_MODAL_ID) as HTMLDialogElement;
         modal?.close();

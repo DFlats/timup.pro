@@ -1,10 +1,35 @@
 import createClient from "openapi-fetch";
-import { paths } from './schema';
+import { components, paths } from './schema';
 import { Project, User, ProjectRequest, UserRequest, UserPatchRequest, ProjectPatchRequest } from './types';
 
 const client = createClient<paths>({ baseUrl: 'http://localhost:5055' });
 
-export const getProjects = async (skillTags?: string[], interestTags?: string[]): Promise<Project[]> => {
+const mapRawProjectResponseToProject = (projectResponse: components['schemas']['ProjectResponse']) => {
+    return {
+        id: projectResponse.id!,
+        title: projectResponse.title!,
+        authorName: projectResponse.authorName!,
+        authorId: projectResponse.authorId!,
+        //TODO: Figure out how NameId works
+        collaborators: [],
+        description: projectResponse.description!,
+        skillTags: projectResponse.skillTags!,
+        interestTags: projectResponse.interestTags!,
+        isCompleted: projectResponse.isCompleted!
+    } as Project;
+}
+
+const mapUserResponseToUser = (userResponse: components['schemas']['UserResponse']) => {
+    return {
+        id: userResponse.id!,
+        name: userResponse.name!,
+        email: userResponse.email!,
+        interestTags: userResponse.interestTags!,
+        skillTags: userResponse.skillTags!
+    } as User;
+}
+
+export const getProjects = async (skillTags?: string[], interestTags?: string[]) => {
     const response = await client.GET('/api/Projects/GetProjects', {
         params: {
             query: {
@@ -14,7 +39,9 @@ export const getProjects = async (skillTags?: string[], interestTags?: string[])
         }
     });
 
-    return response.data as Project[];
+    if (!response.data) throw new Error(response.error);
+
+    return response.data.map(projectResponse => mapRawProjectResponseToProject(projectResponse));
 }
 
 export const getRecommendedProjectsByUserId = async (userId: string) => {
@@ -28,7 +55,7 @@ export const getRecommendedProjectsByUserId = async (userId: string) => {
 
     if (!response.data) throw new Error(response.error);
 
-    return response.data as Project[];
+    return response.data.map(projectResponse => mapRawProjectResponseToProject(projectResponse))
 }
 
 export const createProject = async (projectRequest: ProjectRequest) => {
@@ -38,7 +65,7 @@ export const createProject = async (projectRequest: ProjectRequest) => {
 
     if (!response.data) throw new Error(response.error);
 
-    return response.data as Project;
+    return mapRawProjectResponseToProject(response.data);
 }
 
 export const getProjectByProjectId = async (projectId: number) => {
@@ -52,7 +79,7 @@ export const getProjectByProjectId = async (projectId: number) => {
 
     if (!response.data) throw new Error(response.error);
 
-    return response.data as Project;
+    return mapRawProjectResponseToProject(response.data);
 }
 
 export const getProjectsByUserId = async (userId: string) => {
@@ -66,7 +93,7 @@ export const getProjectsByUserId = async (userId: string) => {
 
     if (!response.data) throw new Error(response.error);
 
-    return response.data as Project[];
+    return response.data.map(projectResponse => mapRawProjectResponseToProject(projectResponse))
 }
 
 export const updateProject = async (projectPatchRequest: ProjectPatchRequest) => {
@@ -84,7 +111,7 @@ export const getUserByUserId = async (id: string): Promise<User> => {
         throw new Error(response.error);
     }
 
-    return response.data as User;
+    return mapUserResponseToUser(response.data);
 }
 
 export const createUser = async (userRequest: UserRequest) => {
@@ -106,7 +133,7 @@ export const getRecommendedUsersByProjectId = async (projectId: number) => {
         throw new Error(response.error);
     }
 
-    return response.data as User[];
+    return response.data.map(userResponse => mapUserResponseToUser(userResponse));
 }
 
 export const updateUser = async (userPatchRequest: UserPatchRequest) => {

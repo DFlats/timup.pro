@@ -34,7 +34,6 @@ export function ProfilePage() {
                     </button>
 
                     <ProjectFeed projectFeed={"projectsOwnedByClientUser"} />
-
                 </>
             }
         </>

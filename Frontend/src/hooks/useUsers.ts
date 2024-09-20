@@ -88,6 +88,7 @@ export function useUsers(params: RecommendedForProject | UserId | Client) {
     const { updatedSkillTags, updatedInterestTags } = calculateUpdatedTags();
 
     const request: UserPatchRequest = {
+      clerkId: clientUser.id,
       skillTags: updatedSkillTags,
       interestTags: updatedInterestTags
     };
