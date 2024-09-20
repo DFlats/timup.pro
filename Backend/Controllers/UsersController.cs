@@ -9,6 +9,7 @@ namespace Backend.Controllers;
 public class UsersController(DatabaseContext db) : ControllerBase
 {
     [HttpGet("GetUsers")]
+    [ProducesResponseType(typeof(List<UserResponse>), 200)]
     public List<UserResponse> GetUsers
     (
         [FromQuery(Name = "interests")] string[]? interests,
@@ -25,6 +26,8 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet("GetUserByUserId/{id}")]
+    [ProducesResponseType(typeof(UserResponse), 200)]
+    [ProducesResponseType(404)]
     public ActionResult<UserResponse> GetUserByUserId(string id)
     {
         var user = db.GetUserById(id);
@@ -33,6 +36,9 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("CreateUser")]
+    [ProducesResponseType(typeof(UserResponse), 201)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
     public IActionResult CreateUser(UserRequest userToAdd)
     {
         (var status, var user) = db.CreateUser(userToAdd);
@@ -46,6 +52,10 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("AddTagToUserByUserId/{id}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
     public IActionResult AddTagToUserByUserId(string id, TagRequest tagToAdd)
     {
         return db.AddTagToUser(id, tagToAdd) switch
@@ -58,6 +68,9 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpDelete("RemoveTagFromUserByUserId/{id}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public IActionResult RemoveTagFromUserByUserId(string id, TagRequest tagToRemove)
     {
         return db.RemoveTagFromUser(id, tagToRemove) switch
@@ -70,6 +83,9 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet("GetRecommendedUsersByProjectId/{id}")]
+    [ProducesResponseType(typeof(List<UserResponse>), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int id, [FromQuery(Name = "page")] int? page = 1)
     {
         (var status, var users) = db.GetRecommendedUsersByProjectId(id, page);
@@ -83,6 +99,9 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPatch("UpdateUser")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public IActionResult UpdateUser(UserPatchRequest requestBody)
     {
         return db.UpdateUser(requestBody) switch

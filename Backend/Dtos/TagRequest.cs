@@ -1,6 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Backend.Dtos;
 
-public record TagRequest(string TagName, bool IsSkill)
-{
-
-}
+public record TagRequest(
+    [Required]
+    string TagName,
+    [Required]
+    bool IsSkill
+);

@@ -8,6 +8,7 @@ namespace Backend.Controllers;
 public class PopulatesController(DatabaseContext db) : ControllerBase
 {
     [HttpPost("PopulateDatabase")]
+    [ProducesResponseType(typeof(bool), 200)]
     public IActionResult PopulateDatabase()
     {
         return Ok(db.PopulateDatabase());

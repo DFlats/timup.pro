@@ -1,3 +1,4 @@
+using Azure.Messaging;
 using Backend.Database;
 using Backend.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace Backend.Controllers;
 public class ProjectsController(DatabaseContext db) : ControllerBase
 {
     [HttpGet("GetProjects")]
+    [ProducesResponseType(typeof(List<ProjectResponse>), 200)]
     public List<ProjectResponse> GetProjects
     (
         [FromQuery(Name = "interests")] string[]? interests,
@@ -25,6 +27,9 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet("GetRecommendedProjectsByUserId/{id}")]
+    [ProducesResponseType(typeof(List<ProjectResponse>), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string id, [FromQuery(Name = "page")] int? page = 1)
     {
         (var status, var projects) = db.GetRecommendedProjectsByUserId(id, page);
@@ -38,6 +43,9 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("CreateProject")]
+    [ProducesResponseType(typeof(ProjectResponse), 201)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public ActionResult<ProjectResponse> CreateProject(ProjectRequest projectRequest)
     {
         (var status, var project) = db.CreateProject(projectRequest);
@@ -52,6 +60,8 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet("GetProjectByProjectId/{id}")]
+    [ProducesResponseType(typeof(ProjectResponse), 200)]
+    [ProducesResponseType(404)]
     public ActionResult<ProjectResponse> GetProjectByProjectId(int id)
     {
         var res = db.GetProjectById(id);
@@ -60,6 +70,9 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet("GetProjectsByUserId/{id}")]
+    [ProducesResponseType(typeof(List<ProjectOverviewResponse>), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public ActionResult<List<ProjectOverviewResponse>> GetProjectsByUserId(string id)
     {
         (var status, var projects) = db.GetProjectsByUserId(id);
@@ -73,6 +86,10 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPatch("UpdateProject")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(500)]
     public IActionResult UpdateProject(ProjectPatchRequest requestBody)
     {
         var status = db.UpdateProject(requestBody);
