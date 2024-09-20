@@ -27,6 +27,7 @@ export function CreateProjectForm() {
     } = useForm<Inputs>()
 
     const handleAddTag = (tag: string, tagType: TagType) => {
+        event?.preventDefault();
         switch (tagType) {
             case 'skill':
                 setSkillTags([...skillTags, tag]);
@@ -37,6 +38,7 @@ export function CreateProjectForm() {
     }
 
     const handleRemoveTag = (tag: string, tagType: TagType) => {
+        event?.preventDefault();
         switch (tagType) {
             case 'skill':
                 setSkillTags(skillTags.filter(t => t != tag));
@@ -88,7 +90,7 @@ export function CreateProjectForm() {
                 tagType='interest'
                 onAddTag={handleAddTag}
                 onRemoveTag={handleRemoveTag} />
-            <button className="btn btn-primary mb-4 w-full" type="submit">Submit</button>
+            <button className="btn btn-primary mb-4 w-full" type="submit" onClick={() => onSubmit}>Submit</button>
         </form>
     )
 }

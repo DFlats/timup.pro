@@ -27,8 +27,8 @@ export function TagContainer({ tags, tagType, onRemoveTag, size = 'full' }: Prop
 
     const noTagsTag = () => {
         switch (tagType) {
-            case 'skill': return <Tag tag="Eager to learn!" tagType='skill' />
-            case 'interest': return <Tag tag="Curious about everything!" tagType='interest' />
+            case 'skill': return <Tag tag="Eager to learn!" tagType='skill' onClick={() => event?.preventDefault()} />
+            case 'interest': return <Tag tag="Curious about everything!" tagType='interest' onClick={() => event?.preventDefault()}/>
         }
     }
 
