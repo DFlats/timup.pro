@@ -8,6 +8,10 @@ namespace Backend.Controllers;
 public class TransactionsController(DatabaseContext db) : ControllerBase
 {
     [HttpPut("HandleJoinProjectRequest/{userId}/{projectId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
     public IActionResult HandleJoinProjectRequest(string userId, int projectId)
     {
         return db.HandleJoinProjectRequest(userId, projectId) switch
@@ -22,6 +26,10 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("HandleJoinProjectRequest/Accept/{userId}/{projectId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
     public IActionResult HandleAcceptJoinProjectInviteRequest(string userId, int projectId)
     {
         return db.HandleAcceptProjectInviteRequest(userId, projectId) switch
@@ -31,12 +39,15 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
             DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
-            DbErrorStatusCodes.Ok => Ok("User accepted p    roject invite"),
+            DbErrorStatusCodes.Ok => Ok("User accepted project invite"),
             _ => StatusCode(500),
         };
     }
 
     [HttpPost("HandleJoinProjectRequest/Deny/{userId}/{projectId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public IActionResult HandleDeclineProjectInviteRequest(string userId, int projectId)
     {
         return db.HandleDeclineProjectInviteRequest(userId, projectId) switch
@@ -50,6 +61,10 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPut("HandleLeaveProjectRequest/{userId}/{projectId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
     public IActionResult HandleLeaveProjectRequest(string userId, int projectId)
     {
         return db.HandleLeaveProjectRequest(userId, projectId) switch
@@ -63,6 +78,10 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPut("HandleKickUserFromProject/{userId}/{projectId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
     public IActionResult HandleKickUserFromProject(string userId, int projectId)
     {
         return db.HandleKickUserRequest(userId, projectId) switch
@@ -77,6 +96,10 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("HandleInviteUserToProject/{userId}/{projectId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
     public IActionResult HandleInviteUserToProject(string userId, int projectId)
     {
         return db.InviteToProject(userId, projectId) switch
@@ -91,6 +114,10 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("HandleInviteUserToProject/Accept/{userId}/{projectId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
     public IActionResult HandleInviteUserToProjectAccept(string userId, int projectId)
     {
         return db.HandleInviteUserToProjectAccept(userId, projectId) switch
@@ -107,6 +134,9 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("HandleInviteUserToProject/Deny/{userId}/{projectId}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public IActionResult HandleInviteUserToProjectDeny(string userId, int projectId)
     {
         return db.HandleInviteUserToProjectDeny(userId, projectId) switch
