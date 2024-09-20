@@ -3,6 +3,7 @@ import { getRouteApi } from "@tanstack/react-router";
 import { useProjects } from "../../hooks";
 import { NotFound } from "../routing";
 import { UserTable } from "../users";
+import { TagContainer } from "../tags";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
@@ -29,13 +30,15 @@ export function ProjectPage() {
             }}>
             <div className="hero-overlay bg-opacity-95"></div>
             <div className="hero-content text-neutral-content text-center">
-                <div className="max-w-md">
+                <div className="max-w-screen-lg">
                     <h1 className="text-5xl font-bold">{project.title}</h1>
                     <p className="py-6">{project.description}</p>
                     {clientOwnsProject &&
                         <p>You are a part of this project</p>
                     }
-                    <UserTable projectId={project.id} />
+            <TagContainer tags={project.skillTags} tagType='skill' />
+            <TagContainer tags={project.interestTags} tagType='interest' />
+            <UserTable project={project} />
                 </div>
             </div>
         </div>
