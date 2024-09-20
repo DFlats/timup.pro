@@ -45,10 +45,13 @@ public partial class DatabaseContext
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .OrderByDescending(p => p.Description.Tags.Count(t => skills.Contains(t.TagValue) && t.IsSkill))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
             .Select(p => (ProjectResponse)p)
             .ToList();
+
+       
 
         return (DbErrorStatusCodes.Ok, projects);
     }
