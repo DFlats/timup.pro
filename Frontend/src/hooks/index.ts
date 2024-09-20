@@ -1,3 +1,2 @@
 export * from './useGoogleMaps'
-export * from './useProjects'
-export * from './useUsers'
+export * from './useTransactions'

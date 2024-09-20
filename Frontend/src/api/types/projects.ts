@@ -58,3 +58,10 @@ export function mapRawProjectResponseToProject(projectResponse: components['sche
         invitedUsersIds: projectResponse.invitedUsers!
     } as ProjectResponse;
 }
+
+export function patchProject(project: ProjectResponse, patch: ProjectPatchRequest) {
+    return {
+        ...project,
+        ...patch
+    } as ProjectResponse;
+}

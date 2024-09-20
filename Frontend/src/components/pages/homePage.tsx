@@ -1,21 +1,18 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useUsers } from "../../hooks";
-import { ProjectFeedType } from "../../types/types";
-import { ProjectFeed } from "../../components";
+import { useClientUser } from "../../hooks/users";
+import { FeaturedProjects, RecommendedProjectsForClientUser } from "../projects";
 
 export function HomePage() {
-    const { clientUser } = useUsers({ type: 'clientUser' });
-
-    const projectFeed = (): ProjectFeedType => {
-        if (clientUser)
-            return 'recommendedProjectsForClientUser'
-        else
-            return 'featuredProjects'
-    }
+    const { clientUser } = useClientUser();
 
     return (
         <>
-            <ProjectFeed projectFeed={projectFeed()} />
+            {clientUser &&
+                <RecommendedProjectsForClientUser />
+            }
+            {!clientUser &&
+                <FeaturedProjects />
+            }
         </>
     );
 }

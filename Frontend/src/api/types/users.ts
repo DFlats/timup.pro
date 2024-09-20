@@ -18,7 +18,7 @@ export type UserRequest = {
 
 // components['schemas']['UserPatchRequest'];
 export type UserPatchRequest = {
-    clerkId: string;
+    id: string;
     skillTags?: string[];
     interestTags?: string[];
 }
@@ -31,4 +31,12 @@ export function mapUserResponseToUser(userResponse: components['schemas']['UserR
         interestTags: userResponse.interestTags!,
         skillTags: userResponse.skillTags!
     } as User;
+}
+
+export function userFromUserPatchRequest(user: User, patch: UserPatchRequest) {
+    const patchedUser: User = {
+        ...user,
+        ...patch
+    };
+    return patchedUser;
 }

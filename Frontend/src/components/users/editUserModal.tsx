@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useUsers } from "../../hooks";
+import { useClientUser } from "../../hooks/users";
 import { TagEditor } from "../tags";
 
 export function EditUserModal() {
@@ -7,7 +7,7 @@ export function EditUserModal() {
         clientUser,
         addTagToClientUser,
         removeTagFromClientUser
-    } = useUsers({ type: 'clientUser' });
+    } = useClientUser();
 
     if (!clientUser) return;
 

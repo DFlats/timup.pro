@@ -1,11 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { SubmitHandler, useForm } from "react-hook-form"
-import { useProjects, useUsers } from "../../hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { TagEditor } from "../tags";
 import { useState } from "react";
 import { TagType } from "../../types";
-import { updateProject } from "../../api";
+import { useProjectActions } from "../../hooks/projects";
+import { useClientUser } from "../../hooks/users";
 
 type Inputs = {
     title: string;
@@ -13,9 +13,9 @@ type Inputs = {
 };
 
 export function CreateProjectForm() {
-    const { clientUser } = useUsers({ type: 'clientUser' });
+    const { clientUser } = useClientUser();
     const navigate = useNavigate();
-    const { createProject } = useProjects({ type: 'projectsOwnedByClientUser' });
+    const { createProjectWithClientAsAuthor } = useProjectActions();
     const [skillTags, setSkillTags] = useState<string[]>([]);
     const [interestTags, setInterestTags] = useState<string[]>([]);
 
@@ -48,17 +48,12 @@ export function CreateProjectForm() {
         }
     }
 
-    const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        if (!clientUser || !createProject) return;
+    const onSubmit: SubmitHandler<Inputs> = async ({ title, description }: Inputs) => {
+        if (!clientUser || !createProjectWithClientAsAuthor) return;
 
-        const createdProject = await createProject(data.title, data.description, clientUser.id);
+        const createdProject = await createProjectWithClientAsAuthor(title, description, skillTags, interestTags);
 
-        await updateProject({
-            authorId: clientUser.id,
-            projectId: createdProject.id,
-            skillTags,
-            interestTags
-        });
+        if (!createdProject) return;
 
         const modal: HTMLDialogElement = document.getElementById(import.meta.env.VITE_CREATE_PROJECT_MODAL_ID) as HTMLDialogElement;
         modal?.close();

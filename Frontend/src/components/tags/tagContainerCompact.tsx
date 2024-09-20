@@ -8,7 +8,7 @@ interface Props {
     onRemoveTag?: (tag: string, tagType: TagType) => void
 }
 
-export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
+export function TagContainerCompact({ tags, tagType, onRemoveTag }: Props) {
     const tagProps = (tag: string) => {
         return {
             tag,
@@ -16,13 +16,6 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
             onClick: onRemoveTag ? (tag: string) => onRemoveTag(tag, tagType) : null
         } as TagProps;
     };
-
-    const heading = () => {
-        switch (tagType) {
-            case 'skill': return 'Skills'
-            case 'interest': return 'Interests'
-        }
-    }
 
     const noTagsTag = () => {
         switch (tagType) {
@@ -32,14 +25,11 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
     }
 
     return (
-        <div className='rounded-xl bg-opacity-5 bg-white p-3 m-2'>
-            <h2>{heading()}</h2>
-            <div className="flex flex-row flex-wrap">
-                {tags.length > 0 &&
-                    tags.map(tag => <Tag key={tag} {...tagProps(tag)} />)
-                }
-                {tags.length == 0 && noTagsTag()}
-            </div>
+        <div className="flex flex-row flex-wrap">
+            {tags.length > 0 &&
+                tags.map(tag => <Tag key={tag} {...tagProps(tag)} />)
+            }
+            {tags.length == 0 && noTagsTag()}
         </div>
     )
 }

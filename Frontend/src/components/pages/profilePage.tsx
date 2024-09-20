@@ -1,17 +1,17 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
-import { useUsers } from "../../hooks";
 import { TagContainer } from "../../components/tags";
-import { ProjectFeed } from "../projects";
 import { EditUserModal } from "../users";
 import { openEditUserModal } from "../../modalControllers";
+import { useClientUser, useUserById } from "../../hooks/users";
+import { ProjectsOwnedByClientUser } from "..";
 
 export function ProfilePage() {
     const Route = getRouteApi('/profile/$userId');
     const { userId } = Route.useParams();
 
-    const { userById: user } = useUsers({ type: 'userId', userId });
-    const { clientUser } = useUsers({ type: 'clientUser' });
+    const { userById: user } = useUserById(userId);
+    const { clientUser } = useClientUser();
 
     if (!user) return;
 
@@ -33,7 +33,7 @@ export function ProfilePage() {
                         Edit Profile
                     </button>
 
-                    <ProjectFeed projectFeed={"projectsOwnedByClientUser"} />
+                    <ProjectsOwnedByClientUser />
                 </>
             }
         </>
