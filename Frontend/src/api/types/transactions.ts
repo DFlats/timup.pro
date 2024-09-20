@@ -24,3 +24,21 @@ export const handleKickUserFromProject = async (userId: string, projectId: numbe
     });
 }
 
+export const handleInviteUserToProject = async (userId: string, projectId: number) => {
+    await client.POST('/api/Transactions/HandleInviteUserToProject/{userId}/{projectId}', {
+        params: { path: { userId, projectId } }
+    });
+}
+
+export const handleInviteUserToProjectAccept = async (userId: string, projectId: number) => {
+    await client.POST('/api/Transactions/HandleInviteUserToProject/Accept/{userId}/{projectId}', {
+        params: { path: { userId, projectId } }
+    });
+}
+
+export const handleInviteUserToProjectDeny = async (userId: string, projectId: number) => {
+    await client.POST('/api/Transactions/HandleInviteUserToProject/Deny/{userId}/{projectId}', {
+        params: { path: { userId, projectId } }
+    });
+}
+
