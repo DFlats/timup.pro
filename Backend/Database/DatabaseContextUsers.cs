@@ -61,43 +61,6 @@ public partial class DatabaseContext
         }
     }
 
-    internal DbErrorStatusCodes AddTagToUser(string id, TagRequest tagToAdd)
-    {
-        var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
-        if (user is null) return DbErrorStatusCodes.UserNotFound;
-
-        if (user.Tags.FirstOrDefault(t => t.TagValue == tagToAdd.TagName && t.IsSkill == tagToAdd.IsSkill) == null)
-        {
-            Tag newTag = new()
-            {
-                TagValue = tagToAdd.TagName,
-                IsSkill = tagToAdd.IsSkill,
-                UserId = id
-            };
-            Tags.Add(newTag);
-            user.Tags.Add(newTag);
-            SaveChanges();
-            return DbErrorStatusCodes.Ok;
-        }
-        return DbErrorStatusCodes.TagAlreadyExists;
-    }
-
-    internal DbErrorStatusCodes RemoveTagFromUser(string id, TagRequest tagToRemove)
-    {
-        var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == id);
-        if (user is null) return DbErrorStatusCodes.UserNotFound;
-
-        var tag = user.Tags.FirstOrDefault(t => t.TagValue == tagToRemove.TagName && t.IsSkill == tagToRemove.IsSkill);
-        if (tag != null)
-        {
-            user.Tags.Remove(tag);
-            Tags.Remove(tag);
-            SaveChanges();
-            return DbErrorStatusCodes.Ok;
-        }
-        return DbErrorStatusCodes.TagNotFound;
-    }
-
     private static User? GetUser(string userId, DbSet<User> Users)
     {
         return Users.FirstOrDefault(u => u.ClerkId == userId);
