@@ -13,7 +13,7 @@ jobs:
       matrix:
         configuration: [Debug, Release]
 
-    runs-on: linux
+    runs-on: ubuntu-latest
 
     env:
       Solution_Name: Backend
