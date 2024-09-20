@@ -25,13 +25,13 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.GetUsersByFilter(skills, interests, page);
     }
 
-    [HttpGet("GetRecommendedUsersByProjectId/{id}")]
+    [HttpGet("GetRecommendedUsersByProjectId/{projectId}")]
     [ProducesResponseType(typeof(List<UserResponse>), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int id, [FromQuery(Name = "page")] int? page = 1)
+    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int projectId, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var users) = db.GetRecommendedUsersByProjectId(id, page);
+        (var status, var users) = db.GetRecommendedUsersByProjectId(projectId, page);
 
         return status switch
         {
@@ -41,12 +41,12 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("GetUserByUserId/{id}")]
+    [HttpGet("GetUserByUserId/{userId}")]
     [ProducesResponseType(typeof(UserResponse), 200)]
     [ProducesResponseType(404)]
-    public ActionResult<UserResponse> GetUserByUserId(string id)
+    public ActionResult<UserResponse> GetUserByUserId(string userId)
     {
-        var user = db.GetUserById(id);
+        var user = db.GetUserById(userId);
         if (user is null) return NotFound("User not found");
         return (UserResponse)user;
     }
@@ -81,7 +81,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpDelete("DeleteUser/{userId}")]
+    [HttpDelete("DeleteUserByUserId/{userId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]

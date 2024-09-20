@@ -30,12 +30,12 @@ public partial class DatabaseContext
             .Select(u => (UserResponse)u)];
     }
 
-    internal User? GetUserById(string id)
+    internal User? GetUserById(string userId)
     {
         var user = Users
         .Include(u => u.Projects).ThenInclude(p => p.Description).ThenInclude(d => d.Tags)
         .Include(u => u.Tags)
-        .FirstOrDefault(u => u.ClerkId == id);
+        .FirstOrDefault(u => u.ClerkId == userId);
         if (user is null) return null;
         return user;
     }
@@ -103,9 +103,9 @@ public partial class DatabaseContext
         return Users.FirstOrDefault(u => u.ClerkId == userId);
     }
 
-    internal (DbErrorStatusCodes, List<User>?) GetRecommendedUsersByProjectId(int id, int? page = 1)
+    internal (DbErrorStatusCodes, List<User>?) GetRecommendedUsersByProjectId(int projectId, int? page = 1)
     {
-        var project = GetProjectById(id);
+        var project = GetProjectById(projectId);
 
         if (project is null) return (DbErrorStatusCodes.ProjectNotFound, null);
 
