@@ -35,21 +35,7 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
 
-    # Pull the SQL Server Docker image
-    - name: Pull SQL Server Docker image
-      run: docker pull mcr.microsoft.com/mssql/server:2019-latest
-
-    # Run the SQL Server Docker container
-    - name: Run SQL Server Docker container
-      run: docker run -d -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=${{ secrets.SA_PASSWORD }}" -p 1433:1433 --name sqlserver mcr.microsoft.com/mssql/server:2019-latest
-
     # Execute all unit tests in the solution
     - name: Execute unit tests
       working-directory: "./Backend"
       run: dotnet test
-
-    # Stop and remove the Docker container
-    - name: Stop and remove Docker container
-      run: |
-        docker stop sqlserver
-        docker rm sqlserver
