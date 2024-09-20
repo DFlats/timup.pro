@@ -79,7 +79,7 @@ public partial class DatabaseContext
         return Users.FirstOrDefault(u => u.ClerkId == userId);
     }
 
-    internal (DbErrorStatusCodes, List<User>?) GetRecommendedUsersByProjectId(int id)
+    internal (DbErrorStatusCodes, List<User>?) GetRecommendedUsersByProjectId(int id, int? page = 1)
     {
         var project = GetProjectById(id);
 
@@ -91,6 +91,8 @@ public partial class DatabaseContext
         var users = Users
             .Include(u => u.Tags)
             .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Skip(((int)page! - 1) * _pageSize)
+            .Take(_pageSize)
             .ToList();
 
         return (DbErrorStatusCodes.Ok, users);
