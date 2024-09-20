@@ -5,12 +5,17 @@ export type ProjectResponse = {
     title: string;
     authorName: string;
     authorId: string;
-    collaborators: components['schemas']['ValueTupleOfStringAndString'][]
+    collaborators: CollaboratorsResponse[],
     description: string;
     skillTags: string[];
     interestTags: string[];
     isCompleted: boolean;
     invitedUsersIds: string[];
+}
+
+export type CollaboratorsResponse = {
+    clerkId: string;
+    name: string;
 }
 
 // components['schemas']['ProjectRequest']
@@ -49,8 +54,7 @@ export function mapRawProjectResponseToProject(projectResponse: components['sche
         title: projectResponse.title!,
         authorName: projectResponse.authorName!,
         authorId: projectResponse.authorId!,
-        //TODO: Figure out how NameId works
-        collaborators: [],
+        collaborators: projectResponse.collaborators!,
         description: projectResponse.description!,
         skillTags: projectResponse.skillTags!,
         interestTags: projectResponse.interestTags!,
