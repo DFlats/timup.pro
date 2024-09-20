@@ -2,14 +2,15 @@ namespace Backend.Database;
 
 public enum DbErrorStatusCodes
 {
+    FatalError,
+    Ok,
+    NoContent,
     UserNotFound,
     ProjectNotFound,
     TagAlreadyExists,
     TagNotFound,
-    Ok,
     UserAlreadyExists,
     UserNotAuthorized,
-    NoContent,
     UserAlreadyInProject,
     UserIsAlreadyOwner,
     UserNotFoundInProject,
