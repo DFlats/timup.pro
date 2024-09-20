@@ -1,20 +1,29 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { User } from "../../api";
+import { Link } from "@tanstack/react-router";
+import { ProjectResponse, User } from "../../api";
 import { TagContainer } from "../tags";
+import { useTransactions } from "../../hooks/useTransactions";
 
 interface Props {
     user: User
+    project: ProjectResponse
     size?: 'full' | 'compact'
 }
 
-export function UserRow({ user, size = 'full' }: Props) {
+export function UserRow({ project, user, size = 'full' }: Props) {
+    const {inviteUser } = useTransactions();
     return (
         <tbody>
             <tr className="hover">
-                <td>{user.name}</td>
+                <td><Link className="btn" to='/profile/$userId' params={{ userId: user.id.toString() }}> {user.name} </Link> </td>
                 <td>
-                    <TagContainer tags={user.skillTags} tagType={"skill"} size={size} />
-                    <TagContainer tags={user.interestTags} tagType={"interest"} size={size} />
+                    <TagContainer tags={user.skillTags.filter(userTag => project.skillTags.some(projectTag => projectTag == userTag))} tagType={"skill"} size={size} />
+                </td>
+                <td>
+                    <TagContainer tags={user.interestTags.filter(userTag => project.interestTags.some(projectTag => projectTag == userTag))} tagType={"interest"} size={size} />
+                </td>
+                <td>
+                    <button className="btn">Invite</button>
                 </td>
             </tr>
         </tbody>
