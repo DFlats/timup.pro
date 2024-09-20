@@ -1,4 +1,4 @@
-import { components } from './schema';
+import { components } from "../schema";
 
 // components['schemas']['ProjectResponse']
 export type Project = {
@@ -43,33 +43,19 @@ export type ProjectPatchRequest = {
     isCompleted?: boolean;
 }
 
-// components['schemas']['TagRequest']
-export type TagRequest = {
-    tagName: string;
-    isSkill: boolean;
-}
-
-// components['schemas']['UserResponse']
-export type User = {
-    id: string;
-    name: string;
-    email: string;
-    interestTags: string[];
-    skillTags: string[];
-}
-
-// components['schemas']['UserRequest']
-export type UserRequest = {
-    clerkId: string;
-    name: string;
-    email: string;
-}
-
-// components['schemas']['UserPatchRequest'];
-export type UserPatchRequest = {
-    clerkId: string;
-    skillTags?: string[];
-    interestTags?: string[];
-}
-
 export type IdName = Required<components['schemas']['ValueTupleOfStringAndString']>
+
+export function mapRawProjectResponseToProject(projectResponse: components['schemas']['ProjectResponse']) {
+    return {
+        id: projectResponse.id!,
+        title: projectResponse.title!,
+        authorName: projectResponse.authorName!,
+        authorId: projectResponse.authorId!,
+        //TODO: Figure out how NameId works
+        collaborators: [],
+        description: projectResponse.description!,
+        skillTags: projectResponse.skillTags!,
+        interestTags: projectResponse.interestTags!,
+        isCompleted: projectResponse.isCompleted!
+    } as Project;
+}
