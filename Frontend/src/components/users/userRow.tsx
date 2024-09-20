@@ -2,6 +2,7 @@
 import { Link } from "@tanstack/react-router";
 import { ProjectResponse, User } from "../../api";
 import { TagContainer } from "../tags";
+import { useTransactions } from "../../hooks/useTransactions";
 
 interface Props {
     user: User
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export function UserRow({ project, user, size = 'full' }: Props) {
+    const {inviteUser } = useTransactions();
     return (
         <tbody>
             <tr className="hover">
