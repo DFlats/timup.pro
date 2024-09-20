@@ -18,3 +18,9 @@ export const handleLeaveProjectRequest = async (userId: string, projectId: numbe
     });
 }
 
+export const handleKickUserFromProject = async (userId: string, projectId: number) => {
+    await client.PUT('/api/Transactions/HandleKickUserFromProject/{userId}/{projectId}', {
+        params: { path: { userId, projectId } }
+    });
+}
+
