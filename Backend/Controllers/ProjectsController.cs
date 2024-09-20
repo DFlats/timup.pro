@@ -102,4 +102,21 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
             _ => StatusCode(500),
         };
     }
+
+    [HttpDelete("DeleteProject/{authorId}/{projectId}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(500)]
+    public IActionResult DeleteProject(string authorId, int projectId)
+    {
+        var status = db.DeleteProject(authorId, projectId);
+        return status switch
+        {
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.UserNotAuthorized => Unauthorized("User not authorized"),
+            DbErrorStatusCodes.Ok => Ok("Project deleted"),
+            _ => StatusCode(500),
+        };
+    }
 }
