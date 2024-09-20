@@ -1,44 +1,76 @@
 import { client } from '../client';
 
-export const handleJoinProjectRequest = async (userId: string, projectId: number) => {
-    await client.PUT('/api/Transactions/HandleJoinProjectRequest/{userId}/{projectId}', {
+export const joinProjectRequest = async (userId: string, projectId: number) => {
+    const { response, error } = await client.POST('/api/Transactions/JoinProjectRequest/{userId}/{projectId}', {
         params: { path: { userId, projectId } }
     });
+
+    if (!response.ok && error)
+        throw error;
 }
 
-export const handleJoinProjectRequestAccept = async (userId: string, projectId: number) => {
-    await client.POST('/api/Transactions/HandleJoinProjectRequest/Accept/{userId}/{projectId}', {
+export const joinProjectRequestAccept = async (userId: string, projectId: number) => {
+    const { response, error } = await client.PUT('/api/Transactions/JoinProjectRequest/Accept/{userId}/{projectId}', {
         params: { path: { userId, projectId } }
     });
+
+    if (!response.ok && error)
+        throw error;
 }
 
-export const handleLeaveProjectRequest = async (userId: string, projectId: number) => {
-    await client.PUT('/api/Transactions/HandleLeaveProjectRequest/{userId}/{projectId}', {
+export const joinProjectRequestDeny = async (userId: string, projectId: number) => {
+    const { response, error } = await client.PUT('/api/Transactions/JoinProjectRequest/Deny/{userId}/{projectId}', {
         params: { path: { userId, projectId } }
     });
+
+    if (!response.ok && error)
+        throw error;
 }
 
-export const handleKickUserFromProject = async (userId: string, projectId: number) => {
-    await client.PUT('/api/Transactions/HandleKickUserFromProject/{userId}/{projectId}', {
+export const inviteUserToProject = async (userId: string, projectId: number) => {
+    const { response, error } = await client.POST('/api/Transactions/InviteUserToProject/{userId}/{projectId}', {
         params: { path: { userId, projectId } }
     });
+
+    if (!response.ok && error)
+        throw error;
 }
 
-export const handleInviteUserToProject = async (userId: string, projectId: number) => {
-    await client.POST('/api/Transactions/HandleInviteUserToProject/{userId}/{projectId}', {
+export const inviteUserToProjectAccept = async (userId: string, projectId: number) => {
+    const { response, error } = await client.PUT('/api/Transactions/InviteUserToProject/Accept/{userId}/{projectId}', {
         params: { path: { userId, projectId } }
     });
+
+    if (!response.ok && error)
+        throw error;
 }
 
-export const handleInviteUserToProjectAccept = async (userId: string, projectId: number) => {
-    await client.POST('/api/Transactions/HandleInviteUserToProject/Accept/{userId}/{projectId}', {
+export const inviteUserToProjectDeny = async (userId: string, projectId: number) => {
+    const { response, error } = await client.PUT('/api/Transactions/InviteUserToProject/Deny/{userId}/{projectId}', {
         params: { path: { userId, projectId } }
     });
+
+    if (!response.ok && error)
+        throw error;
 }
 
-export const handleInviteUserToProjectDeny = async (userId: string, projectId: number) => {
-    await client.POST('/api/Transactions/HandleInviteUserToProject/Deny/{userId}/{projectId}', {
+export const leaveProjectRequest = async (userId: string, projectId: number) => {
+    const { response, error } = await client.DELETE('/api/Transactions/LeaveProjectRequest/{userId}/{projectId}', {
         params: { path: { userId, projectId } }
     });
+
+    if (!response.ok && error)
+        throw error;
 }
+
+export const kickUserFromProject = async (userId: string, projectId: number) => {
+    const { response, error } = await client.DELETE('/api/Transactions/KickUserFromProject/{userId}/{projectId}', {
+        params: { path: { userId, projectId } }
+    });
+
+    if (!response.ok && error)
+        throw error;
+}
+
+
 
