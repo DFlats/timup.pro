@@ -1,3 +1,5 @@
+import { Tags } from "./tags";
+
 export type ProjectCore = {
     authorId: string;
     title: string;
@@ -7,22 +9,17 @@ export type ProjectCore = {
 export type Project = ProjectCore & {
     id: number;
     authorName: string;
-    collaborators: IdName[],
-    skillTags: string[];
-    interestTags: string[];
+    collaborators: UserIdName[],
+    tags: Tags,
     isCompleted: boolean;
     invitedUsersIds: string[];
 }
 
-export type IdName = {
-    id: string,
-    name: string
-}
+export type UserIdName = Record<string, string>;
 
 export type ProjectPatch = {
     title?: string;
     description?: string;
-    skillTags?: string[];
-    interestTags?: string[];
+    tags?: Tags,
     isCompleted?: boolean;
 }

@@ -1,6 +1,7 @@
 import { client } from '../client'
 import { components } from '../schema';
-import { Project, ProjectCore, ProjectPatch } from '../../types/projects';
+import { Project, ProjectCore, ProjectPatch, UserIdName } from '../../types/projects';
+import { Tag } from '../../types';
 
 export const getProjects = async (skillTags: string[] = [], interestTags: string[] = [], page?: number) => {
     const { response, data, error } = await client.GET('/api/Projects/GetProjects', {
@@ -117,28 +118,33 @@ export const deleteProject = async (authorId: string, projectId: number) => {
         throw error;
 }
 
+const tagsFrom = (skillTags?: string[], interestTags?: string[]) => ({
+    'skill': skillTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? [],
+    'interest': interestTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? []
+});
 
-export function projectFromProjectResponse(dto: components['schemas']['ProjectResponse']) {
+const collaboratorsFrom = (collaborators: components['schemas']['CollaboratorsResponse'][]) =>
+    collaborators!.map(dto => {
+        const collab: UserIdName = {};
+        collab[dto.clerkId!] = dto.name!;
+        return collab;
+    });
+
+function projectFromProjectResponse(dto: components['schemas']['ProjectResponse']) {
     return {
-        id: dto.id!,
-        title: dto.title!,
-        authorName: dto.authorName!,
         authorId: dto.authorId!,
-        collaborators: dto.collaborators!.map(dto => {
-            return {
-                id: dto.clerkId,
-                name: dto.name
-            }
-        }),
+        title: dto.title!,
         description: dto.description!,
-        skillTags: dto.skillTags!,
-        interestTags: dto.interestTags!,
+        id: dto.id!,
+        authorName: dto.authorName!,
+        collaborators: collaboratorsFrom(dto.collaborators!),
+        tags: tagsFrom(dto.skillTags, dto.interestTags!),
         isCompleted: dto.isCompleted!,
         invitedUsersIds: dto.invitedUsers!
     } as Project;
 }
 
-export function projectFromProjectOverviewResponse(dto: components['schemas']['ProjectOverviewResponse']) {
+function projectFromProjectOverviewResponse(dto: components['schemas']['ProjectOverviewResponse']) {
     return {
         id: dto.id!,
         title: dto.title!,
@@ -146,8 +152,7 @@ export function projectFromProjectOverviewResponse(dto: components['schemas']['P
         authorId: dto.authorId!,
         collaborators: [],
         description: dto.description!,
-        skillTags: dto.skillTags!,
-        interestTags: dto.interestTags!,
+        tags: tagsFrom(dto.skillTags, dto.interestTags),
         isCompleted: dto.isCompleted!,
         invitedUsersIds: []
     } as Project;

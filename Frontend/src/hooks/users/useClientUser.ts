@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { endpoints } from "../../api";
-import { TagType, UserPatch } from "../../types";
+import { Tag, UserPatch } from "../../types";
 
 export function useClientUser() {
     const { user } = useUser();
@@ -37,47 +37,27 @@ export function useClientUser() {
         queryClient.setQueryData(queryKey, patchedClientUser)
     }
 
-    const getSkillTags = () => {
-        return query.data?.skillTags ?? [] as string[]
-    }
-
-    const getInterestTags = () => {
-        return query.data?.interestTags ?? [] as string[]
-    }
-
-    const updateTags = async (tagText: string, tagType: TagType, operation: 'add' | 'remove') => {
-        console.log("updating tags", operation);
-
+    const updateTags = async (tag: Tag, operation: 'add' | 'remove') => {
         if (!clientUser) return;
 
         if (operation == 'add') {
-            switch (tagType) {
+            switch (tag.kind) {
                 case 'skill':
-                    if (clientUser.skillTags.includes(tagText)) return;
+                    if (clientUser.skillTags.includes(tag.title)) return;
                     break;
                 case 'interest':
-                    if (clientUser.interestTags.includes(tagText)) return;
+                    if (clientUser.interestTags.includes(tag.title)) return;
                     break;
             }
         }
 
-        const calculateUpdatedTags = (): { updatedSkillTags?: string[], updatedInterestTags?: string[] } => {
-            if (operation == 'add' && tagType == 'skill')
-                return { updatedSkillTags: [...getSkillTags(), tagText] }
-            if (operation == 'add' && tagType == 'interest')
-                return { updatedInterestTags: [...getInterestTags(), tagText] }
-            if (operation == 'remove' && tagType == 'skill')
-                return { updatedSkillTags: getSkillTags().filter(t => t != tagText) }
-            if (operation == 'remove' && tagType == 'interest')
-                return { updatedInterestTags: getInterestTags().filter(t => t != tagText) }
-            return {}
-        }
+        const newTags = { ...clientUser.tags };
 
-        const { updatedSkillTags, updatedInterestTags } = calculateUpdatedTags();
+        if (operation == 'add') newTags[tag.kind].push(tag);
+        else newTags[tag.kind] = newTags[tag.kind].filter(t => t.title != tag.title);
 
         const patch: UserPatch = {
-            skillTags: updatedSkillTags,
-            interestTags: updatedInterestTags
+            tags: newTags,
         } as UserPatch;
 
         console.log(patch);
@@ -87,8 +67,8 @@ export function useClientUser() {
 
     return {
         clientUser: query.data,
-        addTagToClientUser: async (tagText: string, tagType: TagType) => updateTags(tagText, tagType, 'add'),
-        removeTagFromClientUser: async (tagText: string, tagType: TagType) => updateTags(tagText, tagType, 'remove'),
+        addTagToClientUser: async (tag: Tag) => updateTags(tag, 'add'),
+        removeTagFromClientUser: async (tag: Tag) => updateTags(tag, 'remove'),
         patchClientUser
     }
 }

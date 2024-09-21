@@ -1,4 +1,4 @@
-import { TagType } from './misc';
+import { Tags } from './tags';
 
 export type UserCore = {
     id: string;
@@ -9,11 +9,10 @@ export type UserCore = {
 export type User = UserCore & {
     interestTags: string[];
     skillTags: string[];
-    tags: Record<TagType, string[]>
+    tags: Tags
 }
 
 export type UserPatch = {
     id: string;
-    skillTags?: string[];
-    interestTags?: string[];
+    tags?: Tags
 }

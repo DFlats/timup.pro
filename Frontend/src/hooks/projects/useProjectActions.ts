@@ -2,13 +2,14 @@ import { endpoints } from "../../api";
 import { useClientUser } from "../users";
 import { useProjectsOwnedByClientUser } from "./useProjectsOwnedByClientUser";
 import { ProjectPatch } from '../../types/projects';
+import { Tags } from "../../types";
 
 export function useProjectActions() {
     const { addProjectToCache } = useProjectsOwnedByClientUser();
     const { clientUser } = useClientUser();
 
     const createProjectWithClientAsAuthor = async (
-        title: string, description: string, skillTags: string[], interestTags: string[]
+        title: string, description: string, tags: Tags
     ) => {
         if (!clientUser) return;
 
@@ -19,8 +20,7 @@ export function useProjectActions() {
         });
 
         const patch: ProjectPatch = {
-            skillTags,
-            interestTags
+            tags
         }
 
         const patchedProject = await endpoints.projects.updateProject(patch, createdProject.id, createdProject.authorId);

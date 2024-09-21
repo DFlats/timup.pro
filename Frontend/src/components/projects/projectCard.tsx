@@ -17,8 +17,8 @@ export function ProjectCard({ project }: Props) {
                 <CardDescription>
                     {project.description}
                 </CardDescription>
-                <TagContainer tags={project.skillTags} tagType={'skill'} />
-                <TagContainer tags={project.interestTags} tagType={'interest'} />
+                <TagContainer tags={project.tags['skill']} tagType={'skill'} />
+                <TagContainer tags={project.tags['interest']} tagType={'interest'} />
                 <CardFooter>
                     {`Initiated by ${project.authorName}`}
                 </CardFooter>

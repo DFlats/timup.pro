@@ -1,4 +1,4 @@
-import { User, UserCore, UserPatch } from "../../types";
+import { Tag, User, UserCore, UserPatch } from "../../types";
 import { client } from "../client";
 import { components } from "../schema";
 
@@ -65,7 +65,8 @@ export const confirmUserExists = async (userCore: UserCore) => {
 export const updateUser = async (userPatch: UserPatch, userId: string) => {
     const userPatchRequest = {
         clerkId: userId,
-        ...userPatch
+        skillTags: userPatch.tags?.['skill']?.map(t => t.title),
+        interestTags: userPatch.tags?.['interest']?.map(t => t.title),
     } as components['schemas']['UserPatchRequest'];
 
     const { response, error } = await client.PATCH('/api/Users/UpdateUser', {
@@ -91,20 +92,19 @@ export const deleteUser = async (userId: string) => {
         throw error;
 }
 
+const tagsFrom = (skillTags?: string[], interestTags?: string[]) => ({
+    'skill': skillTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? [],
+    'interest': interestTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? []
+});
+
+
 export function userFromUserResponse(dto: components['schemas']['UserResponse']) {
     return {
         id: dto.id!,
         name: dto.name!,
         email: dto.email!,
         interestTags: dto.interestTags!,
-        skillTags: dto.skillTags!
+        skillTags: dto.skillTags!,
+        tags: tagsFrom(dto.skillTags, dto.interestTags)
     } as User;
-}
-
-export function patchUser(user: User, patch: UserPatch) {
-    const patchedUser: User = {
-        ...user,
-        ...patch
-    };
-    return patchedUser;
 }

@@ -16,12 +16,12 @@ export function UserRow({ project, user }: Props) {
                 <td><Link className="btn" to='/profile/$userId' params={{ userId: user.id.toString() }}> {user.name} </Link> </td>
                 <td>
                     <TagContainerCompact
-                        tags={user.skillTags.filter(userTag => project.skillTags.some(projectTag => projectTag == userTag))}
+                        tags={user.tags['skill'].filter(userTag => project.tags['skill'].some(projectTag => projectTag == userTag))}
                         tagType={"skill"} />
                 </td>
                 <td>
                     <TagContainer
-                        tags={user.interestTags.filter(userTag => project.interestTags.some(projectTag => projectTag == userTag))}
+                        tags={user.tags['interest'].filter(userTag => project.tags['interest'].some(projectTag => projectTag == userTag))}
                         tagType={"interest"} />
                 </td>
                 <td>

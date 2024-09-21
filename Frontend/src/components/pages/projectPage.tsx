@@ -36,8 +36,8 @@ export function ProjectPage() {
                     {clientOwnsProject &&
                         <p>You are a part of this project</p>
                     }
-                    <TagContainer tags={project.skillTags} tagType='skill' />
-                    <TagContainer tags={project.interestTags} tagType='interest' />
+                    <TagContainer tags={project.tags['skill']} tagType='skill' />
+                    <TagContainer tags={project.tags['interest']} tagType='interest' />
                     <UserTable project={project} />
                 </div>
             </div>

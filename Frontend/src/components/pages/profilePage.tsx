@@ -22,8 +22,8 @@ export function ProfilePage() {
     return (
         <>
             <h1>{finalUser.name}</h1>
-            <TagContainer tags={finalUser.skillTags} tagType='skill' />
-            <TagContainer tags={finalUser.interestTags} tagType='interest' />
+            <TagContainer tags={finalUser.tags['skill']} tagType='skill' />
+            <TagContainer tags={finalUser.tags['interest']} tagType='interest' />
             <EditUserModal />
             {userIsClient &&
                 <>
