@@ -1,11 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Link } from "@tanstack/react-router";
-import { ProjectResponse, User } from "../../api";
+import { Project, User } from "../../api";
 import { TagContainer, TagContainerCompact } from "../tags";
 
 interface Props {
     user: User
-    project: ProjectResponse
+    project: Project
     size?: 'full' | 'compact'
 }
 

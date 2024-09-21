@@ -1,12 +1,12 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Link } from "@tanstack/react-router";
-import { ProjectResponse } from "../../api";
+import { Project } from "../../api";
 import { TagContainer } from "../tags";
 import { Card } from "../layouts/card";
 import { CardDescription, CardFooter, CardTitle } from "../layouts";
 
 interface Props {
-    project: ProjectResponse
+    project: Project
 }
 
 export function ProjectCard({ project }: Props) {

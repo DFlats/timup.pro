@@ -1,10 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { ProjectResponse } from "../../api";
+import { Project } from "../../api";
 import { UserRow } from "../../components/users";
 import { useRecommendedUsersForProject } from "../../hooks/users";
 
 interface props {
-    project: ProjectResponse;
+    project: Project;
 }
 
 export function UserTable({ project }: props) {
