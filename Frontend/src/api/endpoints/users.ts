@@ -49,8 +49,14 @@ export const getUserByUserId = async (id: string) => {
 }
 
 export const confirmUserExists = async (userCore: UserCore) => {
+    const request = {
+        clerkId: userCore.id,
+        name: userCore.name,
+        email: userCore.email,
+    } as components['schemas']['UserRequest']
+
     await client.POST('/api/Users/ConfirmUserExists', {
-        body: userCore
+        body: request
     });
 
     return await getUserByUserId(userCore.id);
