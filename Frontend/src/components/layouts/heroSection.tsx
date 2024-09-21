@@ -15,7 +15,7 @@ export function HeroSection() {
                     </button>
                 </SignUpButton>
             </div>
-            <div className="island">
+            <div className="floating">
                 <img className="contrast-[1.2] brightness-95" src="floating-island-with-a-human-sitting-at-a-computer.png" alt="image of a floating island with a human sitting at a computer" />
             </div>
         </section>

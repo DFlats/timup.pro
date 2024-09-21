@@ -5,7 +5,7 @@ import { ProjectFeedType } from "../../types/types";
 import { ProjectFeed } from "../../components";
 import { HeroSection } from "../layouts/heroSection";
 import "./homePage.css";
-import Stars from "./stars";
+import Stars from "../layouts/stars";
 import { SignedOut } from "@clerk/clerk-react";
 
 export function HomePage() {
