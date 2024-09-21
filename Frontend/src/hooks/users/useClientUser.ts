@@ -50,13 +50,15 @@ export function useClientUser() {
 
         if (!clientUser) return;
 
-        switch (tagType) {
-            case 'skill':
-                if (clientUser.skillTags.includes(tagText)) return;
-                break;
-            case 'interest':
-                if (clientUser.interestTags.includes(tagText)) return;
-                break;
+        if (operation == 'add') {
+            switch (tagType) {
+                case 'skill':
+                    if (clientUser.skillTags.includes(tagText)) return;
+                    break;
+                case 'interest':
+                    if (clientUser.interestTags.includes(tagText)) return;
+                    break;
+            }
         }
 
         const calculateUpdatedTags = (): { updatedSkillTags?: string[], updatedInterestTags?: string[] } => {
