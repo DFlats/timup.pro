@@ -14,7 +14,7 @@ export function ProjectsOwnedByClientUser() {
 
     return (
         <div className="p-12 w-screen flex flex-col items-center justify-center">
-            <h1 className='text-4xl mb-8'>Projects tailored for you</h1>
+            <h1 className='text-4xl mb-8'>{`Projects you're a part of`}</h1>
             <div className='flex flex-row flex-wrap'>
                 <NewProjectCard />
                 {projects && projects.map(project => <ProjectCard key={project.id} project={project} />)}
