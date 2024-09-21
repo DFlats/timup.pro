@@ -1,3 +1,4 @@
+/* eslint-disable */
 import daisyui from "daisyui";
 
 /** @type {import('tailwindcss').Config} */
@@ -6,5 +7,16 @@ export default {
     theme: {
         extend: {},
     },
-    plugins: [daisyui],
+    plugins: [require('@tailwindcss/typography'), daisyui],
+    daisyui: {
+        themes: [
+            {
+                bumblebee: {
+                    ...require("daisyui/src/theming/themes")["bumblebee"],
+                    "accent": "#EEA12D",
+                    "base-100": "#0c0d3f",
+                },
+            }
+        ],
+    },
 };
