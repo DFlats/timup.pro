@@ -67,6 +67,15 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
+    [HttpPost("ConfirmUserExists")]
+    [ProducesResponseType(200)]
+    public IActionResult ConfirmUserExists(UserRequest userToCheck)
+    {
+        db.CreateUser(userToCheck);
+
+        return Ok();
+    }
+
     [HttpPatch("UpdateUser")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
