@@ -27,7 +27,6 @@ export function CreateProjectForm() {
     } = useForm<Inputs>()
 
     const handleAddTag = (tag: string, tagType: TagType) => {
-        event?.preventDefault();
         switch (tagType) {
             case 'skill':
                 setSkillTags([...skillTags, tag]);
@@ -38,7 +37,6 @@ export function CreateProjectForm() {
     }
 
     const handleRemoveTag = (tag: string, tagType: TagType) => {
-        event?.preventDefault();
         switch (tagType) {
             case 'skill':
                 setSkillTags(skillTags.filter(t => t != tag));
@@ -50,7 +48,7 @@ export function CreateProjectForm() {
 
     const onSubmit: SubmitHandler<Inputs> = async ({ title, description }: Inputs) => {
         if (!clientUser || !createProjectWithClientAsAuthor) return;
-        
+
         const createdProject = await createProjectWithClientAsAuthor(title, description, skillTags, interestTags);
 
         if (!createdProject) return;

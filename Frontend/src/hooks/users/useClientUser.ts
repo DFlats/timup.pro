@@ -46,9 +46,18 @@ export function useClientUser() {
     }
 
     const updateTags = async (tagText: string, tagType: TagType, operation: 'add' | 'remove') => {
-        const clientUser = query.data;
+        console.log("updating tags", operation);
 
         if (!clientUser) return;
+
+        switch (tagType) {
+            case 'skill':
+                if (clientUser.skillTags.includes(tagText)) return;
+                break;
+            case 'interest':
+                if (clientUser.interestTags.includes(tagText)) return;
+                break;
+        }
 
         const calculateUpdatedTags = (): { updatedSkillTags?: string[], updatedInterestTags?: string[] } => {
             if (operation == 'add' && tagType == 'skill')
@@ -56,19 +65,22 @@ export function useClientUser() {
             if (operation == 'add' && tagType == 'interest')
                 return { updatedInterestTags: [...getInterestTags(), tagText] }
             if (operation == 'remove' && tagType == 'skill')
-                return { updatedSkillTags: [...getSkillTags(), tagText] }
+                return { updatedSkillTags: getSkillTags().filter(t => t != tagText) }
             if (operation == 'remove' && tagType == 'interest')
-                return { updatedInterestTags: [...getInterestTags(), tagText] }
+                return { updatedInterestTags: getInterestTags().filter(t => t != tagText) }
             return {}
         }
 
         const { updatedSkillTags, updatedInterestTags } = calculateUpdatedTags();
 
-
-        patchClientUser({
+        const patch: UserPatch = {
             skillTags: updatedSkillTags,
             interestTags: updatedInterestTags
-        } as UserPatch)
+        } as UserPatch;
+
+        console.log(patch);
+
+        patchClientUser(patch);
     }
 
     return {

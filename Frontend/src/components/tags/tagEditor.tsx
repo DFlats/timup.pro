@@ -14,7 +14,9 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
     const inputSkillRef = useRef<HTMLInputElement>(null);
     const [inputValue, setInputValue] = useState<string>('');
 
-    const handleAddTag = () => {
+    const handleAddTag = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        
         const value = inputSkillRef!.current?.value;
         if (!value) return;
 
@@ -63,7 +65,7 @@ export function TagEditor({ tags, tagType, onAddTag, onRemoveTag }: Props) {
 
                 <button
                     className={`btn m-4 ${inputValue === '' ? 'btn-disabled' : ''}`}  
-                    onClick={handleAddTag}
+                    onClick={(e) => handleAddTag(e)}
                 >
                     {submitLabel()}
                 </button>

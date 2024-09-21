@@ -85,7 +85,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.UpdateUser(requestBody) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => Ok("User updated"),
+            DbErrorStatusCodes.Ok => Ok(),
             _ => StatusCode(500),
         };
     }
@@ -99,7 +99,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.DeleteUser(userId) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => Ok("User deleted"),
+            DbErrorStatusCodes.Ok => Ok(),
             _ => StatusCode(500),
         };
     }

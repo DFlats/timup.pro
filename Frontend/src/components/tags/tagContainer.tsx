@@ -36,7 +36,7 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
             <h2>{heading()}</h2>
             <div className="flex flex-row flex-wrap">
                 {tags.length > 0 &&
-                    tags.map(tag => <Tag key={tag} {...tagProps(tag)} />)
+                    tags.map((tag, i) => <Tag key={i} {...tagProps(tag)} />)
                 }
                 {tags.length == 0 && noTagsTag()}
             </div>
