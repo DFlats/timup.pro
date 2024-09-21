@@ -48,13 +48,29 @@ export const getUserByUserId = async (id: string) => {
     return userFromUserResponse(data);
 }
 
-export const createUser = async (userCore: UserCore) => {
-    await client.POST('/api/Users/CreateUser', {
+export const confirmUserExists = async (userCore: UserCore) => {
+    await client.POST('/api/Users/ConfirmUserExists', {
         body: userCore
     });
+
     return await getUserByUserId(userCore.id);
 }
 
+export const updateUser = async (userPatch: UserPatch, userId: string) => {
+    const userPatchRequest = {
+        clerkId: userId,
+        ...userPatch
+    } as components['schemas']['UserPatchRequest'];
+
+    const { response, error } = await client.PATCH('/api/Users/UpdateUser', {
+        body: userPatchRequest
+    });
+
+    if (!response.ok && error)
+        throw error;
+
+    return await getUserByUserId(userId);
+}
 
 export const deleteUser = async (userId: string) => {
     const { response, error } = await client.DELETE('/api/Users/DeleteUser/{userId}', {

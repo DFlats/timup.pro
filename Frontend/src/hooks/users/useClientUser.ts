@@ -14,7 +14,7 @@ export function useClientUser() {
         queryFn: async () => {
             if (!user) throw new Error('Could not load clerk user');
 
-            await endpoints.users.createUser({
+            await endpoints.users.confirmUserExists({
                 id: user.id,
                 email: user.primaryEmailAddress!.toString(),
                 name: user.fullName!
