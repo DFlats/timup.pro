@@ -1,10 +1,5 @@
 import { components } from "../schema";
 
-export type IdName = {
-    id: string,
-    name: string
-}
-
 export type ProjectCore = {
     authorId: string;
     title: string;
@@ -19,6 +14,21 @@ export type Project = ProjectCore & {
     interestTags: string[];
     isCompleted: boolean;
     invitedUsersIds: string[];
+}
+
+export type IdName = {
+    id: string,
+    name: string
+}
+
+export type ProjectPatch = {
+    projectId: number;
+    authorId: string;
+    title?: string;
+    description?: string;
+    skillTags?: string[];
+    interestTags?: string[];
+    isCompleted?: boolean;
 }
 
 export function projectFromProjectResponse(dto: components['schemas']['ProjectResponse']) {
@@ -54,16 +64,6 @@ export function projectFromProjectOverviewResponse(dto: components['schemas']['P
         isCompleted: dto.isCompleted!,
         invitedUsersIds: []
     } as Project;
-}
-
-export type ProjectPatch = {
-    projectId: number;
-    authorId: string;
-    title?: string;
-    description?: string;
-    skillTags?: string[];
-    interestTags?: string[];
-    isCompleted?: boolean;
 }
 
 export function patchProject(project: Project, patch: ProjectPatch) {
