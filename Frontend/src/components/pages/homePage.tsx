@@ -6,6 +6,7 @@ import { ProjectFeed } from "../../components";
 import { HeroSection } from "../layouts/heroSection";
 import "./homePage.css";
 import Stars from "./stars";
+import { SignedOut } from "@clerk/clerk-react";
 
 export function HomePage() {
     const { clientUser } = useUsers({ type: 'clientUser' });
@@ -19,8 +20,10 @@ export function HomePage() {
 
     return (
         <>
-            <Stars />
-            <HeroSection />
+            <SignedOut>
+                <Stars />
+                <HeroSection />
+            </SignedOut>
             <ProjectFeed projectFeed={projectFeed()} />
         </>
     );
