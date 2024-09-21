@@ -1,6 +1,6 @@
 import { client } from '../client'
 import { components } from '../schema';
-import { ProjectCore, projectFromProjectOverviewResponse, projectFromProjectResponse, ProjectPatch } from '../types/projects';
+import { ProjectCore, projectFromProjectOverviewResponse, projectFromProjectResponse, ProjectPatch } from '../../types/projects';
 
 export const getProjects = async (skillTags: string[] = [], interestTags: string[] = [], page?: number) => {
     const { response, data, error } = await client.GET('/api/Projects/GetProjects', {
@@ -93,16 +93,14 @@ export const updateProject = async (projectPatch: ProjectPatch, projectId: numbe
         authorId,
     } as components['schemas']['ProjectPatchRequest']
 
-    console.log(projectPatchRequest);
-
-    await client.PATCH('/api/Projects/UpdateProject', {
+    const { response, error } = await client.PATCH('/api/Projects/UpdateProject', {
         body: projectPatchRequest
     });
 
-    console.log("!");
+    if (!response.ok && error)
+        throw error;
 
-    // console.log()
-    // return await getProjectByProjectId(projectId);
+    return await getProjectByProjectId(projectId);
 }
 
 export const deleteProject = async (authorId: string, projectId: number) => {

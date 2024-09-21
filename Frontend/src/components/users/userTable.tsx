@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { Project } from "../../api";
 import { UserRow } from "../../components/users";
 import { useRecommendedUsersForProject } from "../../hooks/users";
+import { Project } from "../../types";
 
 interface props {
     project: Project;

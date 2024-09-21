@@ -1,7 +1,7 @@
 import { endpoints } from "../../api";
 import { useClientUser } from "../users";
 import { useProjectsOwnedByClientUser } from "./useProjectsOwnedByClientUser";
-import { ProjectPatch } from '../../api/types/projects';
+import { ProjectPatch } from '../../types/projects';
 
 export function useProjectActions() {
     const { addProjectToCache } = useProjectsOwnedByClientUser();

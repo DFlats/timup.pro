@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { TagType } from "../../types/types";
+import { TagType } from "../../types/misc";
 
 export interface TagProps {
     tag: string,

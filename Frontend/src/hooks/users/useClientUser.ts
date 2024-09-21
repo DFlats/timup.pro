@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { endpoints, UserPatch } from "../../api";
-import { TagType } from "../../types";
+import { endpoints } from "../../api";
+import { TagType, UserPatch } from "../../types";
 
 export function useClientUser() {
     const { user } = useUser();

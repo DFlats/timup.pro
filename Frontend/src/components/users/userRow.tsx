@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Link } from "@tanstack/react-router";
-import { Project, User } from "../../api";
 import { TagContainer, TagContainerCompact } from "../tags";
+import { User, Project } from "../../types";
 
 interface Props {
     user: User

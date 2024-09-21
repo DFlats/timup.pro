@@ -1,6 +1,6 @@
+import { userFromUserResponse, User, UserCore, UserPatch } from "../../types";
 import { client } from "../client";
 import { components } from "../schema";
-import { User, userFromUserResponse, UserCore, UserPatch } from "../types";
 
 export const getUsers = async (skillTags: string[] = [], interestTags: string[] = [], page?: number) => {
     const { response, data, error } = await client.GET('/api/Users/GetUsers', {

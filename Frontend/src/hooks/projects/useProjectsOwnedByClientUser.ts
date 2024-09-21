@@ -1,6 +1,7 @@
 import { useQueryClient, useQuery } from "@tanstack/react-query";
-import { endpoints, Project } from "../../api";
+import { endpoints } from "../../api";
 import { useClientUser } from "../users";
+import { Project } from "../../types";
 
 export function useProjectsOwnedByClientUser() {
     const { clientUser } = useClientUser();
