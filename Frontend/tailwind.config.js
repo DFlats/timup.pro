@@ -14,7 +14,7 @@ export default {
                 bumblebee: {
                     ...require("daisyui/src/theming/themes")["bumblebee"],
                     "accent": "#EEA12D",
-                    "base-100": "#010a2e",
+                    "base-100": "#000326",
                 },
             }
         ],
