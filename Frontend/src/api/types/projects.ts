@@ -1,11 +1,16 @@
 import { components } from "../schema";
 
-export type ProjectResponse = {
+export type IdName = {
+    id: string,
+    name: string
+}
+
+export type Project = {
     id: number;
     title: string;
     authorName: string;
     authorId: string;
-    collaborators: CollaboratorsResponse[],
+    collaborators: IdName[],
     description: string;
     skillTags: string[];
     interestTags: string[];
@@ -13,32 +18,48 @@ export type ProjectResponse = {
     invitedUsersIds: string[];
 }
 
-export type CollaboratorsResponse = {
-    clerkId: string;
-    name: string;
+export function projectFromProjectResponse(dto: components['schemas']['ProjectResponse']) {
+    return {
+        id: dto.id!,
+        title: dto.title!,
+        authorName: dto.authorName!,
+        authorId: dto.authorId!,
+        collaborators: dto.collaborators!.map(dto => {
+            return {
+                id: dto.clerkId,
+                name: dto.name
+            }
+        }),
+        description: dto.description!,
+        skillTags: dto.skillTags!,
+        interestTags: dto.interestTags!,
+        isCompleted: dto.isCompleted!,
+        invitedUsersIds: dto.invitedUsers!
+    } as Project;
 }
 
-// components['schemas']['ProjectRequest']
-export type ProjectRequest = {
+export function projectFromProjectOverviewResponse(dto: components['schemas']['ProjectOverviewResponse']) {
+    return {
+        id: dto.id!,
+        title: dto.title!,
+        authorName: "ProjectOverviewResponse",
+        authorId: dto.authorId!,
+        collaborators: [],
+        description: dto.description!,
+        skillTags: dto.skillTags!,
+        interestTags: dto.interestTags!,
+        isCompleted: dto.isCompleted!,
+        invitedUsersIds: []
+    } as Project;
+}
+
+export type ProjectCore = {
     authorId: string;
     title: string;
     description: string;
 }
 
-// components['schemas']['ProjectOverviewResponse']
-export type ProjectOverviewResponse = {
-    id: number;
-    title: string;
-    authorId: string;
-    collabCount: number;
-    description: string;
-    skillTags: string[];
-    interestTags: string[];
-    isCompleted: boolean;
-}
-
-// components['schemas']['ProjectOverviewResponse']
-export type ProjectPatchRequest = {
+export type ProjectPatch = {
     projectId: number;
     authorId: string;
     title?: string;
@@ -48,24 +69,9 @@ export type ProjectPatchRequest = {
     isCompleted?: boolean;
 }
 
-export function mapRawProjectResponseToProject(projectResponse: components['schemas']['ProjectResponse']) {
-    return {
-        id: projectResponse.id!,
-        title: projectResponse.title!,
-        authorName: projectResponse.authorName!,
-        authorId: projectResponse.authorId!,
-        collaborators: projectResponse.collaborators!,
-        description: projectResponse.description!,
-        skillTags: projectResponse.skillTags!,
-        interestTags: projectResponse.interestTags!,
-        isCompleted: projectResponse.isCompleted!,
-        invitedUsersIds: projectResponse.invitedUsers!
-    } as ProjectResponse;
-}
-
-export function patchProject(project: ProjectResponse, patch: ProjectPatchRequest) {
+export function patchProject(project: Project, patch: ProjectPatch) {
     return {
         ...project,
         ...patch
-    } as ProjectResponse;
+    } as Project;
 }

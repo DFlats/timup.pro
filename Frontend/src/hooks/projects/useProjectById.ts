@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { endpoints, ProjectPatchRequest, patchProject as patchProjectResponse } from "../../api";
+import { endpoints, ProjectPatch, patchProject as patchProjectResponse } from "../../api";
 
 export function useProjectById(projectId: number) {
     const queryKey = ["project", "byId", projectId];
@@ -13,12 +13,12 @@ export function useProjectById(projectId: number) {
         }
     });
 
-    type FixedPatchRequest = Omit<ProjectPatchRequest, 'authorId' | 'projectId'>;
+    type FixedPatchRequest = Omit<ProjectPatch, 'authorId' | 'projectId'>;
 
     const patchProject = async (projectPatch: FixedPatchRequest) => {
         if (!query.data?.authorId || !query.data?.id) return;
 
-        const patchRequest: ProjectPatchRequest = {
+        const patchRequest: ProjectPatch = {
             ...projectPatch,
             authorId: query.data.authorId,
             projectId: query.data.id

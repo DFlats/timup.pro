@@ -1,7 +1,7 @@
 import { endpoints } from "../../api";
 import { useClientUser } from "../users";
 import { useProjectsOwnedByClientUser } from "./useProjectsOwnedByClientUser";
-import { patchProject, ProjectPatchRequest, ProjectResponse } from '../../api/types/projects';
+import { patchProject, ProjectPatch, ProjectResponse } from '../../api/types/projects';
 
 export function useProjectActions() {
     const { addProjectToCache } = useProjectsOwnedByClientUser();
@@ -18,7 +18,7 @@ export function useProjectActions() {
             title
         });
 
-        const patch: ProjectPatchRequest = {
+        const patch: ProjectPatch = {
             authorId: clientUser.id,
             projectId: createdProject.id,
             skillTags,

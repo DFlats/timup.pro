@@ -1,5 +1,5 @@
 import { client } from '../client'
-import { mapRawProjectResponseToProject, ProjectPatchRequest, ProjectRequest } from '../types/projects';
+import { ProjectCore, projectFromProjectOverviewResponse, projectFromProjectResponse, ProjectPatch } from '../types/projects';
 
 export const getProjects = async (skillTags: string[] = [], interestTags: string[] = [], page?: number) => {
     const { response, data, error } = await client.GET('/api/Projects/GetProjects', {
@@ -15,7 +15,7 @@ export const getProjects = async (skillTags: string[] = [], interestTags: string
     if (!data || (!response.ok && error))
         throw error;
 
-    return data.map(projectResponse => mapRawProjectResponseToProject(projectResponse));
+    return data.map(projectResponse => projectFromProjectResponse(projectResponse));
 }
 
 export const getRecommendedProjectsByUserId = async (userId: string, page?: number) => {
@@ -34,7 +34,7 @@ export const getRecommendedProjectsByUserId = async (userId: string, page?: numb
     if (!data || (!response.ok && error))
         throw error;
 
-    return data.map(projectResponse => mapRawProjectResponseToProject(projectResponse))
+    return data.map(projectResponse => projectFromProjectResponse(projectResponse))
 }
 
 export const getProjectByProjectId = async (projectId: number) => {
@@ -49,9 +49,10 @@ export const getProjectByProjectId = async (projectId: number) => {
     if (!data || (!response.ok && error))
         throw error;
 
-    return mapRawProjectResponseToProject(data);
+    return projectFromProjectResponse(data);
 }
 
+//!!! Endpoint returns ProjectOverviewResponse
 export const getProjectsByUserId = async (userId: string) => {
     const { response, data, error } = await client.GET('/api/Projects/GetProjectsByUserId/{id}', {
         params: {
@@ -64,10 +65,10 @@ export const getProjectsByUserId = async (userId: string) => {
     if (!data || (!response.ok && error))
         throw error;
 
-    return data.map(projectResponse => mapRawProjectResponseToProject(projectResponse))
+    return data.map(projectResponse => projectFromProjectOverviewResponse(projectResponse))
 }
 
-export const createProject = async (projectRequest: ProjectRequest) => {
+export const createProject = async (projectRequest: ProjectCore) => {
     const { response, data, error } = await client.POST('/api/Projects/CreateProject', {
         body: projectRequest
     });
@@ -75,10 +76,10 @@ export const createProject = async (projectRequest: ProjectRequest) => {
     if (!data || (!response.ok && error))
         throw error;
 
-    return mapRawProjectResponseToProject(data);
+    return projectFromProjectResponse(data);
 }
 
-export const updateProject = async (projectPatchRequest: ProjectPatchRequest) => {
+export const updateProject = async (projectPatchRequest: ProjectPatch) => {
     const { response, error } = await client.PATCH('/api/Projects/UpdateProject', {
         body: projectPatchRequest
     });

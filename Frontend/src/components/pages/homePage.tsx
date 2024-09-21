@@ -1,18 +1,16 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useClientUser } from "../../hooks/users";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { FeaturedProjects, RecommendedProjectsForClientUser } from "../projects";
 
 export function HomePage() {
-    const { clientUser } = useClientUser();
-
     return (
         <>
-            {clientUser &&
+            <SignedIn>
                 <RecommendedProjectsForClientUser />
-            }
-            {!clientUser &&
+            </SignedIn>
+            <SignedOut>
                 <FeaturedProjects />
-            }
+            </SignedOut>
         </>
     );
 }
