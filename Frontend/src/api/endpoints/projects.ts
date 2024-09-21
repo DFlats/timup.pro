@@ -1,4 +1,5 @@
 import { client } from '../client'
+import { components } from '../schema';
 import { ProjectCore, projectFromProjectOverviewResponse, projectFromProjectResponse, ProjectPatch } from '../types/projects';
 
 export const getProjects = async (skillTags: string[] = [], interestTags: string[] = [], page?: number) => {
@@ -79,13 +80,21 @@ export const createProject = async (projectRequest: ProjectCore) => {
     return projectFromProjectResponse(data);
 }
 
-export const updateProject = async (projectPatchRequest: ProjectPatch) => {
+export const updateProject = async (projectPatch: ProjectPatch, projectId: number, authorId: string) => {
+    const projectPatchRequest = {
+        ...projectPatch,
+        projectId,
+        authorId,
+    } as components['schemas']['ProjectPatchRequest']
+
     const { response, error } = await client.PATCH('/api/Projects/UpdateProject', {
         body: projectPatchRequest
     });
 
     if (!response.ok && error)
         throw error;
+
+    return await getProjectByProjectId(projectId);
 }
 
 export const deleteProject = async (authorId: string, projectId: number) => {

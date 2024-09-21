@@ -13,20 +13,16 @@ export function useProjectById(projectId: number) {
         }
     });
 
-    type FixedPatchRequest = Omit<ProjectPatch, 'authorId' | 'projectId'>;
-
-    const patchProject = async (projectPatch: FixedPatchRequest) => {
+    const patchProject = async (projectPatch: ProjectPatch) => {
         if (!query.data?.authorId || !query.data?.id) return;
 
         const patchRequest: ProjectPatch = {
             ...projectPatch,
-            authorId: query.data.authorId,
-            projectId: query.data.id
         };
 
-        await endpoints.projects.updateProject(patchRequest);
+        const project = await endpoints.projects.updateProject(patchRequest, projectId, query.data.authorId);
 
-        queryClient.setQueryData(queryKey, patchProjectResponse(query.data, patchRequest))
+        queryClient.setQueryData(queryKey, project);
     }
 
     return {
