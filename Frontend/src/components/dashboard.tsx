@@ -11,7 +11,7 @@ export function Dashboard() {
 
     const profileLink = clientUser ? (
         <Link to={`/profile/${clientUser.id}`}>
-            <button className="btn text-3xl">
+            <button className="text-slate-50 text-3xl mr-8">
                 Profile
             </button>
         </Link>
@@ -21,21 +21,21 @@ export function Dashboard() {
         <div className="flex items-center justify-center">
             <SignedIn>
                 {profileLink}
-                <button className='btn' onClick={openCreateProjectModal}>Create Project</button>
+                <button className='text-slate-50 text-3xl mr-8' onClick={openCreateProjectModal}>Create Project</button>
                 <CreateProjectModal />
 
                 <SignOutButton>
-                    <button className='mx-4 btn text-3xl'>Sign Out</button>
+                    <button className='text-slate-50 text-3xl mr-8'>Sign Out</button>
                 </SignOutButton>
             </SignedIn>
             <SignedOut>
                 <SignInButton mode='modal'>
-                    <button className="btn">
+                    <button className="text-slate-50 text-3xl mr-8">
                         Sign In
                     </button>
                 </SignInButton>
                 <SignUpButton mode='modal'>
-                    <button className="btn">
+                    <button className="btn h-14 w-48 btn-accent text-slate-50 text-3xl">
                         Sign Up
                     </button>
                 </SignUpButton>
