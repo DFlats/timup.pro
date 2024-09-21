@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { endpoints, ProjectPatch, patchProject as patchProjectResponse } from "../../api";
+import { endpoints, ProjectPatch } from "../../api";
 
 export function useProjectById(projectId: number) {
     const queryKey = ["project", "byId", projectId];

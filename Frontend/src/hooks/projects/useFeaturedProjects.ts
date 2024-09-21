@@ -7,7 +7,7 @@ export function useFeaturedProjects() {
     const featuredProjectsQuery = useQuery({
         queryKey,
         queryFn: async () => {
-            return await endpoints.projects.getProjects();
+            return await endpoints.projects.getProjects([], [], 1);
         }
     });
 

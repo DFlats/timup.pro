@@ -1,5 +1,5 @@
 import { useQueryClient, useQuery } from "@tanstack/react-query";
-import { endpoints, ProjectResponse } from "../../api";
+import { endpoints, Project } from "../../api";
 import { useClientUser } from "../users";
 
 export function useProjectsOwnedByClientUser() {
@@ -16,7 +16,7 @@ export function useProjectsOwnedByClientUser() {
         }
     });
 
-    const addProjectToCache = (project: ProjectResponse) => {
+    const addProjectToCache = (project: Project) => {
         if (!query.data) {
             console.error("no query data");
             return;

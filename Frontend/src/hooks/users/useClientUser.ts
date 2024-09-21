@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { endpoints, patchUser, UserPatch } from "../../api";
+import { endpoints, UserPatch } from "../../api";
 import { TagType } from "../../types";
 
 export function useClientUser() {
@@ -26,22 +26,15 @@ export function useClientUser() {
 
     const clientUser = query.data;
 
-    type ClientUserPatchRequest = Omit<UserPatch, 'clerkId'>;
-
-    const patchClientUser = async (userPatchRequest: ClientUserPatchRequest) => {
+    const patchClientUser = async (userPatch: UserPatch) => {
         if (!clientUser) {
             console.error("clientUser is not defined");
             return;
         }
 
-        const patchRequest = {
-            ...userPatchRequest,
-            clerkId: query.data?.id
-        }
+        const patchedClientUser = await endpoints.users.updateUser(userPatch, clientUser.id);
 
-        await endpoints.users.updateUser(patchRequest);
-
-        queryClient.setQueryData(queryKey, patchUser(clientUser, patchRequest))
+        queryClient.setQueryData(queryKey, patchedClientUser)
     }
 
     const getSkillTags = () => {
@@ -71,21 +64,11 @@ export function useClientUser() {
 
         const { updatedSkillTags, updatedInterestTags } = calculateUpdatedTags();
 
-        const request: UserPatch = {
-            id: clientUser.id,
+
+        patchClientUser({
             skillTags: updatedSkillTags,
             interestTags: updatedInterestTags
-        };
-
-        console.log(request);
-
-        await endpoints.users.updateUser(request);
-
-        queryClient.setQueryData(queryKey, {
-            ...clientUser,
-            skillTags: updatedSkillTags ?? getSkillTags(),
-            interestTags: updatedInterestTags ?? getInterestTags()
-        });
+        } as UserPatch)
     }
 
     return {

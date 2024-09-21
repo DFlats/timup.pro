@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { ProjectResponse, endpoints } from "../../api";
+import { Project, endpoints } from "../../api";
 import { useClientUser } from "../users";
 
 export function useRecommendedProjectsForClientUser() {
@@ -8,7 +8,7 @@ export function useRecommendedProjectsForClientUser() {
 
     const recommendedProjectsForClientUserQuery = useQuery({
         queryKey,
-        queryFn: async (): Promise<ProjectResponse[]> => {
+        queryFn: async (): Promise<Project[]> => {
             if (!clientUser) return [];
 
             return await endpoints.projects.getRecommendedProjectsByUserId(clientUser.id);

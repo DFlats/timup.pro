@@ -1,7 +1,7 @@
 import { endpoints } from "../../api";
 import { useClientUser } from "../users";
 import { useProjectsOwnedByClientUser } from "./useProjectsOwnedByClientUser";
-import { patchProject, ProjectPatch, ProjectResponse } from '../../api/types/projects';
+import { ProjectPatch } from '../../api/types/projects';
 
 export function useProjectActions() {
     const { addProjectToCache } = useProjectsOwnedByClientUser();
@@ -19,15 +19,11 @@ export function useProjectActions() {
         });
 
         const patch: ProjectPatch = {
-            authorId: clientUser.id,
-            projectId: createdProject.id,
             skillTags,
             interestTags
         }
 
-        await endpoints.projects.updateProject(patch);
-
-        const patchedProject: ProjectResponse = patchProject(createdProject, patch);
+        const patchedProject = await endpoints.projects.updateProject(patch, createdProject.id, createdProject.authorId);
 
         addProjectToCache(patchedProject);
 

@@ -63,10 +63,3 @@ export function projectFromProjectOverviewResponse(dto: components['schemas']['P
         invitedUsersIds: []
     } as Project;
 }
-
-export function patchProject(project: Project, patch: ProjectPatch) {
-    return {
-        ...project,
-        ...patch
-    } as Project;
-}
