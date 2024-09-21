@@ -25,6 +25,8 @@ export function useProjectActions() {
 
         const patchedProject = await endpoints.projects.updateProject(patch, createdProject.id, createdProject.authorId);
 
+        console.log(patchedProject);
+
         addProjectToCache(patchedProject);
 
         return patchedProject;

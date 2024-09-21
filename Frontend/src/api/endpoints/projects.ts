@@ -69,9 +69,15 @@ export const getProjectsByUserId = async (userId: string) => {
     return data.map(projectResponse => projectFromProjectOverviewResponse(projectResponse))
 }
 
-export const createProject = async (projectRequest: ProjectCore) => {
+export const createProject = async (projectCore: ProjectCore) => {
+    const requestBody = {
+        authorId: projectCore.authorId,
+        description: projectCore.description,
+        title: projectCore.title
+    } as components['schemas']['ProjectRequest'];
+
     const { response, data, error } = await client.POST('/api/Projects/CreateProject', {
-        body: projectRequest
+        body: requestBody
     });
 
     if (!data || (!response.ok && error))
@@ -87,14 +93,16 @@ export const updateProject = async (projectPatch: ProjectPatch, projectId: numbe
         authorId,
     } as components['schemas']['ProjectPatchRequest']
 
-    const { response, error } = await client.PATCH('/api/Projects/UpdateProject', {
+    console.log(projectPatchRequest);
+
+    await client.PATCH('/api/Projects/UpdateProject', {
         body: projectPatchRequest
     });
 
-    if (!response.ok && error)
-        throw error;
+    console.log("!");
 
-    return await getProjectByProjectId(projectId);
+    // console.log()
+    // return await getProjectByProjectId(projectId);
 }
 
 export const deleteProject = async (authorId: string, projectId: number) => {

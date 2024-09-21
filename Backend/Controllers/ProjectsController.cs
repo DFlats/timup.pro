@@ -98,7 +98,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.UserNotAuthorized => Unauthorized("User not authorized"),
-            DbErrorStatusCodes.Ok => Ok("Project updated"),
+            DbErrorStatusCodes.Ok => Ok(),
             _ => StatusCode(500),
         };
     }

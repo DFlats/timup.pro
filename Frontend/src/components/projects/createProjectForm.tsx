@@ -50,7 +50,7 @@ export function CreateProjectForm() {
 
     const onSubmit: SubmitHandler<Inputs> = async ({ title, description }: Inputs) => {
         if (!clientUser || !createProjectWithClientAsAuthor) return;
-
+        
         const createdProject = await createProjectWithClientAsAuthor(title, description, skillTags, interestTags);
 
         if (!createdProject) return;
