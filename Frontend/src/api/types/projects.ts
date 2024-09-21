@@ -5,13 +5,16 @@ export type IdName = {
     name: string
 }
 
-export type Project = {
-    id: number;
-    title: string;
-    authorName: string;
+export type ProjectCore = {
     authorId: string;
-    collaborators: IdName[],
+    title: string;
     description: string;
+}
+
+export type Project = ProjectCore & {
+    id: number;
+    authorName: string;
+    collaborators: IdName[],
     skillTags: string[];
     interestTags: string[];
     isCompleted: boolean;
@@ -51,12 +54,6 @@ export function projectFromProjectOverviewResponse(dto: components['schemas']['P
         isCompleted: dto.isCompleted!,
         invitedUsersIds: []
     } as Project;
-}
-
-export type ProjectCore = {
-    authorId: string;
-    title: string;
-    description: string;
 }
 
 export type ProjectPatch = {
