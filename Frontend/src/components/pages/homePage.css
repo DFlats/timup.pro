@@ -1,0 +1,18 @@
+.stars-bg__star {
+    opacity: 0;
+    animation: blink 3s infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

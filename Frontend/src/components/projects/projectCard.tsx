@@ -17,11 +17,13 @@ export function ProjectCard({ project }: Props) {
                 <CardDescription>
                     {project.description}
                 </CardDescription>
-                <TagContainer tags={project.skillTags} tagType={'skill'} />
-                <TagContainer tags={project.interestTags} tagType={'interest'} />
-                <CardFooter>
-                    {`Initiated by ${project.authorName}`}
-                </CardFooter>
+                <div>
+                    <TagContainer tags={project.skillTags} tagType={'skill'} />
+                    <TagContainer tags={project.interestTags} tagType={'interest'} />
+                    <CardFooter>
+                        {`Initiated by ${project.authorName}`}
+                    </CardFooter>
+                </div>
             </Card>
         </Link>
     );

@@ -39,9 +39,9 @@ export function ProjectFeed({ projectFeed }: Props) {
     }
 
     return (
-        <div className="p-12 w-screen flex flex-col items-center justify-center">
-            <h1 className='text-4xl mb-8'>{heading()}</h1>
-            <div className='flex flex-row flex-wrap'>
+        <div className="flex flex-col items-center justify-center p-12">
+            <h2 className='text-5xl p-8 mb-8'>{heading()}</h2>
+            <div className='flex flex-row flex-wrap justify-center gap-8'>
                 {projectFeed == 'projectsOwnedByClientUser' &&
                     <NewProjectCard />
                 }
