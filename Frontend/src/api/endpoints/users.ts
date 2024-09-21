@@ -1,5 +1,6 @@
 import { client } from "../client";
-import { User, mapUserResponseToUser, UserRequest, UserPatchRequest } from "../types";
+import { components } from "../schema";
+import { User, userFromUserResponse, UserCore, UserPatch } from "../types";
 
 export const getUsers = async (skillTags: string[] = [], interestTags: string[] = [], page?: number) => {
     const { response, data, error } = await client.GET('/api/Users/GetUsers', {
@@ -15,7 +16,7 @@ export const getUsers = async (skillTags: string[] = [], interestTags: string[] 
     if (!data || (!response.ok && error))
         throw error;
 
-    return data.map(userResponse => mapUserResponseToUser(userResponse)) as User[];
+    return data.map(userResponse => userFromUserResponse(userResponse)) as User[];
 }
 
 export const getRecommendedUsersByProjectId = async (projectId: number, page?: number) => {
@@ -33,7 +34,7 @@ export const getRecommendedUsersByProjectId = async (projectId: number, page?: n
     if (!data || (!response.ok && error))
         throw error;
 
-    return data.map(userResponse => mapUserResponseToUser(userResponse));
+    return data.map(userResponse => userFromUserResponse(userResponse));
 }
 
 export const getUserByUserId = async (id: string) => {
@@ -44,23 +45,31 @@ export const getUserByUserId = async (id: string) => {
     if (!data || (!response.ok && error))
         throw error;
 
-    return mapUserResponseToUser(data);
+    return userFromUserResponse(data);
 }
 
-export const createUser = async (userRequest: UserRequest) => {
+export const createUser = async (userCore: UserCore) => {
     await client.POST('/api/Users/CreateUser', {
-        body: userRequest
+        body: userCore
     });
+
+    return await getUserByUserId(userCore.id);
 }
 
-export const updateUser = async (userPatchRequest: UserPatchRequest) => {
-    console.log(userPatchRequest);
+export const updateUser = async (userPatch: UserPatch, userId: string) => {
+    const userPatchRequest = {
+        clerkId: userId,
+        ...userPatch
+    } as components['schemas']['UserPatchRequest'];
+
     const { response, error } = await client.PATCH('/api/Users/UpdateUser', {
         body: userPatchRequest
     });
 
     if (!response.ok && error)
         throw error;
+
+    return await getUserByUserId(userId);
 }
 
 export const deleteUser = async (userId: string) => {

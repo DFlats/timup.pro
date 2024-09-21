@@ -1,39 +1,33 @@
 import { components } from '../schema';
 
-// components['schemas']['UserResponse']
-export type User = {
+export type UserCore = {
     id: string;
     name: string;
     email: string;
+}
+
+export type User = UserCore & {
     interestTags: string[];
     skillTags: string[];
 }
 
-// components['schemas']['UserRequest']
-export type UserRequest = {
-    clerkId: string;
-    name: string;
-    email: string;
-}
-
-// components['schemas']['UserPatchRequest'];
-export type UserPatchRequest = {
-    clerkId: string;
+export type UserPatch = {
+    id: string;
     skillTags?: string[];
     interestTags?: string[];
 }
 
-export function mapUserResponseToUser(userResponse: components['schemas']['UserResponse']) {
+export function userFromUserResponse(dto: components['schemas']['UserResponse']) {
     return {
-        id: userResponse.id!,
-        name: userResponse.name!,
-        email: userResponse.email!,
-        interestTags: userResponse.interestTags!,
-        skillTags: userResponse.skillTags!
+        id: dto.id!,
+        name: dto.name!,
+        email: dto.email!,
+        interestTags: dto.interestTags!,
+        skillTags: dto.skillTags!
     } as User;
 }
 
-export function userFromUserPatchRequest(user: User, patch: UserPatchRequest) {
+export function patchUser(user: User, patch: UserPatch) {
     const patchedUser: User = {
         ...user,
         ...patch

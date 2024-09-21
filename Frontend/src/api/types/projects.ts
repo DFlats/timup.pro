@@ -22,8 +22,6 @@ export type IdName = {
 }
 
 export type ProjectPatch = {
-    projectId: number;
-    authorId: string;
     title?: string;
     description?: string;
     skillTags?: string[];

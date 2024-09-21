@@ -1,6 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { endpoints, userFromUserPatchRequest, UserPatchRequest } from "../../api";
+import { endpoints, patchUser, UserPatch } from "../../api";
 import { TagType } from "../../types";
 
 export function useClientUser() {
@@ -15,7 +15,7 @@ export function useClientUser() {
             if (!user) throw new Error('Could not load clerk user');
 
             await endpoints.users.createUser({
-                clerkId: user.id,
+                id: user.id,
                 email: user.primaryEmailAddress!.toString(),
                 name: user.fullName!
             });
@@ -26,7 +26,7 @@ export function useClientUser() {
 
     const clientUser = query.data;
 
-    type ClientUserPatchRequest = Omit<UserPatchRequest, 'clerkId'>;
+    type ClientUserPatchRequest = Omit<UserPatch, 'clerkId'>;
 
     const patchClientUser = async (userPatchRequest: ClientUserPatchRequest) => {
         if (!clientUser) {
@@ -41,7 +41,7 @@ export function useClientUser() {
 
         await endpoints.users.updateUser(patchRequest);
 
-        queryClient.setQueryData(queryKey, userFromUserPatchRequest(clientUser, patchRequest))
+        queryClient.setQueryData(queryKey, patchUser(clientUser, patchRequest))
     }
 
     const getSkillTags = () => {
@@ -71,8 +71,8 @@ export function useClientUser() {
 
         const { updatedSkillTags, updatedInterestTags } = calculateUpdatedTags();
 
-        const request: UserPatchRequest = {
-            clerkId: clientUser.id,
+        const request: UserPatch = {
+            id: clientUser.id,
             skillTags: updatedSkillTags,
             interestTags: updatedInterestTags
         };
