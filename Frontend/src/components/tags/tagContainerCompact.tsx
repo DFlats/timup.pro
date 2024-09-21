@@ -9,13 +9,6 @@ interface Props {
 }
 
 export function TagContainerCompact({ tags, tagType, onRemoveTag }: Props) {
-    const tagProps = (tag: Tag) => {
-        return {
-            tag,
-            onClick: onRemoveTag ? (tag: Tag) => onRemoveTag(tag) : null
-        } as TagElementProps;
-    };
-
     const noTagsTag = () => {
         switch (tagType) {
             case 'skill':
@@ -27,12 +20,21 @@ export function TagContainerCompact({ tags, tagType, onRemoveTag }: Props) {
         }
     }
 
+    const tagProps = (tag: Tag) => {
+        return {
+            tag,
+            onClick: onRemoveTag ? (tag: Tag) => onRemoveTag(tag) : null
+        } as TagElementProps;
+    };
+
     return (
-        <div className="flex flex-row flex-wrap">
-            {tags.length > 0 &&
-                tags.map((tag, i) => <TagElement key={i} {...tagProps(tag)} />)
-            }
-            {tags.length == 0 && noTagsTag()}
+        <div className='rounded-xl bg-opacity-5 bg-white p-3 m-2'>
+            <div className="flex flex-row flex-wrap">
+                {tags.length > 0 &&
+                    tags.map((tag, i) => <TagElement key={i} {...tagProps(tag)} />)
+                }
+                {tags.length == 0 && noTagsTag()}
+            </div>
         </div>
     )
 }
