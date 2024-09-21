@@ -1,4 +1,4 @@
-import { userFromUserResponse, User, UserCore, UserPatch } from "../../types";
+import { User, UserCore, UserPatch } from "../../types";
 import { client } from "../client";
 import { components } from "../schema";
 
@@ -89,4 +89,22 @@ export const deleteUser = async (userId: string) => {
 
     if (!response.ok && error)
         throw error;
+}
+
+export function userFromUserResponse(dto: components['schemas']['UserResponse']) {
+    return {
+        id: dto.id!,
+        name: dto.name!,
+        email: dto.email!,
+        interestTags: dto.interestTags!,
+        skillTags: dto.skillTags!
+    } as User;
+}
+
+export function patchUser(user: User, patch: UserPatch) {
+    const patchedUser: User = {
+        ...user,
+        ...patch
+    };
+    return patchedUser;
 }

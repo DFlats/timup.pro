@@ -1,6 +1,6 @@
 import { client } from '../client'
 import { components } from '../schema';
-import { ProjectCore, projectFromProjectOverviewResponse, projectFromProjectResponse, ProjectPatch } from '../../types/projects';
+import { Project, ProjectCore, ProjectPatch } from '../../types/projects';
 
 export const getProjects = async (skillTags: string[] = [], interestTags: string[] = [], page?: number) => {
     const { response, data, error } = await client.GET('/api/Projects/GetProjects', {
@@ -115,4 +115,40 @@ export const deleteProject = async (authorId: string, projectId: number) => {
 
     if (!response.ok && error)
         throw error;
+}
+
+
+export function projectFromProjectResponse(dto: components['schemas']['ProjectResponse']) {
+    return {
+        id: dto.id!,
+        title: dto.title!,
+        authorName: dto.authorName!,
+        authorId: dto.authorId!,
+        collaborators: dto.collaborators!.map(dto => {
+            return {
+                id: dto.clerkId,
+                name: dto.name
+            }
+        }),
+        description: dto.description!,
+        skillTags: dto.skillTags!,
+        interestTags: dto.interestTags!,
+        isCompleted: dto.isCompleted!,
+        invitedUsersIds: dto.invitedUsers!
+    } as Project;
+}
+
+export function projectFromProjectOverviewResponse(dto: components['schemas']['ProjectOverviewResponse']) {
+    return {
+        id: dto.id!,
+        title: dto.title!,
+        authorName: "ProjectOverviewResponse",
+        authorId: dto.authorId!,
+        collaborators: [],
+        description: dto.description!,
+        skillTags: dto.skillTags!,
+        interestTags: dto.interestTags!,
+        isCompleted: dto.isCompleted!,
+        invitedUsersIds: []
+    } as Project;
 }

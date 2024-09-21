@@ -1,4 +1,4 @@
-import { components } from '../api/schema';
+import { TagType } from './misc';
 
 export type UserCore = {
     id: string;
@@ -9,28 +9,11 @@ export type UserCore = {
 export type User = UserCore & {
     interestTags: string[];
     skillTags: string[];
+    tags: Record<TagType, string[]>
 }
 
 export type UserPatch = {
     id: string;
     skillTags?: string[];
     interestTags?: string[];
-}
-
-export function userFromUserResponse(dto: components['schemas']['UserResponse']) {
-    return {
-        id: dto.id!,
-        name: dto.name!,
-        email: dto.email!,
-        interestTags: dto.interestTags!,
-        skillTags: dto.skillTags!
-    } as User;
-}
-
-export function patchUser(user: User, patch: UserPatch) {
-    const patchedUser: User = {
-        ...user,
-        ...patch
-    };
-    return patchedUser;
 }
