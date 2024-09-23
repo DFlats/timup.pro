@@ -38,7 +38,9 @@ export function ProjectPage() {
                     }
                     <TagContainer tags={project.tags['skill']} tagType='skill' />
                     <TagContainer tags={project.tags['interest']} tagType='interest' />
-                    <UserTable project={project} />
+                    {clientOwnsProject &&
+                        <UserTable project={project} />
+                    }
                 </div>
             </div>
         </div>
