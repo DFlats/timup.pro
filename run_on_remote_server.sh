@@ -3,7 +3,7 @@
 BRANCH="deploy"
 BACKEND_PID=0
 FRONTEND_PID=0
-BACKEND_PORT=5055
+BACKEND_PORT=26969
 
 check_for_updates() {
     git fetch origin $BRANCH
@@ -30,8 +30,8 @@ check_for_updates() {
         echo "Running dotnet build..."
         cd Backend
         dotnet build
-        echo "Running dotnet application..."
-        dotnet run &
+        echo "Running dotnet application on port $BACKEND_PORT..."
+        dotnet run --urls "http://0.0.0.0:$BACKEND_PORT" &
         BACKEND_PID=$!
         cd ..
 
