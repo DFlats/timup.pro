@@ -5,76 +5,126 @@ namespace Backend.Database;
 
 public class DbSeeder()
 {
+    public static List<User> _users = [];
+    public static List<Project> _projects = [];
+    public static List<Tag> _tags = [];
+
     public static (List<Project>, List<User>, List<Tag>) GenerateData(int count)
     {
-        List<Project> _projects = [];
-        List<User> _users = [];
-        List<Tag> _tags = [];
+        SeedUsers(count * 2);
+        SeedProjects(count);
+        SeedCollaborators();
 
+        return (_projects, _users, _tags);
+    }
+
+    private static void SeedUsers(int count)
+    {
         for (int i = 0; i < count; i++)
         {
+            Random random = new();
+
+            var fakedTags = CreateFakeTags(random);
+
             var authorId = Guid.NewGuid().ToString();
-            var userFaker = new Faker<User>()
+            var fakedUser = CreateFakeUser(authorId, fakedTags);
+
+            _users.Add(fakedUser);
+        }
+    }
+
+    private static void SeedProjects(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Random random = new();
+
+            var user = _users[random.Next(_users.Count)];
+
+            var fakedTags = CreateFakeTags(random);
+
+            var fakedProject = CreateFakeProject(user, user.ClerkId, fakedTags);
+
+            user.Projects.Add(fakedProject);
+
+            _projects.Add(fakedProject);
+            _tags.AddRange(fakedTags);
+        }
+    }
+
+    private static void SeedCollaborators()
+    {
+        foreach (var project in _projects)
+        {
+            Random random = new();
+
+            for (int j = 0; j < random.Next(5); j++)
+            {
+                var user = _users[random.Next(_users.Count)];
+                project.Collaborators.Add(user);
+                user.Projects.Add(project);
+            }
+        }
+    }
+
+    private static User CreateFakeUser(string authorId, List<Tag> fakedTags)
+    {
+        var userFaker = new Faker<User>()
                 .RuleFor(u => u.ClerkId, f => authorId)
                 .RuleFor(u => u.Name, f => f.Name.FirstName())
                 .RuleFor(u => u.Email, f => f.Internet.Email())
-                .RuleFor(u => u.Projects, f => []);
+                .RuleFor(u => u.Tags, f => fakedTags);
 
-            Random random = new();
+        return userFaker.Generate();
+    }
 
-            int skillsAmount = random.Next(6);
-            int interestsAmount = random.Next(6);
+    private static List<Tag> CreateFakeTags(Random random)
+    {
+        int skillsAmount = random.Next(6);
+        int interestsAmount = random.Next(6);
 
-            List<Tag> fakedTags = [];
+        List<Tag> fakedTags = [];
 
-            List<string> skills = ["Data", "Art", "C#", "Tim", "JS", "Java"];
-            for (int j = 0; j < skillsAmount; j++)
-            {
-                int index = random.Next(skills.Count);
-                var tagFaker = new Faker<Tag>()
-                    .RuleFor(t => t.TagValue, v => skills[index])
-                    .RuleFor(t => t.IsSkill, v => true);
+        List<string> skills = ["Data", "Art", "C#", "Tim", "JS", "Java"];
+        for (int j = 0; j < skillsAmount; j++)
+        {
+            int index = random.Next(skills.Count);
+            var tagFaker = new Faker<Tag>()
+                .RuleFor(t => t.TagValue, v => skills[index])
+                .RuleFor(t => t.IsSkill, v => true);
 
-                fakedTags.Add(tagFaker.Generate());
-                skills.RemoveAt(index);
-            }
+            fakedTags.Add(tagFaker.Generate());
+            skills.RemoveAt(index);
+        }
 
-            List<string> interests = ["Data", "Art", "C#", "Tim", "JS", "Java"];
-            for (int j = 0; j < interestsAmount; j++)
-            {
-                int index = random.Next(interests.Count);
-                var tagFake2r = new Faker<Tag>()
-                    .RuleFor(t => t.TagValue, v => interests[index])
-                    .RuleFor(t => t.IsSkill, v => false);
+        List<string> interests = ["Data", "Art", "C#", "Tim", "JS", "Java"];
+        for (int j = 0; j < interestsAmount; j++)
+        {
+            int index = random.Next(interests.Count);
+            var tagFake2r = new Faker<Tag>()
+                .RuleFor(t => t.TagValue, v => interests[index])
+                .RuleFor(t => t.IsSkill, v => false);
 
-                fakedTags.Add(tagFake2r.Generate());
-                interests.RemoveAt(index);
-            }
+            fakedTags.Add(tagFake2r.Generate());
+            interests.RemoveAt(index);
+        }
 
-            userFaker.RuleFor(u => u.Tags, f => fakedTags);
+        return fakedTags;
+    }
 
-            var descriptionFaker = new Faker<Description>()
+    private static Project CreateFakeProject(User fakedUser, string authorId, List<Tag> fakedTags)
+    {
+        var descriptionFaker = new Faker<Description>()
                 .RuleFor(d => d.Text, f => f.Lorem.Paragraph())
                 .RuleFor(d => d.Tags, f => fakedTags);
 
-            var fakedUser = userFaker.Generate();
+        var projectFaker = new Faker<Project>()
+            .RuleFor(p => p.Title, f => f.Lorem.Sentance())
+            .RuleFor(p => p.Author, f => fakedUser)
+            .RuleFor(p => p.AuthorId, (f, p) => authorId)
+            .RuleFor(p => p.Description, f => descriptionFaker.Generate())
+            .RuleFor(p => p.Progress, f => new Progress());
 
-            var projectFaker = new Faker<Project>()
-                .RuleFor(p => p.Title, f => f.Lorem.Sentance())
-                .RuleFor(p => p.Author, f => fakedUser)
-                .RuleFor(p => p.AuthorId, (f, p) => authorId)
-                .RuleFor(p => p.Description, f => descriptionFaker.Generate())
-                .RuleFor(p => p.Progress, f => new Progress());
-
-            var fakedProject = projectFaker.Generate();
-
-            fakedUser.Projects.Add(fakedProject);
-
-            _projects.Add(fakedProject);
-            _users.Add(fakedUser);
-            _tags.AddRange(fakedTags);
-        }
-
-        return (_projects, _users, _tags);
+        return projectFaker.Generate();
     }
 }
