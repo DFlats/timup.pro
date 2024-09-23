@@ -55,9 +55,15 @@ public class UsersController(DatabaseContext db) : ControllerBase
     [ProducesResponseType(typeof(UserResponse), 201)]
     public IActionResult ConfirmUserExists(UserRequest userToCheck)
     {
-        var (_, user) = db.CreateUser(userToCheck);
+        var (status, user) = db.CreateUser(userToCheck);
 
-        return CreatedAtAction(nameof(GetUserByUserId), new { id = user!.ClerkId }, (UserResponse)user);
+        return status switch
+        {
+            DbErrorStatusCodes.UserAlreadyExists => Conflict("User already exists"),
+            DbErrorStatusCodes.FatalError => StatusCode(500),
+            _ => CreatedAtAction(nameof(GetUserByUserId), new { id = user!.ClerkId }, (UserResponse)user)
+        };
+
     }
 
     [HttpPatch("UpdateUser")]
