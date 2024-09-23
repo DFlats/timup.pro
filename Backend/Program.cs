@@ -20,7 +20,16 @@ builder.Services.AddOpenApiDocument(config =>
     config.Version = version;
 });
 
-builder.Services.AddCors();
+// Define a CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder
+            .WithOrigins("http://timup.pro:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
 
 var app = builder.Build();
 
@@ -36,14 +45,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseCors(options =>
-{
-    options
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials()
-        .SetIsOriginAllowed(origin => true);
-});
+// Apply the CORS policy
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 
@@ -52,6 +55,6 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
-// app.Run("http://0.0.0.0:26969");
 app.Run();
+
 public partial class Program { }
