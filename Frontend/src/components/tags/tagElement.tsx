@@ -1,5 +1,4 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useRef } from "react";
 import { Tag } from "../../types";
 
 export interface TagElementProps {
