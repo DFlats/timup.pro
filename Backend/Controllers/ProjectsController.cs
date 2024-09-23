@@ -23,7 +23,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
             return db.GetProjectBatch(page);
         }
 
-        return db.GetProjectsByFilter(skills, interests, page);
+        return db.GetProjectBatchByFilter(skills, interests, page);
     }
 
     [HttpGet("GetRecommendedProjects/{userId}")]
