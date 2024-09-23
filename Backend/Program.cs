@@ -20,12 +20,11 @@ builder.Services.AddOpenApiDocument(config =>
     config.Version = version;
 });
 
-// Define a CORS policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",
+    options.AddPolicy("AllowAllOrigins",
         builder => builder
-            .WithOrigins("http://timup.pro:5173")
+            .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());
@@ -46,7 +45,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Apply the CORS policy
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
 
