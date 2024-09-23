@@ -3,18 +3,12 @@ import { ReactNode } from "@tanstack/react-router";
 
 interface Props {
     children?: ReactNode,
-    backgroundImageUrl?: string
 }
 
-export function Card({ children, backgroundImageUrl = "https://storage.googleapis.com/pod_public/1300/141876.jpg" }: Props) {
+export function Card({ children}: Props) {
     return (
-        <div className='card bg-base-100 image-full w-96 shadow-xl'>
-            <figure>
-                <img
-                    src={backgroundImageUrl}
-                    alt="Floating Island" />
-            </figure>
-            <div className="card-body">
+        <div className='card bg-base-300 w-[420px] h-[700px] shadow-xl'>
+            <div className="card-body justify-between">
                 {children}
             </div>
         </div>

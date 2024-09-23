@@ -15,6 +15,8 @@ export function HomePage() {
                 <HeroSection />
                 <FeaturedProjects />
             </SignedOut>
+
+
             <SignedIn>
                 <RecommendedProjectsForClientUser />
             </SignedIn>

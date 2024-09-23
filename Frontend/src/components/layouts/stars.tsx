@@ -28,11 +28,11 @@ const StarryBackground = () => {
     }, []);
 
     return (
-        <div className="absolute w-full h-full -mt-36 -z-10">
+        <div className="fixed w-full h-full -mt-36 -z-10">
             {stars.map((star, index) => (
                 <div
                     key={index}
-                    className="absolute text-slate-50 star stars-bg__star"
+                    className="fixed text-slate-50 star stars-bg__star"
                     style={{ top: `${star.top}px`, right: `${star.right}px`, animationDelay: `${star.delay}s`, fontSize: `${star.size}px` }}
                 >
                     .

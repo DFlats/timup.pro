@@ -13,9 +13,9 @@ export function FeaturedProjects() {
         projects = projects.slice(0, maxProjectsInFeed);
 
     return (
-        <div className="p-12 w-screen flex flex-col items-center justify-center">
-            <h1 className='text-4xl mb-8'>{'Featured Projects'}</h1>
-            <div className='flex flex-row flex-wrap'>
+        <div className="flex flex-col items-center justify-center p-12">
+            <h2 className='text-5xl p-8 mb-8'>{'Featured Projects'}</h2>
+            <div className='flex flex-row flex-wrap justify-center gap-8'>
                 {projects && projects.map(project => <ProjectCard key={project.id} project={project} />)}
             </div>
         </div>
