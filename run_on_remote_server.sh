@@ -3,7 +3,7 @@
 BRANCH="deploy"
 BACKEND_PID=0
 FRONTEND_PID=0
-BACKEND_PORT=26969
+BACKEND_PORT=5055
 
 check_for_updates() {
     git fetch origin $BRANCH
