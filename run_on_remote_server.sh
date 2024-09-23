@@ -24,7 +24,7 @@ check_for_updates() {
         npm install
         npm run build
         echo "Running frontend application..."
-        npm start &
+        npm run dev &
         FRONTEND_PID=$!
         cd ..
 
