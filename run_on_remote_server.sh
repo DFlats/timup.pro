@@ -4,6 +4,7 @@ BRANCH="deploy"
 BACKEND_PID=0
 FRONTEND_PID=0
 BACKEND_PORT=5055
+FRONTEND_PORT=5173
 
 check_for_updates() {
     git fetch origin $BRANCH
@@ -26,6 +27,9 @@ check_for_updates() {
 
         echo "Freeing up port $BACKEND_PORT..."
         fuser -k $BACKEND_PORT/tcp
+
+        echo "Freeing up port $FRONTEND_PORT..."
+        fuser -k $FRONTEND_PORT/tcp
 
         echo "Running dotnet build..."
         cd Backend
