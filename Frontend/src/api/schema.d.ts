@@ -1114,13 +1114,11 @@ export interface operations {
             };
         };
         responses: {
-            201: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["UserResponse"];
-                };
+                content?: never;
             };
         };
     };

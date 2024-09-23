@@ -52,12 +52,11 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("ConfirmUserExists")]
-    [ProducesResponseType(typeof(UserResponse), 201)]
+    [ProducesResponseType(200)]
     public IActionResult ConfirmUserExists(UserRequest userToCheck)
     {
         var (_, user) = db.CreateUser(userToCheck);
-
-        return CreatedAtAction(nameof(GetUserByUserId), new { id = user!.ClerkId }, (UserResponse)user);
+        return Ok();
     }
 
     [HttpPatch("UpdateUser")]

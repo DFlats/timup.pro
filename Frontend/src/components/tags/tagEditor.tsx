@@ -17,8 +17,8 @@ const placeHolders: Record<TagType, string> = {
 };
 
 const submitLabels: Record<TagType, string> = {
-    'interest': 'Add Skill',
-    'skill': 'Add Interest'
+    'interest': 'Add Interest',
+    'skill': 'Add Skill'
 }
 
 export function TagEditor({ tags, onAddTag, onRemoveTag }: Props) {
@@ -63,7 +63,7 @@ export function TagEditor({ tags, onAddTag, onRemoveTag }: Props) {
     return (
         <div className="my-4 gap-2 flex flex-col">
             {tagKinds.map(kind => (
-                <>
+                <div key={kind}>
                     <TagContainer tags={tags[kind]} tagType={kind} onRemoveTag={onRemoveTag} />
                     <div className="flex flex-row">
                         <input
@@ -80,12 +80,13 @@ export function TagEditor({ tags, onAddTag, onRemoveTag }: Props) {
                         <button
                             className={`btn m-4 ${inputValues[kind] ?? 'btn-disabled'}`}
                             onClick={(e) => handleSubmit(e, kind)}
+                            disabled={!inputValues[kind]}
                         >
                             {submitLabels[kind]}
                         </button>
-                    </div>
-                </>))
+                    </div >
+                </div>))
             }
-        </div>
+        </div >
     );
 }   
