@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BRANCH="release"
+BRANCH="deploy"
 
 check_for_updates() {
     git fetch origin $BRANCH
