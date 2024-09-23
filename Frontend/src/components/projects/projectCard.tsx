@@ -13,15 +13,19 @@ export function ProjectCard({ project }: Props) {
     return (
         <Link to='/project/$id' params={{ id: project.id.toString() }}>
             <Card>
-                <CardTitle title={project.title} />
-                <CardDescription>
-                    {project.description}
-                </CardDescription>
-                <TagContainer tags={project.tags['skill']} tagType={'skill'} />
-                <TagContainer tags={project.tags['interest']} tagType={'interest'} />
-                <CardFooter>
-                    {`Initiated by ${project.authorName}`}
-                </CardFooter>
+                <div className="h-1/2">
+                    <CardTitle title={project.title} />
+                    <CardDescription>
+                        {project.description}
+                    </CardDescription>
+                </div>
+                <div className="h-1/2">
+                    <TagContainer tags={project.tags['skill']} tagType={'skill'} />
+                    <TagContainer tags={project.tags['interest']} tagType={'interest'} />
+                    <CardFooter>
+                        {`Initiated by ${project.authorName}`}
+                    </CardFooter>
+                </div>
             </Card>
         </Link>
     );
