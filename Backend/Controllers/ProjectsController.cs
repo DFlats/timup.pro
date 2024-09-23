@@ -11,7 +11,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
 {
     [HttpGet("GetProjects")]
     [ProducesResponseType(typeof(List<ProjectResponse>), 200)]
-    public List<ProjectResponse> GetProjects
+    public ProjectBatchResponse GetProjects
     (
         [FromQuery(Name = "interests")] string[]? interests,
         [FromQuery(Name = "skills")] string[]? skills,
@@ -20,7 +20,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     {
         if (skills?.Length == 0 && interests?.Length == 0)
         {
-            return db.GetAllProjects(page);
+            return db.GetProjectBatch(page);
         }
 
         return db.GetProjectsByFilter(skills, interests, page);
