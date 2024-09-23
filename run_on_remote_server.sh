@@ -14,14 +14,14 @@ check_for_updates() {
         echo "Changes detected. Pulling latest changes..."
         git pull origin $BRANCH
 
-        if [ $BACKEND_PID -ne 0 ]; then
-            echo "Stopping existing backend process..."
-            kill $BACKEND_PID
-        fi
-
         if [ $FRONTEND_PID -ne 0 ]; then
             echo "Stopping existing frontend process..."
             kill $FRONTEND_PID
+        fi
+
+        if [ $BACKEND_PID -ne 0 ]; then
+            echo "Stopping existing backend process..."
+            kill $BACKEND_PID
         fi
 
         echo "Freeing up port $BACKEND_PORT..."

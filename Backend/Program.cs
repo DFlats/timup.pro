@@ -55,6 +55,6 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
-app.Run("http://localhost:5055");
+app.Run();
 
 public partial class Program { }
