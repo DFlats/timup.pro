@@ -3,6 +3,7 @@
 BRANCH="deploy"
 BACKEND_PID=0
 FRONTEND_PID=0
+BACKEND_PORT=5173
 
 check_for_updates() {
     git fetch origin $BRANCH
@@ -22,6 +23,9 @@ check_for_updates() {
             echo "Stopping existing frontend process..."
             kill $FRONTEND_PID
         fi
+
+        echo "Freeing up port $BACKEND_PORT..."
+        fuser -k $BACKEND_PORT/tcp
 
         echo "Running dotnet build..."
         cd Backend
