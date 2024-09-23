@@ -10,8 +10,8 @@ namespace Backend.Controllers;
 public class ProjectsController(DatabaseContext db) : ControllerBase
 {
     [HttpGet("GetProjects")]
-    [ProducesResponseType(typeof(List<ProjectResponse>), 200)]
-    public ProjectBatchResponse GetProjects
+    [ProducesResponseType(typeof(ProjectBatchResponse), 200)]
+    public ProjectBatchResponse GetProjectBatch
     (
         [FromQuery(Name = "interests")] string[]? interests,
         [FromQuery(Name = "skills")] string[]? skills,
@@ -27,12 +27,12 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet("GetRecommendedProjects/{userId}")]
-    [ProducesResponseType(typeof(List<ProjectResponse>), 200)]
+    [ProducesResponseType(typeof(ProjectBatchResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string userId, [FromQuery(Name = "page")] int? page = 1)
+    public ActionResult<ProjectBatchResponse> GetRecommendedProjectsBatchByUserId(string userId, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var projects) = db.GetRecommendedProjectsByUserId(userId, page);
+        (var status, var projects) = db.GetRecommendedProjectBatchByUserId(userId, page);
 
         return status switch
         {

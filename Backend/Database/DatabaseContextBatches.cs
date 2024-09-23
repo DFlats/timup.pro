@@ -1,5 +1,4 @@
 using Backend.Dtos;
-using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -38,4 +37,33 @@ partial class DatabaseContext
         );
     }
 
+    internal (DbErrorStatusCodes, ProjectBatchResponse?) GetRecommendedProjectBatchByUserId(string id, int? page = 1)
+    {
+        var user = GetUserById(id);
+
+        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
+
+        var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
+        var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+
+        int projectsCount = Projects
+            .Include(p => p.Author)
+            .Include(p => p.Description)
+            .ThenInclude(p => p.Tags)
+            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Count();
+
+        var (status, projectsResponse) = GetRecommendedProjectsByUserId(id, page);
+
+        return status switch
+        {
+            DbErrorStatusCodes.UserNotFound => (DbErrorStatusCodes.UserNotFound, null),
+            DbErrorStatusCodes.Ok => (DbErrorStatusCodes.Ok, new ProjectBatchResponse(
+                projectsResponse!,
+                (int)page!,
+                projectsCount / _pageSize > page ? page + 1 : null)
+            ),
+            _ => (DbErrorStatusCodes.FatalError, null)
+        };
+    }
 }
