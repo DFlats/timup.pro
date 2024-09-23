@@ -52,7 +52,9 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("ConfirmUserExists")]
-    [ProducesResponseType(typeof(UserResponse), 201)]
+    [ProducesResponseType(typeof(UserResponse), 200)]
+    [ProducesResponseType(409)]
+    [ProducesResponseType(500)]
     public IActionResult ConfirmUserExists(UserRequest userToCheck)
     {
         var (status, user) = db.CreateUser(userToCheck);
@@ -64,7 +66,6 @@ public class UsersController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.Ok => Ok(),
             _ => StatusCode(500),
         };
-
     }
 
     [HttpPatch("UpdateUser")]
