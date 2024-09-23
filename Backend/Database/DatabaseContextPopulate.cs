@@ -6,7 +6,7 @@ public partial class DatabaseContext
     {
         try
         {
-            var (seededProjects, seededUsers, seededTags) = DbSeeder.GenerateData(count);
+            var (seededProjects, seededUsers, seededTags) = GenerateData(count);
             Console.WriteLine("hello");
 
             Users.AddRange(seededUsers);
@@ -14,6 +14,9 @@ public partial class DatabaseContext
             Tags.AddRange(seededTags);
 
             SaveChanges();
+
+            SeedCollaborators();
+            
             return true;
         }
         catch

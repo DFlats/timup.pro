@@ -3,17 +3,17 @@ using Bogus;
 
 namespace Backend.Database;
 
-public class DbSeeder()
+public partial class DatabaseContext
 {
     public static List<User> _users = [];
     public static List<Project> _projects = [];
     public static List<Tag> _tags = [];
 
-    public static (List<Project>, List<User>, List<Tag>) GenerateData(int count)
+    internal (List<Project>, List<User>, List<Tag>) GenerateData(int count)
     {
         SeedUsers(count * 2);
         SeedProjects(count);
-        SeedCollaborators();
+        //SeedCollaborators();
 
         return (_projects, _users, _tags);
     }
@@ -52,7 +52,7 @@ public class DbSeeder()
         }
     }
 
-    private static void SeedCollaborators()
+    internal void SeedCollaborators()
     {
         foreach (var project in _projects)
         {
@@ -61,8 +61,9 @@ public class DbSeeder()
             for (int j = 0; j < random.Next(5); j++)
             {
                 var user = _users[random.Next(_users.Count)];
-                project.Collaborators.Add(user);
-                user.Projects.Add(project);
+                AddUserToProject(user, project);
+                 project.Collaborators.Add(user);
+                 user.Projects.Add(project);
             }
         }
     }
