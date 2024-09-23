@@ -39,9 +39,6 @@ check_for_updates() {
         npm run dev &
         FRONTEND_PID=$!
         cd ..
-
-        wait $BACKEND_PID
-        wait $FRONTEND_PID
     else
         echo "No changes detected."
     fi
