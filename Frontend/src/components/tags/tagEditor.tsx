@@ -60,7 +60,6 @@ export function TagEditor({ tags, onAddTag, onRemoveTag }: Props) {
         setInputValues(newInputValues);
     }
 
-
     return (
         <div className="my-4 gap-2 flex flex-col">
             {tagKinds.map(kind => (

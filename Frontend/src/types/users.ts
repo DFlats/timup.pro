@@ -7,8 +7,6 @@ export type UserCore = {
 }
 
 export type User = UserCore & {
-    interestTags: string[];
-    skillTags: string[];
     tags: Tags
 }
 
