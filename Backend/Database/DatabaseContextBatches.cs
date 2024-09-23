@@ -66,4 +66,34 @@ partial class DatabaseContext
             _ => (DbErrorStatusCodes.FatalError, null)
         };
     }
+
+    internal (DbErrorStatusCodes, UserBatchResponse?) GetRecommendedUserBatchByProjectId(int id, int? page = 1)
+    {
+        var project = GetProjectById(id);
+
+        if (project is null) return (DbErrorStatusCodes.ProjectNotFound, null);
+
+        var interests = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
+        var skills = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+
+        int usersCount = Users
+            .Include(u => u.Tags)
+            .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Count();
+
+
+        var (status, usersResponse) = GetRecommendedUsersByProjectId(id, page);
+
+        return status switch
+        {
+            DbErrorStatusCodes.ProjectNotFound => (DbErrorStatusCodes.UserNotFound, null),
+            DbErrorStatusCodes.Ok => (DbErrorStatusCodes.Ok, new UserBatchResponse(
+                usersResponse!.Select(u => (UserResponse) u).ToList(),
+                (int)page!,
+                usersCount / _pageSize > page ? page + 1 : null)
+            ),
+            _ => (DbErrorStatusCodes.FatalError, null)
+        };
+    }
+
 }
