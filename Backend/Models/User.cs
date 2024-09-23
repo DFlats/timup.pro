@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models;
 public class User
@@ -9,7 +10,8 @@ public class User
     public string Name { get; set; } = null!;
     [Required]
     public string Email { get; set; } = null!;
-    public List<Project> Projects { get; set; } = [];
+    [ForeignKey("ProjectId")]
+    public virtual List<Project> Projects { get; set; } = [];
     public List<Tag> Tags { get; set; } = [];
     public List<ProjectInvite> ProjectInvites { get; set; } = [];
 }

@@ -20,15 +20,6 @@ builder.Services.AddOpenApiDocument(config =>
     config.Version = version;
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAllOrigins",
-        builder => builder
-            .AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials());
-});
 
 var app = builder.Build();
 
