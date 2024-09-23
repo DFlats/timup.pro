@@ -19,7 +19,7 @@ export function TagElement({ tag, onClick }: TagElementProps) {
 
     return (
         <button
-            className={`btn rounded-full m-2 text-white ${color}`}
+            className={`${onClick ? "btn" : "p-4"} rounded-full m-2 text-white ${color}`}
             onClick={(e) => handleClick(e)}>
             <p>{tag.title}</p>
         </button>
