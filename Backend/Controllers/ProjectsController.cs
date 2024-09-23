@@ -10,8 +10,8 @@ namespace Backend.Controllers;
 public class ProjectsController(DatabaseContext db) : ControllerBase
 {
     [HttpGet("GetProjects")]
-    [ProducesResponseType(typeof(List<ProjectResponse>), 200)]
-    public List<ProjectResponse> GetProjects
+    [ProducesResponseType(typeof(ProjectBatchResponse), 200)]
+    public ProjectBatchResponse GetProjectBatch
     (
         [FromQuery(Name = "interests")] string[]? interests,
         [FromQuery(Name = "skills")] string[]? skills,
@@ -20,19 +20,19 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     {
         if (skills?.Length == 0 && interests?.Length == 0)
         {
-            return db.GetAllProjects(page);
+            return db.GetProjectBatch(page);
         }
 
-        return db.GetProjectsByFilter(skills, interests, page);
+        return db.GetProjectBatchByFilter(skills, interests, page);
     }
 
     [HttpGet("GetRecommendedProjects/{userId}")]
-    [ProducesResponseType(typeof(List<ProjectResponse>), 200)]
+    [ProducesResponseType(typeof(ProjectBatchResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public ActionResult<List<ProjectResponse>> GetRecommendedProjectsByUserId(string userId, [FromQuery(Name = "page")] int? page = 1)
+    public ActionResult<ProjectBatchResponse> GetRecommendedProjectsBatchByUserId(string userId, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var projects) = db.GetRecommendedProjectsByUserId(userId, page);
+        (var status, var projects) = db.GetRecommendedProjectBatchByUserId(userId, page);
 
         return status switch
         {
@@ -79,7 +79,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return status switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("Could not find a user for given project"),
-            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetProjectByProjectId), new { id = project!.Id }, (ProjectResponse)project),
+            DbErrorStatusCodes.Ok => Ok(),
             _ => StatusCode(500),
         };
 

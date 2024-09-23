@@ -57,7 +57,7 @@ public partial class DatabaseContext
         }
         catch
         {
-            return (DbErrorStatusCodes.UserAlreadyExists, null);
+            return (DbErrorStatusCodes.FatalError, null);
         }
     }
 
