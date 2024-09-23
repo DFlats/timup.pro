@@ -97,7 +97,6 @@ const tagsFrom = (skillTags?: string[], interestTags?: string[]) => ({
     'interest': interestTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? []
 });
 
-
 export function userFromUserResponse(dto: components['schemas']['UserResponse']) {
     return {
         id: dto.id!,

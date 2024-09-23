@@ -16,7 +16,7 @@ export function TagContainerCompact({ tags, tagType, onRemoveTag }: Props) {
                     tag={{ title: 'Eager to learn', kind: 'skill' } as Tag} />
             case 'interest':
                 return <TagElement
-                    tag={{ title: 'Eager to learn', kind: 'skill' } as Tag} />
+                    tag={{ title: 'Interested in everything', kind: 'interest' } as Tag} />
         }
     }
 
