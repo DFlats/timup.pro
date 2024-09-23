@@ -25,13 +25,13 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.GetUsersByFilter(skills, interests, page);
     }
 
-    [HttpGet("GetRecommendedUsersByProjectId/{id}")]
+    [HttpGet("GetRecommendedUsers/{projectId}")]
     [ProducesResponseType(typeof(List<UserResponse>), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int id, [FromQuery(Name = "page")] int? page = 1)
+    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int projectId, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var users) = db.GetRecommendedUsersByProjectId(id, page);
+        (var status, var users) = db.GetRecommendedUsersByProjectId(projectId, page);
 
         return status switch
         {
@@ -41,39 +41,23 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("GetUserByUserId/{id}")]
+    [HttpGet("GetUser/{userId}")]
     [ProducesResponseType(typeof(UserResponse), 200)]
     [ProducesResponseType(404)]
-    public ActionResult<UserResponse> GetUserByUserId(string id)
+    public ActionResult<UserResponse> GetUserByUserId(string userId)
     {
-        var user = db.GetUserById(id);
+        var user = db.GetUserById(userId);
         if (user is null) return NotFound("User not found");
         return (UserResponse)user;
     }
 
-    [HttpPost("CreateUser")]
-    [ProducesResponseType(typeof(UserResponse), 201)]
-    [ProducesResponseType(409)]
-    [ProducesResponseType(500)]
-    public IActionResult CreateUser(UserRequest userToAdd)
-    {
-        (var status, var user) = db.CreateUser(userToAdd);
-
-        return status switch
-        {
-            DbErrorStatusCodes.UserAlreadyExists => Conflict("User already exists"),
-            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetUserByUserId), new { id = user!.ClerkId }, (UserResponse)user),
-            _ => StatusCode(500),
-        };
-    }
-
     [HttpPost("ConfirmUserExists")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(UserResponse), 201)]
     public IActionResult ConfirmUserExists(UserRequest userToCheck)
     {
-        db.CreateUser(userToCheck);
+        var (_, user) = db.CreateUser(userToCheck);
 
-        return Ok();
+        return CreatedAtAction(nameof(GetUserByUserId), new { id = user!.ClerkId }, (UserResponse)user);
     }
 
     [HttpPatch("UpdateUser")]
@@ -85,7 +69,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.UpdateUser(requestBody) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => Ok(),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }
@@ -99,7 +83,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.DeleteUser(userId) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => Ok(),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }

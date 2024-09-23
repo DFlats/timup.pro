@@ -20,7 +20,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is already owner"),
-            DbErrorStatusCodes.Ok => Ok("User joined project"),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }
@@ -39,7 +39,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
             DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
-            DbErrorStatusCodes.Ok => Ok("User accepted project invite"),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }
@@ -55,7 +55,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
             DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
-            DbErrorStatusCodes.Ok => Ok("User declined project invite"),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }
@@ -73,7 +73,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
-            DbErrorStatusCodes.Ok => Ok("User invited to project"),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }
@@ -93,7 +93,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
             DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
             DbErrorStatusCodes.NoInviteFound => NotFound("No invite found"),
-            DbErrorStatusCodes.Ok => Ok("User accepted project invite"),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }
@@ -110,7 +110,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
             DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
             DbErrorStatusCodes.NoInviteFound => NotFound("No invite found"),
-            DbErrorStatusCodes.Ok => Ok("User declined project invite"),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }
@@ -127,7 +127,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
-            DbErrorStatusCodes.Ok => Ok("User left project"),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }
@@ -145,7 +145,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
             DbErrorStatusCodes.UserNotFoundInProject => NotFound("User not found in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
-            DbErrorStatusCodes.Ok => Ok("User kicked from project"),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }

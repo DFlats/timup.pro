@@ -162,11 +162,10 @@ public partial class DatabaseContext
         return true;
     }
 
-    internal DbErrorStatusCodes DeleteProject(string authorId, int projectId)
+    internal DbErrorStatusCodes DeleteProject(int projectId)
     {
         var project = Projects.FirstOrDefault(p => p.Id == projectId);
         if (project is null) return DbErrorStatusCodes.UserNotFound;
-        if (project.AuthorId != authorId) return DbErrorStatusCodes.UserNotAuthorized;
         Projects.Remove(project);
         SaveChanges();
         return DbErrorStatusCodes.Ok;

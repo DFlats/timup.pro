@@ -26,7 +26,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return db.GetProjectsByFilter(skills, interests, page);
     }
 
-    [HttpGet("GetRecommendedProjectsByUserId/{id}")]
+    [HttpGet("GetRecommendedProjects/{userId}")]
     [ProducesResponseType(typeof(List<ProjectResponse>), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -42,7 +42,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("GetProjectByProjectId/{id}")]
+    [HttpGet("GetProject/{projectId}")]
     [ProducesResponseType(typeof(ProjectResponse), 200)]
     [ProducesResponseType(404)]
     public ActionResult<ProjectResponse> GetProjectByProjectId(int id)
@@ -52,7 +52,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return (ProjectResponse)res;
     }
 
-    [HttpGet("GetProjectsByUserId/{id}")]
+    [HttpGet("GetOwnedProjects/{userId}")]
     [ProducesResponseType(typeof(List<ProjectOverviewResponse>), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -98,24 +98,23 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.UserNotAuthorized => Unauthorized("User not authorized"),
-            DbErrorStatusCodes.Ok => Ok(),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }
 
-    [HttpDelete("DeleteProject/{authorId}/{projectId}")]
+    [HttpDelete("DeleteProject/{projectId}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(401)]
     [ProducesResponseType(500)]
-    public IActionResult DeleteProject(string authorId, int projectId)
+    public IActionResult DeleteProject(int projectId)
     {
-        var status = db.DeleteProject(authorId, projectId);
+        var status = db.DeleteProject(projectId);
         return status switch
         {
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
-            DbErrorStatusCodes.UserNotAuthorized => Unauthorized("User not authorized"),
-            DbErrorStatusCodes.Ok => Ok(),
+            DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
     }

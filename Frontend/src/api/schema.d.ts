@@ -36,7 +36,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Projects/GetRecommendedProjectsByUserId/{id}": {
+    "/api/Projects/GetRecommendedProjects/{userId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -52,7 +52,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Projects/GetProjectByProjectId/{id}": {
+    "/api/Projects/GetProject/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -68,7 +68,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Projects/GetProjectsByUserId/{id}": {
+    "/api/Projects/GetOwnedProjects/{userId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -116,7 +116,7 @@ export interface paths {
         patch: operations["Projects_UpdateProject"];
         trace?: never;
     };
-    "/api/Projects/DeleteProject/{authorId}/{projectId}": {
+    "/api/Projects/DeleteProject/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -276,7 +276,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Users/GetRecommendedUsersByProjectId/{id}": {
+    "/api/Users/GetRecommendedUsers/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -292,7 +292,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Users/GetUserByUserId/{id}": {
+    "/api/Users/GetUser/{userId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -302,22 +302,6 @@ export interface paths {
         get: operations["Users_GetUserByUserId"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Users/CreateUser": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["Users_CreateUser"];
         delete?: never;
         options?: never;
         head?: never;
@@ -501,11 +485,12 @@ export interface operations {
     Projects_GetRecommendedProjectsByUserId: {
         parameters: {
             query?: {
+                id?: string;
                 page?: number;
             };
             header?: never;
             path: {
-                id: string;
+                userId: string;
             };
             cookie?: never;
         };
@@ -537,10 +522,12 @@ export interface operations {
     };
     Projects_GetProjectByProjectId: {
         parameters: {
-            query?: never;
+            query?: {
+                id?: number;
+            };
             header?: never;
             path: {
-                id: number;
+                projectId: string;
             };
             cookie?: never;
         };
@@ -566,10 +553,12 @@ export interface operations {
     };
     Projects_GetProjectsByUserId: {
         parameters: {
-            query?: never;
+            query?: {
+                id?: string;
+            };
             header?: never;
             path: {
-                id: string;
+                userId: string;
             };
             cookie?: never;
         };
@@ -684,7 +673,6 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                authorId: string;
                 projectId: number;
             };
             cookie?: never;
@@ -1071,7 +1059,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                id: number;
+                projectId: number;
             };
             cookie?: never;
         };
@@ -1106,7 +1094,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                userId: string;
             };
             cookie?: never;
         };
@@ -1130,7 +1118,7 @@ export interface operations {
             };
         };
     };
-    Users_CreateUser: {
+    Users_ConfirmUserExists: {
         parameters: {
             query?: never;
             header?: never;
@@ -1150,41 +1138,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["UserResponse"];
                 };
-            };
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProblemDetails"];
-                };
-            };
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    Users_ConfirmUserExists: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UserRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
