@@ -20,11 +20,16 @@ builder.Services.AddOpenApiDocument(config =>
     config.Version = version;
 });
 
+var allowedOrigins = new[] {
+    "http://timup.pro:5173",
+    "http://localhost:5173"
+};
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins",
+    options.AddPolicy("AllowSpecificOrigins",
         builder => builder
-            .AllowAnyOrigin()
+            .WithOrigins(allowedOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());
@@ -45,7 +50,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Apply the CORS policy
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowSpecificOrigins");
 
 app.UseHttpsRedirection();
 
