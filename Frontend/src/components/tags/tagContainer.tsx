@@ -37,7 +37,7 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
     return (
         <div className='rounded-xl bg-opacity-5 bg-white p-3 m-2'>
             <h2>{heading()}</h2>
-            <div className="flex flex-row flex-wrap">
+            <div className="flex flex-row overflow-x-auto no-scrollbar">
                 {tags.length > 0 &&
                     tags.map((tag, i) => <TagElement key={i} {...tagProps(tag)} />)
                 }
