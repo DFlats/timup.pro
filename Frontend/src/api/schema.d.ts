@@ -52,22 +52,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Projects/CreateProject": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["Projects_CreateProject"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/Projects/GetProjectByProjectId/{id}": {
         parameters: {
             query?: never;
@@ -100,6 +84,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Projects/CreateProject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Projects_CreateProject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Projects/UpdateProject": {
         parameters: {
             query?: never;
@@ -116,23 +116,7 @@ export interface paths {
         patch: operations["Projects_UpdateProject"];
         trace?: never;
     };
-    "/api/Transactions/HandleJoinProjectRequest/{userId}/{projectId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["Transactions_HandleJoinProjectRequest"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Transactions/HandleJoinProjectRequest/Accept/{userId}/{projectId}": {
+    "/api/Projects/DeleteProject/{authorId}/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -141,14 +125,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["Transactions_HandleAcceptJoinProjectInviteRequest"];
-        delete?: never;
+        post?: never;
+        delete: operations["Projects_DeleteProject"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/Transactions/HandleJoinProjectRequest/Deny/{userId}/{projectId}": {
+    "/api/Transactions/JoinProjectRequest/{userId}/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -157,14 +141,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["Transactions_HandleDeclineProjectInviteRequest"];
+        post: operations["Transactions_HandleJoinProjectRequest"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/Transactions/HandleLeaveProjectRequest/{userId}/{projectId}": {
+    "/api/Transactions/JoinProjectRequest/Accept/{userId}/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -172,7 +156,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["Transactions_HandleLeaveProjectRequest"];
+        put: operations["Transactions_HandleAcceptJoinProjectInviteRequest"];
         post?: never;
         delete?: never;
         options?: never;
@@ -180,7 +164,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Transactions/HandleKickUserFromProject/{userId}/{projectId}": {
+    "/api/Transactions/JoinProjectRequest/Deny/{userId}/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -188,7 +172,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["Transactions_HandleKickUserFromProject"];
+        put: operations["Transactions_HandleDeclineProjectInviteRequest"];
         post?: never;
         delete?: never;
         options?: never;
@@ -196,7 +180,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Transactions/HandleInviteUserToProject/{userId}/{projectId}": {
+    "/api/Transactions/InviteUserToProject/{userId}/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -212,7 +196,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Transactions/HandleInviteUserToProject/Accept/{userId}/{projectId}": {
+    "/api/Transactions/InviteUserToProject/Accept/{userId}/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -220,15 +204,31 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put?: never;
-        post: operations["Transactions_HandleInviteUserToProjectAccept"];
+        put: operations["Transactions_HandleInviteUserToProjectAccept"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/Transactions/HandleInviteUserToProject/Deny/{userId}/{projectId}": {
+    "/api/Transactions/InviteUserToProject/Deny/{userId}/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["Transactions_HandleInviteUserToProjectDeny"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Transactions/LeaveProjectRequest/{userId}/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -237,7 +237,55 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["Transactions_HandleInviteUserToProjectDeny"];
+        post?: never;
+        delete: operations["Transactions_HandleLeaveProjectRequest"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Transactions/KickUserFromProject/{userId}/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["Transactions_HandleKickUserFromProject"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Users/GetUsers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Users_GetUsers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Users/GetRecommendedUsersByProjectId/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Users_GetRecommendedUsersByProjectId"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -276,7 +324,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Users/AddTagToUserByUserId/{id}": {
+    "/api/Users/ConfirmUserExists": {
         parameters: {
             query?: never;
             header?: never;
@@ -285,39 +333,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["Users_AddTagToUserByUserId"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Users/RemoveTagFromUserByUserId/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["Users_RemoveTagFromUserByUserId"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Users/GetRecommendedUsersByProjectId/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Users_GetRecommendedUsersByProjectId"];
-        put?: never;
-        post?: never;
+        post: operations["Users_ConfirmUserExists"];
         delete?: never;
         options?: never;
         head?: never;
@@ -340,6 +356,22 @@ export interface paths {
         patch: operations["Users_UpdateUser"];
         trace?: never;
     };
+    "/api/Users/DeleteUser/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["Users_DeleteUser"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -350,18 +382,26 @@ export interface components {
             title?: string;
             authorName?: string;
             authorId?: string;
-            collaborators?: components["schemas"]["ValueTupleOfStringAndString"][];
+            collaborators?: components["schemas"]["CollaboratorsResponse"][];
             description?: string;
             skillTags?: string[];
             interestTags?: string[];
             isCompleted?: boolean;
             invitedUsers?: string[];
         };
-        ValueTupleOfStringAndString: Record<string, never>;
-        ProjectRequest: {
-            authorId?: string;
-            title?: string;
-            description?: string;
+        CollaboratorsResponse: {
+            clerkId?: string;
+            name?: string;
+        };
+        ProblemDetails: {
+            type?: string | null;
+            title?: string | null;
+            /** Format: int32 */
+            status?: number | null;
+            detail?: string | null;
+            instance?: string | null;
+        } & {
+            [key: string]: unknown;
         };
         ProjectOverviewResponse: {
             /** Format: int32 */
@@ -374,6 +414,11 @@ export interface components {
             skillTags?: string[];
             interestTags?: string[];
             isCompleted?: boolean;
+        };
+        ProjectRequest: {
+            authorId?: string;
+            title?: string;
+            description?: string;
         };
         ProjectPatchRequest: {
             /** Format: int32 */
@@ -396,10 +441,6 @@ export interface components {
             clerkId?: string;
             name?: string;
             email?: string;
-        };
-        TagRequest: {
-            tagName?: string;
-            isSkill?: boolean;
         };
         UserPatchRequest: {
             clerkId?: string;
@@ -429,7 +470,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/octet-stream": string;
+                    "application/json": boolean;
                 };
             };
         };
@@ -478,28 +519,19 @@ export interface operations {
                     "application/json": components["schemas"]["ProjectResponse"][];
                 };
             };
-        };
-    };
-    Projects_CreateProject: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProjectRequest"];
-            };
-        };
-        responses: {
-            200: {
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ProjectResponse"];
+                    "application/json": components["schemas"]["ProblemDetails"];
                 };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -520,6 +552,14 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProjectResponse"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
                 };
             };
         };
@@ -543,6 +583,57 @@ export interface operations {
                     "application/json": components["schemas"]["ProjectOverviewResponse"][];
                 };
             };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    Projects_CreateProject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
         };
     };
     Projects_UpdateProject: {
@@ -562,9 +653,71 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/octet-stream": string;
+                content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
                 };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    Projects_DeleteProject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                authorId: string;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -584,9 +737,29 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/octet-stream": string;
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
                 };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -606,9 +779,29 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/octet-stream": string;
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
                 };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -628,53 +821,21 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/octet-stream": string;
-                };
+                content?: never;
             };
-        };
-    };
-    Transactions_HandleLeaveProjectRequest: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                userId: string;
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/octet-stream": string;
+                    "application/json": components["schemas"]["ProblemDetails"];
                 };
             };
-        };
-    };
-    Transactions_HandleKickUserFromProject: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                userId: string;
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/octet-stream": string;
-                };
+                content?: never;
             };
         };
     };
@@ -694,9 +855,29 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/octet-stream": string;
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
                 };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -716,9 +897,29 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/octet-stream": string;
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
                 };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -738,18 +939,31 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/octet-stream": string;
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
                 };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
-    Users_GetUserByUserId: {
+    Transactions_HandleLeaveProjectRequest: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                userId: string;
+                projectId: number;
             };
             cookie?: never;
         };
@@ -759,81 +973,93 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["UserResponse"];
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
                 };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
-    Users_CreateUser: {
+    Transactions_HandleKickUserFromProject: {
         parameters: {
             query?: never;
+            header?: never;
+            path: {
+                userId: string;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    Users_GetUsers: {
+        parameters: {
+            query?: {
+                interests?: string[] | null;
+                skills?: string[] | null;
+                page?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UserRequest"];
-            };
-        };
+        requestBody?: never;
         responses: {
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/octet-stream": string;
-                };
-            };
-        };
-    };
-    Users_AddTagToUserByUserId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TagRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/octet-stream": string;
-                };
-            };
-        };
-    };
-    Users_RemoveTagFromUserByUserId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TagRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/octet-stream": string;
+                    "application/json": components["schemas"]["UserResponse"][];
                 };
             };
         };
@@ -859,6 +1085,107 @@ export interface operations {
                     "application/json": components["schemas"]["UserResponse"][];
                 };
             };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    Users_GetUserByUserId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserResponse"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    Users_CreateUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserResponse"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    Users_ConfirmUserExists: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
         };
     };
     Users_UpdateUser: {
@@ -878,9 +1205,54 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/octet-stream": string;
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
                 };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    Users_DeleteUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

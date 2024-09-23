@@ -4,5 +4,5 @@ interface Props {
 }
 
 export function CardTitle({ title }: Props) {
-    return <h3 className="card-title pb-4">{title}</h3>
+    return <h2 className="card-title">{title}</h2>
 }

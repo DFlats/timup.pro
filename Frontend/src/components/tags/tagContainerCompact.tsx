@@ -8,14 +8,7 @@ interface Props {
     onRemoveTag?: (tag: Tag) => void
 }
 
-export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
-    const heading = () => {
-        switch (tagType) {
-            case 'skill': return 'Skills'
-            case 'interest': return 'Interests'
-        }
-    }
-
+export function TagContainerCompact({ tags, tagType, onRemoveTag }: Props) {
     const noTagsTag = () => {
         switch (tagType) {
             case 'skill':
@@ -23,7 +16,7 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
                     tag={{ title: 'Eager to learn', kind: 'skill' } as Tag} />
             case 'interest':
                 return <TagElement
-                    tag={{ title: 'Eager to learn', kind: 'skill' } as Tag} />
+                    tag={{ title: 'Interested in everything', kind: 'interest' } as Tag} />
         }
     }
 
@@ -36,7 +29,6 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
 
     return (
         <div className='rounded-xl bg-opacity-5 bg-white p-3 m-2'>
-            <h2>{heading()}</h2>
             <div className="flex flex-row flex-wrap">
                 {tags.length > 0 &&
                     tags.map((tag, i) => <TagElement key={i} {...tagProps(tag)} />)

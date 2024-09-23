@@ -67,6 +67,15 @@ public class UsersController(DatabaseContext db) : ControllerBase
         };
     }
 
+    [HttpPost("ConfirmUserExists")]
+    [ProducesResponseType(200)]
+    public IActionResult ConfirmUserExists(UserRequest userToCheck)
+    {
+        db.CreateUser(userToCheck);
+
+        return Ok();
+    }
+
     [HttpPatch("UpdateUser")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
@@ -76,7 +85,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.UpdateUser(requestBody) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => Ok("User updated"),
+            DbErrorStatusCodes.Ok => Ok(),
             _ => StatusCode(500),
         };
     }
@@ -90,7 +99,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         return db.DeleteUser(userId) switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => Ok("User deleted"),
+            DbErrorStatusCodes.Ok => Ok(),
             _ => StatusCode(500),
         };
     }

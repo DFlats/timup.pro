@@ -1,47 +1,46 @@
 import { client } from '../client'
-import { mapRawProjectResponseToProject, ProjectPatchRequest, ProjectRequest } from '../types/projects';
+import { components } from '../schema';
+import { Project, ProjectCore, ProjectPatch, UserIdName } from '../../types/projects';
+import { Tag } from '../../types';
 
-export const getProjects = async (skillTags?: string[], interestTags?: string[]) => {
-    const response = await client.GET('/api/Projects/GetProjects', {
+export const getProjects = async (skillTags: string[] = [], interestTags: string[] = [], page?: number) => {
+    const { response, data, error } = await client.GET('/api/Projects/GetProjects', {
         params: {
             query: {
-                interests: interestTags ?? [],
-                skills: skillTags ?? []
+                interests: interestTags,
+                skills: skillTags,
+                page
             }
         }
     });
 
-    if (!response.data) throw new Error(response.error);
+    if (!data || (!response.ok && error))
+        throw error;
 
-    return response.data.map(projectResponse => mapRawProjectResponseToProject(projectResponse));
+    return data.map(projectResponse => projectFromProjectResponse(projectResponse));
 }
 
-export const getRecommendedProjectsByUserId = async (userId: string) => {
-    const response = await client.GET('/api/Projects/GetProjectsByUserId/{id}', {
+export const getRecommendedProjectsByUserId = async (userId: string, page?: number) => {
+    const { response, data, error } = await client.GET('/api/Projects/GetRecommendedProjectsByUserId/{id}', {
         params: {
             path: {
                 id: userId
+            },
+            query: {
+                page
             }
+
         }
     });
 
-    if (!response.data) throw new Error(response.error);
+    if (!data || (!response.ok && error))
+        throw error;
 
-    return response.data.map(projectResponse => mapRawProjectResponseToProject(projectResponse))
-}
-
-export const createProject = async (projectRequest: ProjectRequest) => {
-    const response = await client.POST('/api/Projects/CreateProject', {
-        body: projectRequest
-    });
-
-    if (!response.data) throw new Error(response.error);
-
-    return mapRawProjectResponseToProject(response.data);
+    return data.map(projectResponse => projectFromProjectResponse(projectResponse))
 }
 
 export const getProjectByProjectId = async (projectId: number) => {
-    const response = await client.GET('/api/Projects/GetProjectByProjectId/{id}', {
+    const { response, data, error } = await client.GET('/api/Projects/GetProjectByProjectId/{id}', {
         params: {
             path: {
                 id: projectId
@@ -49,13 +48,15 @@ export const getProjectByProjectId = async (projectId: number) => {
         }
     });
 
-    if (!response.data) throw new Error(response.error);
+    if (!data || (!response.ok && error))
+        throw error;
 
-    return mapRawProjectResponseToProject(response.data);
+    return projectFromProjectResponse(data);
 }
 
+//!!! Endpoint returns ProjectOverviewResponse
 export const getProjectsByUserId = async (userId: string) => {
-    const response = await client.GET('/api/Projects/GetProjectsByUserId/{id}', {
+    const { response, data, error } = await client.GET('/api/Projects/GetProjectsByUserId/{id}', {
         params: {
             path: {
                 id: userId
@@ -63,13 +64,96 @@ export const getProjectsByUserId = async (userId: string) => {
         }
     })
 
-    if (!response.data) throw new Error(response.error);
+    if (!data || (!response.ok && error))
+        throw error;
 
-    return response.data.map(projectResponse => mapRawProjectResponseToProject(projectResponse))
+    return data.map(projectResponse => projectFromProjectOverviewResponse(projectResponse))
 }
 
-export const updateProject = async (projectPatchRequest: ProjectPatchRequest) => {
-    await client.PATCH('/api/Projects/UpdateProject', {
+export const createProject = async (projectCore: ProjectCore) => {
+    const requestBody = {
+        authorId: projectCore.authorId,
+        description: projectCore.description,
+        title: projectCore.title
+    } as components['schemas']['ProjectRequest'];
+
+    const { response, data, error } = await client.POST('/api/Projects/CreateProject', {
+        body: requestBody
+    });
+
+    if (!data || (!response.ok && error))
+        throw error;
+
+    return projectFromProjectResponse(data);
+}
+
+export const updateProject = async (projectPatch: ProjectPatch, projectId: number, authorId: string) => {
+    const projectPatchRequest = {
+        ...projectPatch,
+        projectId,
+        authorId,
+    } as components['schemas']['ProjectPatchRequest']
+
+    const { response, error } = await client.PATCH('/api/Projects/UpdateProject', {
         body: projectPatchRequest
     });
+
+    if (!response.ok && error)
+        throw error;
+
+    return await getProjectByProjectId(projectId);
+}
+
+export const deleteProject = async (authorId: string, projectId: number) => {
+    const { response, error } = await client.DELETE('/api/Projects/DeleteProject/{authorId}/{projectId}', {
+        params: {
+            path: {
+                authorId,
+                projectId
+            }
+        }
+    });
+
+    if (!response.ok && error)
+        throw error;
+}
+
+const tagsFrom = (skillTags?: string[], interestTags?: string[]) => ({
+    'skill': skillTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? [],
+    'interest': interestTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? []
+});
+
+const collaboratorsFrom = (collaborators: components['schemas']['CollaboratorsResponse'][]) =>
+    collaborators!.map(dto => {
+        const collab: UserIdName = {};
+        collab[dto.clerkId!] = dto.name!;
+        return collab;
+    });
+
+function projectFromProjectResponse(dto: components['schemas']['ProjectResponse']) {
+    return {
+        authorId: dto.authorId!,
+        title: dto.title!,
+        description: dto.description!,
+        id: dto.id!,
+        authorName: dto.authorName!,
+        collaborators: collaboratorsFrom(dto.collaborators!),
+        tags: tagsFrom(dto.skillTags, dto.interestTags!),
+        isCompleted: dto.isCompleted!,
+        invitedUsersIds: dto.invitedUsers!
+    } as Project;
+}
+
+function projectFromProjectOverviewResponse(dto: components['schemas']['ProjectOverviewResponse']) {
+    return {
+        id: dto.id!,
+        title: dto.title!,
+        authorName: "ProjectOverviewResponse",
+        authorId: dto.authorId!,
+        collaborators: [],
+        description: dto.description!,
+        tags: tagsFrom(dto.skillTags, dto.interestTags),
+        isCompleted: dto.isCompleted!,
+        invitedUsersIds: []
+    } as Project;
 }

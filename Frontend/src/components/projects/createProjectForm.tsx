@@ -1,23 +1,27 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { SubmitHandler, useForm } from "react-hook-form"
-import { useProjects, useUsers } from "../../hooks";
 import { useNavigate } from "@tanstack/react-router";
 import { TagEditor } from "../tags";
 import { useState } from "react";
-import { TagType } from "../../types";
-import { updateProject } from "../../api";
+import { Tag, Tags } from "../../types";
+import { useProjectActions } from "../../hooks/projects";
+import { useClientUser } from "../../hooks/users";
 
 type Inputs = {
     title: string;
     description: string;
 };
 
+const initTags: Tags = {
+    'interest': [],
+    'skill': []
+}
+
 export function CreateProjectForm() {
-    const { clientUser } = useUsers({ type: 'clientUser' });
+    const { clientUser } = useClientUser();
     const navigate = useNavigate();
-    const { createProject } = useProjects({ type: 'projectsOwnedByClientUser' });
-    const [skillTags, setSkillTags] = useState<string[]>([]);
-    const [interestTags, setInterestTags] = useState<string[]>([]);
+    const { createProjectWithClientAsAuthor } = useProjectActions();
+    const [tags, setTags] = useState<Tags>(initTags);
 
     const {
         register,
@@ -26,39 +30,24 @@ export function CreateProjectForm() {
         reset
     } = useForm<Inputs>()
 
-    const handleAddTag = (tag: string, tagType: TagType) => {
-        event?.preventDefault();
-        switch (tagType) {
-            case 'skill':
-                setSkillTags([...skillTags, tag]);
-                break;
-            case 'interest':
-                setInterestTags([...interestTags, tag]);
-        }
+    const handleAddTag = (tag: Tag) => {
+        const newTags: Tags = { ...tags };
+        newTags[tag.kind] = [...newTags[tag.kind], tag];
+        setTags(newTags);
     }
 
-    const handleRemoveTag = (tag: string, tagType: TagType) => {
-        event?.preventDefault();
-        switch (tagType) {
-            case 'skill':
-                setSkillTags(skillTags.filter(t => t != tag));
-                break;
-            case 'interest':
-                setInterestTags(interestTags.filter(t => t != tag));
-        }
+    const handleRemoveTag = (tag: Tag) => {
+        const newTags: Tags = { ...tags };
+        newTags[tag.kind] = newTags[tag.kind].filter(t => t.title != tag.title);
+        setTags(newTags);
     }
 
-    const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        if (!clientUser || !createProject) return;
+    const onSubmit: SubmitHandler<Inputs> = async ({ title, description }: Inputs) => {
+        if (!clientUser || !createProjectWithClientAsAuthor) return;
 
-        const createdProject = await createProject(data.title, data.description, clientUser.id);
+        const createdProject = await createProjectWithClientAsAuthor(title, description, tags);
 
-        await updateProject({
-            authorId: clientUser.id,
-            projectId: createdProject.id,
-            skillTags,
-            interestTags
-        });
+        if (!createdProject) return;
 
         const modal: HTMLDialogElement = document.getElementById(import.meta.env.VITE_CREATE_PROJECT_MODAL_ID) as HTMLDialogElement;
         modal?.close();
@@ -80,16 +69,12 @@ export function CreateProjectForm() {
 
             <label className="pt-8 pb-1" htmlFor="name">Description* {errors.description && <span>This field is required</span>}</label>
             <input className="input input-bordered input-primary w-full mb-10" {...register("description", { required: true })} />
+
             <TagEditor
-                tags={skillTags}
-                tagType='skill'
+                tags={tags}
                 onAddTag={handleAddTag}
                 onRemoveTag={handleRemoveTag} />
-            <TagEditor
-                tags={interestTags}
-                tagType='interest'
-                onAddTag={handleAddTag}
-                onRemoveTag={handleRemoveTag} />
+
             <button className="btn btn-primary mb-4 w-full" type="submit" onClick={() => onSubmit}>Submit</button>
         </form>
     )

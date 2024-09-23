@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
-import { useProjects } from "../../hooks";
+import { useProjectById, useProjectsOwnedByClientUser } from "../../hooks/projects";
 import { NotFound } from "../routing";
 import { UserTable } from "../users";
 import { TagContainer } from "../tags";
@@ -8,8 +8,8 @@ import { TagContainer } from "../tags";
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
     const projectId = Number.parseInt(Route.useParams().id);
-    const { projectById: project } = useProjects({ type: 'projectById', projectId });
-    const { projectsOwnedByClientUser } = useProjects({ type: 'projectsOwnedByClientUser' });
+    const { projectById: project } = useProjectById(projectId);
+    const { projectsOwnedByClientUser } = useProjectsOwnedByClientUser();
 
     if (!project) {
         return (<NotFound>
@@ -36,9 +36,9 @@ export function ProjectPage() {
                     {clientOwnsProject &&
                         <p>You are a part of this project</p>
                     }
-            <TagContainer tags={project.skillTags} tagType='skill' />
-            <TagContainer tags={project.interestTags} tagType='interest' />
-            <UserTable project={project} />
+                    <TagContainer tags={project.tags['skill']} tagType='skill' />
+                    <TagContainer tags={project.tags['interest']} tagType='interest' />
+                    <UserTable project={project} />
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useUsers } from "../../hooks";
+import { useClientUser } from "../../hooks/users";
 import { TagEditor } from "../tags";
 
 export function EditUserModal() {
@@ -7,7 +7,7 @@ export function EditUserModal() {
         clientUser,
         addTagToClientUser,
         removeTagFromClientUser
-    } = useUsers({ type: 'clientUser' });
+    } = useClientUser();
 
     if (!clientUser) return;
 
@@ -17,13 +17,7 @@ export function EditUserModal() {
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">{clientUser.name}</h3>
                     <TagEditor
-                        tags={clientUser.skillTags}
-                        tagType='skill'
-                        onAddTag={addTagToClientUser}
-                        onRemoveTag={removeTagFromClientUser} />
-                    <TagEditor
-                        tags={clientUser.interestTags}
-                        tagType='interest'
+                        tags={clientUser.tags}
                         onAddTag={addTagToClientUser}
                         onRemoveTag={removeTagFromClientUser} />
                 </div>

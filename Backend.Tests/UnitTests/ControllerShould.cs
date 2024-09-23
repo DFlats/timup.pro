@@ -7,6 +7,7 @@ public class ControllerShould(CustomWebAppFactory factory) : IClassFixture<Custo
 {
     private readonly HttpClient _client = factory.CreateClient();
 
+
     [Fact]
     public async Task GetAllProjects_Should_Return_OKAsync()
     {

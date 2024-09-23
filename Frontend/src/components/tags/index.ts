@@ -1,4 +1,5 @@
-export * from './tag'
+export * from './tagElement'
 export * from './tagContainer'
 export * from './tagEditor'
 export * from './plusTag'
+export * from './tagContainerCompact'
