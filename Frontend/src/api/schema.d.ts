@@ -387,18 +387,6 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
-        ProjectOverviewResponse: {
-            /** Format: int32 */
-            id?: number;
-            title?: string;
-            authorId?: string;
-            /** Format: int32 */
-            collabCount?: number;
-            description?: string;
-            skillTags?: string[];
-            interestTags?: string[];
-            isCompleted?: boolean;
-        };
         ProjectRequest: {
             authorId?: string;
             title?: string;
@@ -485,7 +473,6 @@ export interface operations {
     Projects_GetRecommendedProjectsByUserId: {
         parameters: {
             query?: {
-                id?: string;
                 page?: number;
             };
             header?: never;
@@ -522,12 +509,10 @@ export interface operations {
     };
     Projects_GetProjectByProjectId: {
         parameters: {
-            query?: {
-                id?: number;
-            };
+            query?: never;
             header?: never;
             path: {
-                projectId: string;
+                projectId: number;
             };
             cookie?: never;
         };
@@ -553,9 +538,7 @@ export interface operations {
     };
     Projects_GetProjectsByUserId: {
         parameters: {
-            query?: {
-                id?: string;
-            };
+            query?: never;
             header?: never;
             path: {
                 userId: string;
@@ -569,7 +552,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ProjectOverviewResponse"][];
+                    "application/json": components["schemas"]["ProjectResponse"][];
                 };
             };
             404: {

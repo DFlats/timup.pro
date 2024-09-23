@@ -20,10 +20,10 @@ export const getUsers = async (skillTags: string[] = [], interestTags: string[] 
 }
 
 export const getRecommendedUsersByProjectId = async (projectId: number, page?: number) => {
-    const { response, data, error } = await client.GET('/api/Users/GetRecommendedUsersByProjectId/{id}', {
+    const { response, data, error } = await client.GET("/api/Users/GetRecommendedUsers/{projectId}", {
         params: {
             path: {
-                id: projectId
+                projectId
             },
             query: {
                 page
@@ -37,9 +37,9 @@ export const getRecommendedUsersByProjectId = async (projectId: number, page?: n
     return data.map(userResponse => userFromUserResponse(userResponse));
 }
 
-export const getUserByUserId = async (id: string) => {
-    const { response, data, error } = await client.GET('/api/Users/GetUserByUserId/{id}', {
-        params: { path: { id } }
+export const getUserByUserId = async (userId: string) => {
+    const { response, data, error } = await client.GET("/api/Users/GetUser/{userId}", {
+        params: { path: { userId } }
     });
 
     if (!data || (!response.ok && error))

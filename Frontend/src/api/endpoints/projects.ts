@@ -21,10 +21,10 @@ export const getProjects = async (skillTags: string[] = [], interestTags: string
 }
 
 export const getRecommendedProjectsByUserId = async (userId: string, page?: number) => {
-    const { response, data, error } = await client.GET('/api/Projects/GetRecommendedProjectsByUserId/{id}', {
+    const { response, data, error } = await client.GET('/api/Projects/GetRecommendedProjects/{userId}', {
         params: {
             path: {
-                id: userId
+                userId
             },
             query: {
                 page
@@ -40,10 +40,10 @@ export const getRecommendedProjectsByUserId = async (userId: string, page?: numb
 }
 
 export const getProjectByProjectId = async (projectId: number) => {
-    const { response, data, error } = await client.GET('/api/Projects/GetProjectByProjectId/{id}', {
+    const { response, data, error } = await client.GET("/api/Projects/GetProject/{projectId}", {
         params: {
             path: {
-                id: projectId
+                projectId
             }
         }
     });
@@ -56,10 +56,10 @@ export const getProjectByProjectId = async (projectId: number) => {
 
 //!!! Endpoint returns ProjectOverviewResponse
 export const getProjectsByUserId = async (userId: string) => {
-    const { response, data, error } = await client.GET('/api/Projects/GetProjectsByUserId/{id}', {
+    const { response, data, error } = await client.GET('/api/Projects/GetOwnedProjects/{userId}', {
         params: {
             path: {
-                id: userId
+                userId
             }
         }
     })
@@ -67,7 +67,7 @@ export const getProjectsByUserId = async (userId: string) => {
     if (!data || (!response.ok && error))
         throw error;
 
-    return data.map(projectResponse => projectFromProjectOverviewResponse(projectResponse))
+    return data.map(projectResponse => projectFromProjectResponse(projectResponse))
 }
 
 export const createProject = async (projectCore: ProjectCore) => {
@@ -104,11 +104,10 @@ export const updateProject = async (projectPatch: ProjectPatch, projectId: numbe
     return await getProjectByProjectId(projectId);
 }
 
-export const deleteProject = async (authorId: string, projectId: number) => {
-    const { response, error } = await client.DELETE('/api/Projects/DeleteProject/{authorId}/{projectId}', {
+export const deleteProject = async (projectId: number) => {
+    const { response, error } = await client.DELETE('/api/Projects/DeleteProject/{projectId}', {
         params: {
             path: {
-                authorId,
                 projectId
             }
         }
@@ -141,19 +140,5 @@ function projectFromProjectResponse(dto: components['schemas']['ProjectResponse'
         tags: tagsFrom(dto.skillTags, dto.interestTags!),
         isCompleted: dto.isCompleted!,
         invitedUsersIds: dto.invitedUsers!
-    } as Project;
-}
-
-function projectFromProjectOverviewResponse(dto: components['schemas']['ProjectOverviewResponse']) {
-    return {
-        id: dto.id!,
-        title: dto.title!,
-        authorName: "ProjectOverviewResponse",
-        authorId: dto.authorId!,
-        collaborators: [],
-        description: dto.description!,
-        tags: tagsFrom(dto.skillTags, dto.interestTags),
-        isCompleted: dto.isCompleted!,
-        invitedUsersIds: []
     } as Project;
 }
