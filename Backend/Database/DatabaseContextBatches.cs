@@ -96,4 +96,15 @@ partial class DatabaseContext
         };
     }
 
+        internal (DbErrorStatusCodes, ProjectBatchResponse?) GetProjectBatchByUserId(string id, int? page)
+    {
+        var (status, projects, hasNext) = GetProjectsByUserId(id, page);
+        if(status != DbErrorStatusCodes.Ok) return (status, null);
+        var projectResponses = projects!.Select( p => (ProjectResponse) p).ToList();
+        int? nextPage = hasNext ? page+1 : null;
+        int CurrentPage = (int) page!;
+        return (DbErrorStatusCodes.Ok, new ProjectBatchResponse (projectResponses, (int) page!, nextPage));
+    }
+
+
 }

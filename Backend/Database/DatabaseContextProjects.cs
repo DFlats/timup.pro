@@ -1,3 +1,4 @@
+using System.Globalization;
 using Backend.Dtos;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -86,14 +87,17 @@ public partial class DatabaseContext
                         .FirstOrDefault(p => p.Id == id);
     }
 
-    internal (DbErrorStatusCodes, List<Project>?) GetProjectsByUserId(string id)
+    internal (DbErrorStatusCodes, List<Project>?, bool) GetProjectsByUserId(string id, int? page = 1)
     {
         var user = GetUserById(id);
-        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
+        if (user is null) return (DbErrorStatusCodes.UserNotFound, null, false);
         var projects = new List<Project>();
         projects.AddRange(user.ProjectsAuthored);
         projects.AddRange(user.ProjectsCollaborated.Select(p => p.Project));
-        return (DbErrorStatusCodes.Ok, projects);
+        bool hasNext = (page * _pageSize) < projects.Count;
+        return (DbErrorStatusCodes.Ok, projects
+            .Skip(((int)page! - 1) * _pageSize)
+            .Take(_pageSize).ToList(), hasNext);
     }
 
     internal DbErrorStatusCodes UpdateProject(ProjectPatchRequest requestBody)
