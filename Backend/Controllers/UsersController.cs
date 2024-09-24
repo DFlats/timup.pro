@@ -53,7 +53,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
 
     [HttpPost("ConfirmUserExists")]
     [ProducesResponseType(typeof(UserResponse), 200)]
-    [ProducesResponseType(409)]
+    [ProducesResponseType(typeof(UserResponse), 201)]
     [ProducesResponseType(500)]
     public IActionResult ConfirmUserExists(UserRequest userToCheck)
     {
@@ -61,9 +61,9 @@ public class UsersController(DatabaseContext db) : ControllerBase
 
         return status switch
         {
-            DbErrorStatusCodes.UserAlreadyExists => Conflict("User already exists"),
+            DbErrorStatusCodes.UserAlreadyExists => Ok((UserResponse) db.GetUserById(userToCheck.ClerkId)!),
+            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetUserByUserId), new {userId = user!.ClerkId},(UserResponse) user),
             DbErrorStatusCodes.FatalError => StatusCode(500),
-            DbErrorStatusCodes.Ok => Ok(),
             _ => StatusCode(500),
         };
     }
