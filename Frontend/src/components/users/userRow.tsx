@@ -1,32 +1,31 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Link } from "@tanstack/react-router";
-import { TagContainer, TagContainerCompact } from "../tags";
-import { User, Project } from "../../types";
+import { TagContainerCompact } from "../tags";
+import { User } from "../../types";
 
 interface Props {
-    user: User
-    project: Project
+    user: User,
+    onInvite?: (userId: string) => void
     size?: 'full' | 'compact'
 }
 
-export function UserRow({ project, user }: Props) {
+export function UserRow({ user, onInvite }: Props) {
     return (
         <tbody>
             <tr className="hover">
                 <td><Link className="btn" to='/profile/$userId' params={{ userId: user.id.toString() }}> {user.name} </Link> </td>
                 <td>
                     <TagContainerCompact
-                        tags={user.tags['skill'].filter(userTag => project.tags['skill'].some(projectTag => projectTag == userTag))}
+                        tags={user.tags['skill']}
                         tagType={"skill"} />
                 </td>
                 <td>
-                    <TagContainer
-                        tags={user.tags['interest'].filter(userTag => project.tags['interest'].some(projectTag => projectTag == userTag))}
+                    <TagContainerCompact
+                        tags={user.tags['interest']}
                         tagType={"interest"} />
                 </td>
-                <td>
-                    <button className="btn">Invite</button>
-                </td>
+                {onInvite &&
+                    (<td><button onClick={() => onInvite(user.id)} className="btn">Invite</button></td>)}
             </tr>
         </tbody>
     )

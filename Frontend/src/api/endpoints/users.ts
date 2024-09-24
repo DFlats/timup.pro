@@ -94,7 +94,7 @@ export const deleteUser = async (userId: string) => {
 
 const tagsFrom = (skillTags?: string[], interestTags?: string[]) => ({
     'skill': skillTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? [],
-    'interest': interestTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? []
+    'interest': interestTags?.map(tag => ({ title: tag, kind: 'interest' } as Tag)) ?? []
 });
 
 export function userFromUserResponse(dto: components['schemas']['UserResponse']) {
