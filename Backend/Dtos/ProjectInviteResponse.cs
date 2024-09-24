@@ -2,7 +2,7 @@ using Backend.Models;
 
 namespace Backend.Dtos;
 
-public record ProjectInviteResponse(string UserId, int ProjectId, bool Accepted)
+public record ProjectInviteResponse(string UserId, int ProjectId)
 {
 
  public static implicit operator ProjectInviteResponse(ProjectInvite projectInvite)
@@ -13,8 +13,7 @@ public record ProjectInviteResponse(string UserId, int ProjectId, bool Accepted)
 
         return new ProjectInviteResponse(
             userId,
-            projectId,
-            projectInvite.Accepted
+            projectId
         );
 
     }

@@ -42,7 +42,8 @@ public partial class DatabaseContext
         var projectInvite = new ProjectInvite
         {
             User = user,
-            Project = project
+            Project = project,
+            UserAccepted = true
         };
         ProjectInvites.Add(projectInvite);
         SaveChanges();
@@ -151,7 +152,8 @@ public partial class DatabaseContext
         var projectInvite = new ProjectInvite
         {
             User = user,
-            Project = project
+            Project = project,
+            ProjectAccepted = true
         };
         user.ProjectInvites.Add(projectInvite);
         ProjectInvites.Add(projectInvite);
@@ -210,8 +212,7 @@ public partial class DatabaseContext
                     .Include(u => u.ProjectInvites).ThenInclude(i => i.Project)
                     .FirstOrDefault(u => u.ClerkId == userId);
         if (user == null) return (DbErrorStatusCodes.UserNotFound, null);
-        return (DbErrorStatusCodes.Ok, user.ProjectInvites);
-
+        return (DbErrorStatusCodes.Ok, user.ProjectInvites.Where(i => i.ProjectAccepted == true).ToList());
     }
 
     internal (DbErrorStatusCodes, List<ProjectInvite>?) GetProjectInvites(int projectId)
@@ -220,7 +221,6 @@ public partial class DatabaseContext
                     .Include(p => p.ProjectInvites).ThenInclude(i => i.User)
                     .FirstOrDefault(p => p.Id == projectId);
         if (project == null) return (DbErrorStatusCodes.ProjectNotFound, null);
-        return (DbErrorStatusCodes.Ok, project.ProjectInvites);
-
+        return (DbErrorStatusCodes.Ok, project.ProjectInvites.Where(i => i.UserAccepted == true).ToList());
     }
 }
