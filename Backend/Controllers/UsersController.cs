@@ -63,7 +63,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
         {
             DbErrorStatusCodes.UserAlreadyExists => Conflict("User already exists"),
             DbErrorStatusCodes.FatalError => StatusCode(500),
-            DbErrorStatusCodes.Ok => Ok(),
+            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetUserByUserId), new {userId = user!.ClerkId}, user),
             _ => StatusCode(500),
         };
     }
