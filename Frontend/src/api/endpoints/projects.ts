@@ -89,7 +89,8 @@ export const createProject = async (projectCore: ProjectCore) => {
 
 export const updateProject = async (projectPatch: ProjectPatch, projectId: number, authorId: string) => {
     const projectPatchRequest = {
-        ...projectPatch,
+        skillTags: projectPatch.tags?.['skill'].map(tag => tag.title),
+        interestTags: projectPatch.tags?.['interest'].map(tag => tag.title),
         projectId,
         authorId,
     } as components['schemas']['ProjectPatchRequest']
