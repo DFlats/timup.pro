@@ -84,6 +84,8 @@ export const createProject = async (projectCore: ProjectCore) => {
     if (!data || (!response.ok && error))
         throw error;
 
+    console.log(data);
+
     return projectFromProjectResponse(data);
 }
 
@@ -120,7 +122,7 @@ export const deleteProject = async (projectId: number) => {
 
 const tagsFrom = (skillTags?: string[], interestTags?: string[]) => ({
     'skill': skillTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? [],
-    'interest': interestTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? []
+    'interest': interestTags?.map(tag => ({ title: tag, kind: 'interest' } as Tag)) ?? []
 });
 
 const collaboratorsFrom = (collaborators: components['schemas']['CollaboratorsResponse'][]) =>
@@ -131,6 +133,7 @@ const collaboratorsFrom = (collaborators: components['schemas']['CollaboratorsRe
     });
 
 function projectFromProjectResponse(dto: components['schemas']['ProjectResponse']) {
+    console.log(dto);
     return {
         authorId: dto.authorId!,
         title: dto.title!,
