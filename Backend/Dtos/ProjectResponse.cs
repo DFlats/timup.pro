@@ -16,7 +16,7 @@ public record ProjectResponse(int Id, string Title, string AuthorName, string Au
             project.Id,
             project.Title,
             project.Author.Name,
-            project.AuthorId,
+            project.Author.ClerkId,
             collaborators,
             project.Description.Text,
             skillTags,
