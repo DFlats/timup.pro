@@ -60,7 +60,7 @@ public partial class DatabaseContext
 
             var fakedProject = CreateFakeProject(user, user.ClerkId, fakedTags);
 
-            user.Projects.Add(fakedProject);
+            user.ProjectsAuthored.Add(fakedProject);
 
             _projects.Add(fakedProject);
             _tags.AddRange(fakedTags);
@@ -70,7 +70,7 @@ public partial class DatabaseContext
     internal void SeedCollaborators()
     {
         var projects = Projects.Include(p => p.Collaborators).ToList();
-        var users = Users.Include(u => u.Projects).ToList();
+        var users = Users.Include(u => u.ProjectsAuthored).ToList();
 
         foreach (var project in projects)
         {
@@ -86,7 +86,7 @@ public partial class DatabaseContext
                 // if (project.AuthorId == user.ClerkId) continue;
                 // if (project.Collaborators.Count != 0 && project.Collaborators.Any(u => u.ClerkId == user.ClerkId)) continue;
                 project.Collaborators.Add(collaborator);
-                user.ProjectCollaborateds.Add(new ProjectCollaborated {Project = project, ProjectId = project.Id});
+                user.ProjectsCollaborated.Add(new ProjectCollaborated {Project = project, ProjectId = project.Id});
                 SaveChanges();
             }
         }

@@ -71,7 +71,7 @@ public partial class DatabaseContext
         };
         Descriptions.Add(description);
         Projects.Add(project);
-        user.Projects.Add(project);
+        user.ProjectsAuthored.Add(project);
         SaveChanges();
         return (DbErrorStatusCodes.Ok, project);
     }
@@ -90,8 +90,8 @@ public partial class DatabaseContext
     {
         var user = GetUserById(id);
         if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
-        var ownedProjects = user.Projects;
-        var collaboratedProjects = user.ProjectCollaborateds.Select(p => p.Project);
+        var ownedProjects = user.ProjectsAuthored;
+        var collaboratedProjects = user.ProjectsCollaborated.Select(p => p.Project);
         ownedProjects.AddRange(collaboratedProjects);
         return (DbErrorStatusCodes.Ok, ownedProjects);
     }
@@ -99,12 +99,12 @@ public partial class DatabaseContext
     internal DbErrorStatusCodes UpdateProject(ProjectPatchRequest requestBody)
     {
         var user = Users.
-        Include(u => u.Projects).ThenInclude(p => p.Progress)
-            .Include(u => u.Projects).ThenInclude(p => p.Description).ThenInclude(d => d.Tags)
+        Include(u => u.ProjectsAuthored).ThenInclude(p => p.Progress)
+            .Include(u => u.ProjectsAuthored).ThenInclude(p => p.Description).ThenInclude(d => d.Tags)
             .FirstOrDefault(u => u.ClerkId == requestBody.AuthorId);
         if (user is null) return DbErrorStatusCodes.UserNotFound;
 
-        var project = user.Projects.FirstOrDefault(p => p.Id == requestBody.ProjectId);
+        var project = user.ProjectsAuthored.FirstOrDefault(p => p.Id == requestBody.ProjectId);
         if (project is null) return DbErrorStatusCodes.UserNotAuthorized;
 
         project.Title = requestBody.Title is not null ? requestBody.Title : project.Title;
@@ -164,7 +164,7 @@ public partial class DatabaseContext
         if (project.AuthorId == user.ClerkId) return false;
         if (project.Collaborators.Any(u => u.UserId == user.ClerkId)) return false;
         project.Collaborators.Add(new Collaborator { UserId = user.ClerkId, User = user });
-        user.Projects.Add(project);
+        user.ProjectsAuthored.Add(project);
         SaveChanges();
         return true;
     }

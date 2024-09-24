@@ -10,7 +10,9 @@ public partial class DatabaseContext
         if (!project.Collaborators.Any(u => u.UserId == user.ClerkId)) return false;
         var collaborator = project.Collaborators.First(c => c.UserId == user.ClerkId);
         project.Collaborators.Remove(collaborator);
-        user.Projects.Remove(project);
+        var collaborationRef = user.ProjectsCollaborated.FirstOrDefault(c => c.ProjectId == project.Id);
+        if(collaborationRef == null) return false;
+        user.ProjectsCollaborated.Remove(collaborationRef);
         SaveChanges();
         return true;
     }
