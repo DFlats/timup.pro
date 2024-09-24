@@ -1,6 +1,7 @@
 using Azure.Messaging;
 using Backend.Database;
 using Backend.Dtos;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -53,17 +54,17 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     }
 
     [HttpGet("GetOwnedProjects/{userId}")]
-    [ProducesResponseType(typeof(List<ProjectResponse>), 200)]
+    [ProducesResponseType(typeof(ProjectBatchResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public ActionResult<List<ProjectResponse>> GetProjectsByUserId(string userId)
+    public ActionResult<ProjectBatchResponse> GetProjectsByUserId(string userId, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var projects) = db.GetProjectsByUserId(userId);
+        (var status, var batch) = db.GetProjectBatchByUserId(userId, page);
 
         return status switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => projects!.Select(p => (ProjectResponse)p).ToList(),
+            DbErrorStatusCodes.Ok => batch!,
             _ => StatusCode(500),
         };
     }

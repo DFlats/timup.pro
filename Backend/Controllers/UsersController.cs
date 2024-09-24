@@ -10,7 +10,7 @@ public class UsersController(DatabaseContext db) : ControllerBase
 {
     [HttpGet("GetUsers")]
     [ProducesResponseType(typeof(List<UserResponse>), 200)]
-    public List<UserResponse> GetUsers
+    public UserBatchResponse GetUsers
     (
         [FromQuery(Name = "interests")] string[]? interests,
         [FromQuery(Name = "skills")] string[]? skills,
@@ -19,14 +19,14 @@ public class UsersController(DatabaseContext db) : ControllerBase
     {
         if (skills?.Length == 0 && interests?.Length == 0)
         {
-            return db.GetAllUsers(page);
+            return db.GetAllUserBatch(page);
         }
 
-        return db.GetUsersByFilter(skills, interests, page);
+        return db.GetUserBatchByFilter(skills, interests, page);
     }
 
     [HttpGet("GetRecommendedUsers/{projectId}")]
-    [ProducesResponseType(typeof(List<UserResponse>), 200)]
+    [ProducesResponseType(typeof(UserBatchResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public ActionResult<UserBatchResponse> GetRecommendedUsersByProjectId(int projectId, [FromQuery(Name = "page")] int? page = 1)
