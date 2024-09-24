@@ -10,7 +10,6 @@ public class User
     public string Name { get; set; } = null!;
     [Required]
     public string Email { get; set; } = null!;
-    [ForeignKey("ProjectId")]
     public virtual List<Project> Projects { get; set; } = [];
     public List<Tag> Tags { get; set; } = [];
     public List<ProjectInvite> ProjectInvites { get; set; } = [];
