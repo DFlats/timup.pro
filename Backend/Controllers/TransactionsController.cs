@@ -2,6 +2,7 @@ using Backend.Database;
 using Backend.Dtos;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using SQLitePCL;
 
 namespace Backend.Controllers;
 
@@ -152,6 +153,27 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    // [HttpGet]
-    // public ActionResult<List<ProjectInviteResponse>> GetUser
+    [HttpGet("GetUserInvites/{userId}")]
+    public ActionResult<List<ProjectInviteResponse>> GetUserInvites(string userId)
+    {
+        var (status, invites) = db.GetUserInvites(userId);
+        return status switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.Ok => invites!.Select(i => (ProjectInviteResponse)i).ToList(),
+            _ => StatusCode(500)
+        };
+    }
+
+    [HttpGet("GetProjectInvites/{projectId}")]
+    public ActionResult<List<ProjectInviteResponse>> GetProjectInvites(int projectId)
+    {
+        var (status, invites) = db.GetProjectInvites(projectId);
+        return status switch
+        {
+            DbErrorStatusCodes.ProjectNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.Ok => invites!.Select(i => (ProjectInviteResponse)i).ToList(),
+            _ => StatusCode(500)
+        };
+    }
 }
