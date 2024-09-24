@@ -1,6 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { NewProjectCard, ProjectCard } from "..";
 import { useProjectsOwnedByClientUser } from "../../hooks/projects";
+import { ProjectFeed } from "./layout/projectFeed";
+import { ProjectFeedCardContainer } from "./layout/projectFeedCardContainer";
+import { ProjectFeedTitle } from "./layout/projectFeedTitle";
 
 export function ProjectsOwnedByClientUser() {
     const { projectsOwnedByClientUser: projects } = useProjectsOwnedByClientUser();
@@ -8,12 +11,12 @@ export function ProjectsOwnedByClientUser() {
     if (!projects) return;
 
     return (
-        <div className="p-12 w-screen flex flex-col items-center justify-center">
-            <h1 className='text-4xl mb-8'>{`Projects you're a part of`}</h1>
-            <div className='flex flex-row flex-wrap'>
+        <ProjectFeed>
+            <ProjectFeedTitle title={`Projects you're a part of`} />
+            <ProjectFeedCardContainer>
                 <NewProjectCard />
                 {projects && projects.map(project => <ProjectCard key={project.id} project={project} />)}
-            </div>
-        </div>
+            </ProjectFeedCardContainer>
+        </ProjectFeed>
     );
 }
