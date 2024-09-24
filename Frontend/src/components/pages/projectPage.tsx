@@ -37,10 +37,7 @@ export function ProjectPage() {
 
     return (
         <><div
-            className="hero min-h-screen"
-            style={{
-                backgroundImage: "url(https://storage.googleapis.com/pod_public/1300/141876.jpg)",
-            }}>
+            className="hero min-h-screen" >
             <div className="hero-overlay bg-opacity-95"></div>
             <div className="hero-content text-neutral-content text-center">
                 <div className="max-w-screen-lg">
@@ -61,6 +58,6 @@ export function ProjectPage() {
                     }
                 </div>
             </div>
-        </div>
+        </div >
         </>);
 }
