@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Link } from "@tanstack/react-router";
-import { TagContainer, TagContainerCompact } from "../tags";
+import { TagContainerCompact } from "../tags";
 import { User } from "../../types";
 
 interface Props {
@@ -20,7 +20,7 @@ export function UserRow({ user, onInvite }: Props) {
                         tagType={"skill"} />
                 </td>
                 <td>
-                    <TagContainer
+                    <TagContainerCompact
                         tags={user.tags['interest']}
                         tagType={"interest"} />
                 </td>

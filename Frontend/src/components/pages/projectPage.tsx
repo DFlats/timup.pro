@@ -5,14 +5,13 @@ import { NotFound } from "../routing";
 import { UserTable } from "../users";
 import { TagContainer } from "../tags";
 import { useCollaborators } from "../../hooks/users/useCollaborators";
-import { User } from "../../types";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
     const projectId = Number.parseInt(Route.useParams().id);
     const { projectById: project } = useProjectById(projectId);
     const { projectsOwnedByClientUser } = useProjectsOwnedByClientUser();
-    let { collaboratorsInProject } = useCollaborators(projectId);
+    const { collaboratorsInProject } = useCollaborators(projectId);
 
     if (!project) {
         return (<NotFound>
@@ -26,22 +25,6 @@ export function ProjectPage() {
             : false;
 
     if (!collaboratorsInProject) return;
-
-    console.log(project.tags['interest']);
-
-    collaboratorsInProject = collaboratorsInProject.map(collaborator => ({
-        ...collaborator,
-        tags: {
-            'skill': collaborator.tags['skill']
-                .filter(tag => project.tags['skill']
-                    .map(pTag => pTag.title).includes(tag.title)),
-            'interest': collaborator.tags['interest']
-                .filter(tag => project.tags['interest']
-                    .map(pTag => pTag.title).includes(tag.title)),
-        }
-    } as User));
-
-    console.log(collaboratorsInProject);
 
     return (
         <><div
@@ -59,8 +42,17 @@ export function ProjectPage() {
                     }
                     <TagContainer tags={project.tags['skill']} tagType='skill' />
                     <TagContainer tags={project.tags['interest']} tagType='interest' />
+                    <h2>Collaborators</h2>
                     {collaboratorsInProject &&
-                        <UserTable users={collaboratorsInProject} />
+                        <UserTable
+                            users={collaboratorsInProject}
+                            onInvite={(userId) => console.log(`Invite user ${userId}`)} />
+                    }
+                    <h2>Suggested Collaborators</h2>
+                    {collaboratorsInProject &&
+                        <UserTable
+                            users={collaboratorsInProject}
+                            onInvite={(userId) => console.log(`Invite user ${userId}`)} />
                     }
                 </div>
             </div>
