@@ -90,10 +90,10 @@ public partial class DatabaseContext
     {
         var user = GetUserById(id);
         if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
-        var ownedProjects = user.ProjectsAuthored;
-        var collaboratedProjects = user.ProjectsCollaborated.Select(p => p.Project);
-        ownedProjects.AddRange(collaboratedProjects);
-        return (DbErrorStatusCodes.Ok, ownedProjects);
+        var projects = new List<Project>();
+        projects.AddRange(user.ProjectsAuthored);
+        projects.AddRange(user.ProjectsCollaborated.Select(p => p.Project));
+        return (DbErrorStatusCodes.Ok, projects);
     }
 
     internal DbErrorStatusCodes UpdateProject(ProjectPatchRequest requestBody)
