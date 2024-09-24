@@ -6,6 +6,7 @@ import { UserTable } from "../users";
 import { TagContainer } from "../tags";
 import { useCollaborators } from "../../hooks/users/useCollaborators";
 import { useRecommendedUsersForProject } from "../../hooks/users";
+import { useTransactions } from "../../hooks";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
@@ -14,6 +15,7 @@ export function ProjectPage() {
     const { projectById: project } = useProjectById(projectId);
     const { collaboratorsInProject } = useCollaborators(projectId);
     const { recommendedUsersForProject } = useRecommendedUsersForProject(projectId);
+    const { inviteUserToProjectRequest } = useTransactions();
 
     if (!project) {
         return (<NotFound>
@@ -33,7 +35,10 @@ export function ProjectPage() {
         }
     }
 
-    console.log(project.tags['skill']);
+    const handleInvite = (userId: string) => {
+        console.log(`Invites user ${userId} to project ${projectId}`);
+        inviteUserToProjectRequest(userId, projectId);
+    }
 
     return (
         <><div
@@ -54,7 +59,7 @@ export function ProjectPage() {
                     {recommendedUsersForProject &&
                         <UserTable
                             users={recommendedUsersForProject}
-                            onInvite={(userId) => console.log(`Invite user ${userId}`)} />
+                            onInvite={handleInvite} />
                     }
                 </div>
             </div>
