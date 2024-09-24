@@ -1,16 +1,20 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { ProjectCard } from "..";
-import { useRecommendedProjectsForClientUser } from "../../hooks/projects";
+import { useFeaturedProjects, useRecommendedProjectsForClientUser } from "../../hooks/projects";
+import { Project } from "../../types";
 
 export function RecommendedProjectsForClientUser() {
-    const maxProjectsInFeed = 10;
+    const { recommendedProjectsForClientUser } = useRecommendedProjectsForClientUser();
+    const { featuredProjects } = useFeaturedProjects();
+    let projects: Project[] = [];
 
-    let { recommendedProjectsForClientUser: projects } = useRecommendedProjectsForClientUser();
+    if (!recommendedProjectsForClientUser) return;
 
-    if (!projects) return;
-
-    if (projects.length > maxProjectsInFeed)
-        projects = projects.slice(0, maxProjectsInFeed);
+    if (recommendedProjectsForClientUser.length == 0 && featuredProjects) {
+        projects = featuredProjects;
+    } else {
+        projects = recommendedProjectsForClientUser;
+    }
 
     return (
         <div className="p-12 w-screen flex flex-col items-center justify-center">

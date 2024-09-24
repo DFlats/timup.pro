@@ -3,14 +3,9 @@ import { useFeaturedProjects } from "../../hooks/projects";
 import { ProjectCard } from "./projectCard";
 
 export function FeaturedProjects() {
-    const maxProjectsInFeed = 10;
-
-    let { featuredProjects: projects } = useFeaturedProjects();
+    const { featuredProjects: projects } = useFeaturedProjects();
 
     if (!projects) return;
-
-    if (projects.length > maxProjectsInFeed)
-        projects = projects.slice(0, maxProjectsInFeed);
 
     return (
         <div className="flex flex-col items-center justify-center p-12">

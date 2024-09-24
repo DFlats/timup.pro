@@ -3,14 +3,9 @@ import { NewProjectCard, ProjectCard } from "..";
 import { useProjectsOwnedByClientUser } from "../../hooks/projects";
 
 export function ProjectsOwnedByClientUser() {
-    const maxProjectsInFeed = 10;
-
-    let { projectsOwnedByClientUser: projects } = useProjectsOwnedByClientUser();
+    const { projectsOwnedByClientUser: projects } = useProjectsOwnedByClientUser();
 
     if (!projects) return;
-
-    if (projects.length > maxProjectsInFeed)
-        projects = projects.slice(0, maxProjectsInFeed);
 
     return (
         <div className="p-12 w-screen flex flex-col items-center justify-center">
