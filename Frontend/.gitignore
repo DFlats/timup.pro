@@ -23,5 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 
-src/routeTree.gen.ts
 src/api/schema.d.ts

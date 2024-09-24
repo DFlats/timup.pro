@@ -61,12 +61,12 @@ export const getOwnedProjects = async (userId: string) => {
                 userId
             }
         }
-    })
+    });
 
     if (!data || (!response.ok && error))
         throw error;
 
-    return data.map(projectResponse => projectFromProjectResponse(projectResponse))
+    return projectBatchFromProjectBatchResponse(data);
 }
 
 export const createProject = async (projectCore: ProjectCore) => {
@@ -133,7 +133,6 @@ const collaboratorsFrom = (collaborators: components['schemas']['CollaboratorsRe
     });
 
 function projectFromProjectResponse(dto: components['schemas']['ProjectResponse']) {
-    console.log(dto);
     return {
         authorId: dto.authorId!,
         title: dto.title!,

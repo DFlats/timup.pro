@@ -1,4 +1,4 @@
-import { Tag, User, UserCore, UserPatch } from "../../types";
+import { Tag, User, UserBatch, UserCore, UserPatch } from "../../types";
 import { client } from "../client";
 import { components } from "../schema";
 
@@ -34,7 +34,7 @@ export const getRecommendedUsersByProjectId = async (projectId: number, page?: n
     if (!data || (!response.ok && error))
         throw error;
 
-    return data.map(userResponse => userFromUserResponse(userResponse));
+    return userBatchFromUserBatchResponse(data);
 }
 
 export const getUserByUserId = async (userId: string) => {
@@ -94,7 +94,7 @@ export const deleteUser = async (userId: string) => {
 
 const tagsFrom = (skillTags?: string[], interestTags?: string[]) => ({
     'skill': skillTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? [],
-    'interest': interestTags?.map(tag => ({ title: tag, kind: 'skill' } as Tag)) ?? []
+    'interest': interestTags?.map(tag => ({ title: tag, kind: 'interest' } as Tag)) ?? []
 });
 
 export function userFromUserResponse(dto: components['schemas']['UserResponse']) {
@@ -104,4 +104,12 @@ export function userFromUserResponse(dto: components['schemas']['UserResponse'])
         email: dto.email!,
         tags: tagsFrom(dto.skillTags, dto.interestTags)
     } as User;
+}
+
+export function userBatchFromUserBatchResponse(dto: components['schemas']['UserBatchResponse']) {
+    return {
+        users: dto.userResponses!.map(user => userFromUserResponse(user)),
+        currentPage: dto.currentPage!,
+        nextPage: dto.nextPage
+    } as UserBatch;
 }

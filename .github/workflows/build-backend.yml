@@ -1,0 +1,57 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore dependencies backend
+      run: dotnet restore
+      working-directory: Backend
+
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: Backend
+
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      working-directory: Backend
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '22'
+
+    - name: Install dependencies frontend
+      run: npm install
+      working-directory: Frontend
+
+    - name: Build frontend
+      run: npm run build
+      working-directory: Frontend
+
+    - name: Test frontend
+      run: npm run test
+      working-directory: Frontend
+
+    # - name: Merge main into deploy
+    #   run: |
+    #     git config --global user.name 'github-actions'
+    #     git config --global user.email 'github-actions@github.com'
+    #     git checkout -b deploy
+    #     git merge main
+    #     git push origin deploy
