@@ -27,5 +27,5 @@ export type ProjectPatch = {
 export type ProjectBatch = {
     projects: Project[],
     currentPage: number,
-    nextPage: number
+    nextPage?: number
 }

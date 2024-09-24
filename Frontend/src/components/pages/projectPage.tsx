@@ -4,10 +4,9 @@ import { useProjectById } from "../../hooks/projects";
 import { NotFound } from "../routing";
 import { UserTable } from "../users";
 import { TagContainer } from "../tags";
-import { useCollaborators } from "../../hooks/users/useCollaborators";
-import { useRecommendedUsersForProject } from "../../hooks/users";
 import { useTransactions } from "../../hooks";
-import { Tags, TagType } from "../../types";
+import { Tags } from "../../types";
+import { useCollaborators, useRecommendedUsersForProject } from "../../hooks/users";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
