@@ -49,11 +49,6 @@ export function ProjectPage() {
                             onInvite={(userId) => console.log(`Invite user ${userId}`)} />
                     }
                     <h2>Suggested Collaborators</h2>
-                    {collaboratorsInProject &&
-                        <UserTable
-                            users={collaboratorsInProject}
-                            onInvite={(userId) => console.log(`Invite user ${userId}`)} />
-                    }
                 </div>
             </div>
         </div>
