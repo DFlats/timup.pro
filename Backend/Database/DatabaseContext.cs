@@ -16,7 +16,7 @@ public partial class DatabaseContext(DbContextOptions options) : DbContext(optio
         modelBuilder.Entity<Project>()
             .HasOne(p => p.Author)
             .WithMany(u => u.ProjectsAuthored)
-            .HasForeignKey(p => p.Author.ClerkId)
+            .HasForeignKey(p => p.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Description>()

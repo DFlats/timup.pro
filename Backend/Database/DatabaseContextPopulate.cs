@@ -153,7 +153,7 @@ public partial class DatabaseContext
         var projectFaker = new Faker<Project>()
             .RuleFor(p => p.Title, f => projectTitles[projectTitlesIndex])
             .RuleFor(p => p.Author, f => fakedUser)
-            .RuleFor(p => p.Author.ClerkId, (f, p) => authorId)
+            .RuleFor(p => p.AuthorId, (f, p) => authorId)
             .RuleFor(p => p.Description, f => descriptionFaker.Generate())
             .RuleFor(p => p.Progress, f => new Progress());
 

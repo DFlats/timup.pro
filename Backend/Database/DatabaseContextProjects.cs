@@ -67,6 +67,7 @@ public partial class DatabaseContext
         {
             Title = projectRequest.Title,
             Author = user,
+            AuthorId = user.ClerkId,
             Description = description,
         };
         Descriptions.Add(description);
@@ -164,7 +165,7 @@ public partial class DatabaseContext
 
     private bool AddUserToProject(User user, Project project)
     {
-        if (project.Author.ClerkId == user.ClerkId) return false;
+        if (project.AuthorId == user.ClerkId) return false;
         if (project.Collaborators.Any(u => u.UserId == user.ClerkId)) return false;
         project.Collaborators.Add(new Collaborator { UserId = user.ClerkId, User = user });
         user.ProjectsAuthored.Add(project);
