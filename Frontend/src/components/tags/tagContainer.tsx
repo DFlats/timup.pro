@@ -11,8 +11,8 @@ interface Props {
 export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
     const heading = () => {
         switch (tagType) {
-            case 'skill': return 'Skills'
-            case 'interest': return 'Interests'
+            case 'skill': return 'Required Skills'
+            case 'interest': return 'Topics'
         }
     }
 
@@ -35,7 +35,7 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
     };
 
     return (
-        <div className='rounded-xl bg-opacity-5 bg-white p-3 m-2'>
+        <div className='rounded-xl bg-opacity-5 bg-white p-3 mb-2'>
             <h2>{heading()}</h2>
             <div className="flex flex-row overflow-x-auto no-scrollbar">
                 {tags.length > 0 &&
