@@ -17,10 +17,10 @@ export const getProjects = async (skillTags: string[] = [], interestTags: string
     if (!data || (!response.ok && error))
         throw error;
 
-    return data.map(projectResponse => projectFromProjectResponse(projectResponse));
+    return projectsFromProjectBatchResponse(data);
 }
 
-export const getRecommendedProjectsByUserId = async (userId: string, page?: number) => {
+export const getRecommendedProjects = async (userId: string, page?: number) => {
     const { response, data, error } = await client.GET('/api/Projects/GetRecommendedProjects/{userId}', {
         params: {
             path: {
@@ -36,10 +36,10 @@ export const getRecommendedProjectsByUserId = async (userId: string, page?: numb
     if (!data || (!response.ok && error))
         throw error;
 
-    return data.map(projectResponse => projectFromProjectResponse(projectResponse))
+    return projectsFromProjectBatchResponse(data);
 }
 
-export const getProjectByProjectId = async (projectId: number) => {
+export const getProject = async (projectId: number) => {
     const { response, data, error } = await client.GET("/api/Projects/GetProject/{projectId}", {
         params: {
             path: {
@@ -54,7 +54,7 @@ export const getProjectByProjectId = async (projectId: number) => {
     return projectFromProjectResponse(data);
 }
 
-export const getProjectsByUserId = async (userId: string) => {
+export const getOwnedProjects = async (userId: string) => {
     const { response, data, error } = await client.GET('/api/Projects/GetOwnedProjects/{userId}', {
         params: {
             path: {
@@ -101,7 +101,7 @@ export const updateProject = async (projectPatch: ProjectPatch, projectId: numbe
     if (!response.ok && error)
         throw error;
 
-    return await getProjectByProjectId(projectId);
+    return await getProject(projectId);
 }
 
 export const deleteProject = async (projectId: number) => {
@@ -141,4 +141,8 @@ function projectFromProjectResponse(dto: components['schemas']['ProjectResponse'
         isCompleted: dto.isCompleted!,
         invitedUsersIds: dto.invitedUsers!
     } as Project;
+}
+
+function projectsFromProjectBatchResponse(dto: components['schemas']['ProjectBatchResponse']) {
+    return dto.projectResponses!.map(project => projectFromProjectResponse(project));
 }
