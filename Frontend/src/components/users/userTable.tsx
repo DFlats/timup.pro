@@ -1,16 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { UserRow } from "../../components/users";
-import { useRecommendedUsersForProject } from "../../hooks/users";
-import { Project } from "../../types";
+import { User } from "../../types";
 
 interface props {
-    project: Project;
+    users: User[],
+    onInvite?: (userId: string) => void
 }
 
-export function UserTable({ project }: props) {
-    const projectId = project.id
-    const { recommendedUsersForProject: users } = useRecommendedUsersForProject(projectId);
-
+export function UserTable({ users, onInvite }: props) {
     return (
         // <Link className="" to='/project/$id' params={{ id: projectId.toString() }}>
         <table className="table">
@@ -19,10 +16,10 @@ export function UserTable({ project }: props) {
                     <th>User Profile</th>
                     <th>Matching Skills</th>
                     <th>Matching Interests</th>
-                    <th></th>
+                    {onInvite && <th></th>}
                 </tr>
             </thead>
-            {users && users.map(user => <UserRow key={user.id} user={user} project={project} size='compact' />)}
+            {users && users.map(user => <UserRow key={user.id} onInvite={onInvite} user={user} size='compact' />)}
         </table>
         // </Link>
     )

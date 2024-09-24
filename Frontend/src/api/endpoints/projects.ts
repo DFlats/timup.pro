@@ -133,7 +133,6 @@ const collaboratorsFrom = (collaborators: components['schemas']['CollaboratorsRe
     });
 
 function projectFromProjectResponse(dto: components['schemas']['ProjectResponse']) {
-    console.log(dto);
     return {
         authorId: dto.authorId!,
         title: dto.title!,
