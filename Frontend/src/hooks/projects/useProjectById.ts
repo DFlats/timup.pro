@@ -10,7 +10,7 @@ export function useProjectById(projectId: number) {
         queryKey: queryKey,
         queryFn: async () => {
             if (!projectId) return;
-            return await endpoints.projects.getProjectByProjectId(projectId);
+            return await endpoints.projects.getProject(projectId);
         }
     });
 

@@ -27,7 +27,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["Projects_GetProjects"];
+        get: operations["Projects_GetProjectBatch"];
         put?: never;
         post?: never;
         delete?: never;
@@ -43,7 +43,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["Projects_GetRecommendedProjectsByUserId"];
+        get: operations["Projects_GetRecommendedProjectsBatchByUserId"];
         put?: never;
         post?: never;
         delete?: never;
@@ -360,6 +360,13 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        ProjectBatchResponse: {
+            projectResponses?: components["schemas"]["ProjectResponse"][];
+            /** Format: int32 */
+            currentPage?: number;
+            /** Format: int32 */
+            nextPage?: number | null;
+        };
         ProjectResponse: {
             /** Format: int32 */
             id?: number;
@@ -447,7 +454,7 @@ export interface operations {
             };
         };
     };
-    Projects_GetProjects: {
+    Projects_GetProjectBatch: {
         parameters: {
             query?: {
                 interests?: string[] | null;
@@ -465,12 +472,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ProjectResponse"][];
+                    "application/json": components["schemas"]["ProjectBatchResponse"];
                 };
             };
         };
     };
-    Projects_GetRecommendedProjectsByUserId: {
+    Projects_GetRecommendedProjectsBatchByUserId: {
         parameters: {
             query?: {
                 page?: number;
@@ -488,7 +495,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ProjectResponse"][];
+                    "application/json": components["schemas"]["ProjectBatchResponse"];
                 };
             };
             404: {
@@ -1114,6 +1121,14 @@ export interface operations {
             };
         };
         responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserResponse"];
+                };
+            };
             201: {
                 headers: {
                     [name: string]: unknown;
@@ -1121,6 +1136,12 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["UserResponse"];
                 };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

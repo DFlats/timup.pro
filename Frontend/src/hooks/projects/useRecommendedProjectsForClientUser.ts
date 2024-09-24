@@ -11,7 +11,7 @@ export function useRecommendedProjectsForClientUser() {
         queryFn: async () => {
             if (!clientUser) return [];
 
-            return await endpoints.projects.getRecommendedProjectsByUserId(clientUser.id);
+            return await endpoints.projects.getRecommendedProjects(clientUser.id);
         }
     });
 

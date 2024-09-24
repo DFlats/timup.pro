@@ -79,10 +79,9 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
         return status switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("Could not find a user for given project"),
-            DbErrorStatusCodes.Ok => Ok(),
+            DbErrorStatusCodes.Ok => Ok((ProjectResponse)project!),
             _ => StatusCode(500),
         };
-
     }
 
     [HttpPatch("UpdateProject")]

@@ -102,8 +102,6 @@ export function userFromUserResponse(dto: components['schemas']['UserResponse'])
         id: dto.id!,
         name: dto.name!,
         email: dto.email!,
-        interestTags: dto.interestTags!,
-        skillTags: dto.skillTags!,
         tags: tagsFrom(dto.skillTags, dto.interestTags)
     } as User;
 }

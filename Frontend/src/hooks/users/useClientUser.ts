@@ -43,10 +43,10 @@ export function useClientUser() {
         if (operation == 'add') {
             switch (tag.kind) {
                 case 'skill':
-                    if (clientUser.skillTags.includes(tag.title)) return;
+                    if (clientUser.tags['skill'].map(t => t.title).includes(tag.title)) return;
                     break;
                 case 'interest':
-                    if (clientUser.interestTags.includes(tag.title)) return;
+                    if (clientUser.tags['interest'].map(t => t.title).includes(tag.title)) return;
                     break;
             }
         }

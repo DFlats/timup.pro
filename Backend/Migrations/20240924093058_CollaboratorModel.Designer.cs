@@ -4,6 +4,7 @@ using Backend.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240924093058_CollaboratorModel")]
+    partial class CollaboratorModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,24 +27,21 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Collaborator", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserClerkId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserClerkId");
 
                     b.ToTable("Collaborator");
                 });
@@ -110,29 +110,6 @@ namespace Backend.Migrations
                     b.HasIndex("ProgressId");
 
                     b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("Backend.Models.ProjectCollaborated", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserClerkId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserClerkId");
-
-                    b.ToTable("ProjectCollaborated");
                 });
 
             modelBuilder.Entity("Backend.Models.ProjectInvite", b =>
@@ -218,7 +195,7 @@ namespace Backend.Migrations
 
                     b.HasOne("Backend.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserClerkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -250,21 +227,6 @@ namespace Backend.Migrations
                     b.Navigation("Description");
 
                     b.Navigation("Progress");
-                });
-
-            modelBuilder.Entity("Backend.Models.ProjectCollaborated", b =>
-                {
-                    b.HasOne("Backend.Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Models.User", null)
-                        .WithMany("ProjectCollaborateds")
-                        .HasForeignKey("UserClerkId");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Backend.Models.ProjectInvite", b =>
@@ -313,8 +275,6 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.User", b =>
                 {
-                    b.Navigation("ProjectCollaborateds");
-
                     b.Navigation("ProjectInvites");
 
                     b.Navigation("Projects");
