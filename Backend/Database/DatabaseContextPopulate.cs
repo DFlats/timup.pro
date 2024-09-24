@@ -84,7 +84,7 @@ public partial class DatabaseContext
                     UserId = user.ClerkId,
                     User = user
                 };
-                if (project.AuthorId == user.ClerkId) continue;
+                if (project.Author.ClerkId == user.ClerkId) continue;
                 if (project.Collaborators.Count != 0 && project.Collaborators.Any(u => u.UserId == user.ClerkId)) continue;
                 project.Collaborators.Add(collaborator);
                 user.ProjectsCollaborated.Add(new ProjectCollaborated { Project = project, ProjectId = project.Id });
