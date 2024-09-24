@@ -11,6 +11,7 @@ public partial class DatabaseContext
         return [.. Projects.Include(p => p.Author)
                             .Include(p => p.Description)
                             .ThenInclude(p => p.Tags)
+                            .Include(p => p.Collaborators)
                             .Skip(((int)page! - 1) * _pageSize)
                             .Take(_pageSize)
                             .Select(p => (ProjectResponse) p)];
@@ -25,6 +26,7 @@ public partial class DatabaseContext
             .Include(p => p.Author)
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
+            .Include(p => p.Collaborators)
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
@@ -44,6 +46,7 @@ public partial class DatabaseContext
             .Include(p => p.Author)
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
+            .Include(p => p.Collaborators)
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
@@ -78,6 +81,7 @@ public partial class DatabaseContext
         return Projects.Include(p => p.Description).ThenInclude(d => d.Tags)
                         .Include(p => p.Author)
                         .Include(P => P.Progress)
+                        .Include(p => p.Collaborators)
                         .Include(p => p.ProjectInvites).ThenInclude(i => i.User)
                         .FirstOrDefault(p => p.Id == id);
     }
