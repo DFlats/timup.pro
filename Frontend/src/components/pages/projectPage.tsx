@@ -10,6 +10,7 @@ import { useRecommendedUsersForProject } from "../../hooks/users";
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
     const projectId = Number.parseInt(Route.useParams().id);
+
     const { projectById: project } = useProjectById(projectId);
     const { collaboratorsInProject } = useCollaborators(projectId);
     const { recommendedUsersForProject } = useRecommendedUsersForProject(projectId);
@@ -21,6 +22,18 @@ export function ProjectPage() {
     }
 
     if (!collaboratorsInProject) return;
+
+    for (const tag of project.tags['skill']) {
+        for (const collaborator of collaboratorsInProject) {
+            for (const collaboratorTag of collaborator.tags['skill']) {
+                if (collaboratorTag.title == tag.title) {
+                    tag.count = tag.count == undefined ? 0 : tag.count + 1;
+                }
+            }
+        }
+    }
+
+    console.log(project.tags['skill']);
 
     return (
         <><div

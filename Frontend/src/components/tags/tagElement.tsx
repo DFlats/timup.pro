@@ -21,7 +21,7 @@ export function TagElement({ tag, onClick }: TagElementProps) {
         <button
             className={`${onClick ? "btn" : "p-4"} rounded-full m-2 text-white ${color}`}
             onClick={(e) => handleClick(e)}>
-            <p>{tag.title}</p>
+            <p>{`${tag.title}${tag.count ? ` ${`😶`.repeat(tag.count)}` : ''}`}</p>
         </button>
     );
 }
