@@ -48,10 +48,10 @@ jobs:
       run: npm run test
       working-directory: Frontend
 
-    - name: Merge main into deploy
-      run: |
-        git config --global user.name 'github-actions'
-        git config --global user.email 'github-actions@github.com'
-        git checkout -b deploy
-        git merge main
-        git push origin deploy
+    # - name: Merge main into deploy
+    #   run: |
+    #     git config --global user.name 'github-actions'
+    #     git config --global user.email 'github-actions@github.com'
+    #     git checkout -b deploy
+    #     git merge main
+    #     git push origin deploy
