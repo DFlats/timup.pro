@@ -6,7 +6,7 @@ import { ProjectFeedTitle } from "./layout/projectFeedTitle";
 import { ProjectCard } from "./projectCard";
 
 export function FeaturedProjects() {
-    const { featuredProjects: projects } = useFeaturedProjects();
+    const { featuredProjects: projects, fetchNextPage } = useFeaturedProjects();
 
     if (!projects) return;
 
@@ -16,6 +16,7 @@ export function FeaturedProjects() {
             <ProjectFeedCardContainer>
                 {projects && projects.map(project => <ProjectCard key={project.id} project={project} />)}
             </ProjectFeedCardContainer>
+            <button onClick={() => fetchNextPage()}>Fetch More Projects</button>
         </ProjectFeed>
     );
 }
