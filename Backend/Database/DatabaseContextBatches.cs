@@ -88,7 +88,7 @@ partial class DatabaseContext
         {
             DbErrorStatusCodes.ProjectNotFound => (DbErrorStatusCodes.UserNotFound, null),
             DbErrorStatusCodes.Ok => (DbErrorStatusCodes.Ok, new UserBatchResponse(
-                usersResponse!.Select(u => (UserResponse) u).ToList(),
+                usersResponse!.Select(u => (UserResponse)u).ToList(),
                 (int)page!,
                 usersCount / _pageSize > page ? page + 1 : null)
             ),
@@ -96,15 +96,30 @@ partial class DatabaseContext
         };
     }
 
-        internal (DbErrorStatusCodes, ProjectBatchResponse?) GetProjectBatchByUserId(string id, int? page)
+    internal (DbErrorStatusCodes, ProjectBatchResponse?) GetProjectBatchByUserId(string id, int? page)
     {
         var (status, projects, hasNext) = GetProjectsByUserId(id, page);
-        if(status != DbErrorStatusCodes.Ok) return (status, null);
-        var projectResponses = projects!.Select( p => (ProjectResponse) p).ToList();
-        int? nextPage = hasNext ? page+1 : null;
-        int CurrentPage = (int) page!;
-        return (DbErrorStatusCodes.Ok, new ProjectBatchResponse (projectResponses, (int) page!, nextPage));
+        if (status != DbErrorStatusCodes.Ok) return (status, null);
+        var projectResponses = projects!.Select(p => (ProjectResponse)p).ToList();
+        int? nextPage = hasNext ? page + 1 : null;
+        int CurrentPage = (int)page!;
+        return (DbErrorStatusCodes.Ok, new ProjectBatchResponse(projectResponses, (int)page!, nextPage));
     }
+
+    internal  UserBatchResponse GetUserBatchByFilter(string[]? skills, string[]? interests, int? page = 1)
+    {
+        var (users, hasNext) = GetUsersByFilter(skills, interests, page);
+        int? nextPage = hasNext ? page + 1 : null;
+        return  new UserBatchResponse(users, (int)page!, nextPage);
+    }
+
+    internal  UserBatchResponse GetAllUserBatch(int? page = 1)
+    {
+        var (users, hasNext) = GetAllUsers(page);
+        int? nextPage = hasNext ? page + 1 : null;
+        return  new UserBatchResponse(users, (int)page!, nextPage);
+    }
+
 
 
 }

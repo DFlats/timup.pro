@@ -7,27 +7,41 @@ namespace Backend.Database;
 
 public partial class DatabaseContext
 {
-    internal List<UserResponse> GetAllUsers(int? page = 1)
+    internal (List<UserResponse>, bool) GetAllUsers(int? page = 1)
     {
-        return [.. Users
+        var users = Users
             .Include(u => u.Tags)
+            .Select(u => (UserResponse)u).ToList();
+
+        bool hasNext = page * _pageSize < users.Count;
+
+        users = users
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
-            .Select(u => (UserResponse) u)];
+            .ToList();
+
+        return (users, hasNext);
     }
 
-    internal List<UserResponse> GetUsersByFilter(string[]? skills, string[]? interests, int? page = 1)
+    internal (List<UserResponse>, bool) GetUsersByFilter(string[]? skills, string[]? interests, int? page = 1)
     {
 
         skills ??= [];
         interests ??= [];
 
-        return [.. Users
+        var users = Users
             .Include(u => u.Tags)
             .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Select(u => (UserResponse)u).ToList();
+
+        bool hasNext = page * _pageSize < users.Count;
+
+        users = users
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
-            .Select(u => (UserResponse)u)];
+            .ToList();
+
+        return (users, hasNext);
     }
 
     internal User? GetUserById(string id)
@@ -38,13 +52,13 @@ public partial class DatabaseContext
         .Include(u => u.ProjectsAuthored).ThenInclude(p => p.Progress)
         .Include(u => u.ProjectsAuthored).ThenInclude(p => p.ProjectInvites)
         //.Include(u => u.ProjectsAuthored).ThenInclude(p => p.Author)
-        
+
         .Include(u => u.ProjectsCollaborated).ThenInclude(p => p.Project).ThenInclude(p => p.Collaborators).ThenInclude(c => c.User)
         .Include(u => u.ProjectsCollaborated).ThenInclude(p => p.Project).ThenInclude(p => p.Description).ThenInclude(d => d.Tags)
         .Include(u => u.ProjectsCollaborated).ThenInclude(p => p.Project).ThenInclude(p => p.Progress)
         .Include(u => u.ProjectsCollaborated).ThenInclude(p => p.Project).ThenInclude(p => p.Author)
         .Include(u => u.ProjectsCollaborated).ThenInclude(p => p.Project).ThenInclude(p => p.ProjectInvites)
-        
+
         .Include(u => u.Tags)
         .FirstOrDefault(u => u.ClerkId == id);
         if (user is null) return null;
