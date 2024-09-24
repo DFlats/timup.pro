@@ -1,6 +1,6 @@
 import { client } from '../client'
 import { components } from '../schema';
-import { Project, ProjectCore, ProjectPatch, UserIdName } from '../../types/projects';
+import { Project, ProjectBatch, ProjectCore, ProjectPatch, UserIdName } from '../../types/projects';
 import { Tag } from '../../types';
 
 export const getProjects = async (skillTags: string[] = [], interestTags: string[] = [], page?: number) => {
@@ -17,7 +17,7 @@ export const getProjects = async (skillTags: string[] = [], interestTags: string
     if (!data || (!response.ok && error))
         throw error;
 
-    return projectsFromProjectBatchResponse(data);
+    return projectBatchFromProjectBatchResponse(data);
 }
 
 export const getRecommendedProjects = async (userId: string, page?: number) => {
@@ -145,4 +145,12 @@ function projectFromProjectResponse(dto: components['schemas']['ProjectResponse'
 
 function projectsFromProjectBatchResponse(dto: components['schemas']['ProjectBatchResponse']) {
     return dto.projectResponses!.map(project => projectFromProjectResponse(project));
+}
+
+function projectBatchFromProjectBatchResponse(dto: components['schemas']['ProjectBatchResponse']) {
+    return {
+        projects: dto.projectResponses!.map(project => projectFromProjectResponse(project)),
+        page: dto.currentPage!,
+        nextPage: dto.nextPage!
+    } as ProjectBatch;
 }

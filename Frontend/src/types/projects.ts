@@ -23,3 +23,9 @@ export type ProjectPatch = {
     tags?: Tags,
     isCompleted?: boolean;
 }
+
+export type ProjectBatch = {
+    projects: Project[],
+    page: number,
+    nextPage: number
+}
