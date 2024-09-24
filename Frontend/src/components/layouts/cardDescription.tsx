@@ -7,7 +7,7 @@ interface Props {
 
 export function CardDescription({ children }: Props) {
     return (
-        <div className='max-w-full'>
+        <div className='max-w-full mt-4'>
             {children}
         </div>
     )

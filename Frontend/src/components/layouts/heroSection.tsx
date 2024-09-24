@@ -5,7 +5,7 @@ import "./heroSection.css";
 export function HeroSection() {
 
     return (
-        <section className="flex justify-around mt-32">
+        <section className="flex justify-around mt-32 mb-10">
             <div className="max-w-2xl pl-20">
                 <h1 className="text-slate-50 text-6xl mt-10">Join the Creative Community!</h1>
                 <p className="text-slate-50 text-3xl mt-5">Collaborate on innovative projects with skilled partners who are eager to contribute.</p>
