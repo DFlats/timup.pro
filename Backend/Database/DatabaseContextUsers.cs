@@ -34,8 +34,17 @@ public partial class DatabaseContext
     {
         var user = Users
         .Include(u => u.ProjectsAuthored).ThenInclude(p => p.Description).ThenInclude(d => d.Tags)
-        .Include(u => u.ProjectsAuthored).ThenInclude(p => p.Collaborators)
+        .Include(u => u.ProjectsAuthored).ThenInclude(p => p.Collaborators).ThenInclude(c => c.User)
+        .Include(u => u.ProjectsAuthored).ThenInclude(p => p.Progress)
+        .Include(u => u.ProjectsAuthored).ThenInclude(p => p.ProjectInvites)
+        //.Include(u => u.ProjectsAuthored).ThenInclude(p => p.Author)
+        
         .Include(u => u.ProjectsCollaborated).ThenInclude(p => p.Project).ThenInclude(p => p.Collaborators).ThenInclude(c => c.User)
+        .Include(u => u.ProjectsCollaborated).ThenInclude(p => p.Project).ThenInclude(p => p.Description).ThenInclude(d => d.Tags)
+        .Include(u => u.ProjectsCollaborated).ThenInclude(p => p.Project).ThenInclude(p => p.Progress)
+        .Include(u => u.ProjectsCollaborated).ThenInclude(p => p.Project).ThenInclude(p => p.Author)
+        .Include(u => u.ProjectsCollaborated).ThenInclude(p => p.Project).ThenInclude(p => p.ProjectInvites)
+        
         .Include(u => u.Tags)
         .FirstOrDefault(u => u.ClerkId == id);
         if (user is null) return null;
