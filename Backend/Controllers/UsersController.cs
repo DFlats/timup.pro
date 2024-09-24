@@ -29,14 +29,14 @@ public class UsersController(DatabaseContext db) : ControllerBase
     [ProducesResponseType(typeof(List<UserResponse>), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public ActionResult<List<UserResponse>> GetRecommendedUsersByProjectId(int projectId, [FromQuery(Name = "page")] int? page = 1)
+    public ActionResult<UserBatchResponse> GetRecommendedUsersByProjectId(int projectId, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var users) = db.GetRecommendedUsersByProjectId(projectId, page);
+        (var status, var batch) = db.GetRecommendedUserBatchByProjectId(projectId, page);
 
         return status switch
         {
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
-            DbErrorStatusCodes.Ok => users!.Select(u => (UserResponse)u).ToList(),
+            DbErrorStatusCodes.Ok => batch!,
             _ => StatusCode(500),
         };
     }
@@ -52,11 +52,20 @@ public class UsersController(DatabaseContext db) : ControllerBase
     }
 
     [HttpPost("ConfirmUserExists")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(UserResponse), 200)]
+    [ProducesResponseType(typeof(UserResponse), 201)]
+    [ProducesResponseType(500)]
     public IActionResult ConfirmUserExists(UserRequest userToCheck)
     {
-        var (_, user) = db.CreateUser(userToCheck);
-        return Ok();
+        var (status, user) = db.CreateUser(userToCheck);
+
+        return status switch
+        {
+            DbErrorStatusCodes.UserAlreadyExists => Ok((UserResponse) db.GetUserById(userToCheck.ClerkId)!),
+            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetUserByUserId), new {userId = user!.ClerkId},(UserResponse) user),
+            DbErrorStatusCodes.FatalError => StatusCode(500),
+            _ => StatusCode(500),
+        };
     }
 
     [HttpPatch("UpdateUser")]
