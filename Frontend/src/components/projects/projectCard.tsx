@@ -19,6 +19,9 @@ export function ProjectCard({ project }: Props) {
                         {project.description}
                     </CardDescription>
                 </div>
+                <div>
+                    <p>{`Collaborators: ${project.collaborators.length}`}</p>
+                </div>
                 <div className="h-1/2">
                     <TagContainer tags={project.tags['skill']} tagType={'skill'} />
                     <TagContainer tags={project.tags['interest']} tagType={'interest'} />
