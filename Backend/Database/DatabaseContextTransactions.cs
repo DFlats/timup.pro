@@ -6,7 +6,7 @@ public partial class DatabaseContext
 {
     private bool RemoveCollaboratorFromProject(User user, Project project)
     {
-        if (project.AuthorId == user.ClerkId) return false;
+        if (project.Author.ClerkId == user.ClerkId) return false;
         if (!project.Collaborators.Any(u => u.UserId == user.ClerkId)) return false;
         var collaborator = project.Collaborators.First(c => c.UserId == user.ClerkId);
         project.Collaborators.Remove(collaborator);
@@ -25,7 +25,7 @@ public partial class DatabaseContext
         var project = GetProjectById(projectId);
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
 
-        if (project.AuthorId == userId) return DbErrorStatusCodes.UserAlreadyInProject;
+        if (project.Author.ClerkId == userId) return DbErrorStatusCodes.UserAlreadyInProject;
 
         if (project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
 
@@ -55,7 +55,7 @@ public partial class DatabaseContext
         var project = GetProjectById(projectId);
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
 
-        if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
+        if (project.Author.ClerkId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
         if (project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
 
@@ -100,7 +100,7 @@ public partial class DatabaseContext
         var project = GetProjectById(projectId);
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
 
-        if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
+        if (project.Author.ClerkId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
         if (!project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserNotFoundInProject;
 
@@ -117,7 +117,7 @@ public partial class DatabaseContext
         var project = GetProjectById(projectId);
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
 
-        if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
+        if (project.Author.ClerkId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
         if (!project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserNotFoundInProject;
 
@@ -134,7 +134,7 @@ public partial class DatabaseContext
         var project = GetProjectById(projectId);
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
 
-        if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
+        if (project.Author.ClerkId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
         if (project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
 
@@ -165,7 +165,7 @@ public partial class DatabaseContext
         var project = GetProjectById(projectId);
         if (project is null) return DbErrorStatusCodes.ProjectNotFound;
 
-        if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
+        if (project.Author.ClerkId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
         if (project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
 

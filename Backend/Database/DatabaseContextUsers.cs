@@ -202,7 +202,7 @@ public partial class DatabaseContext
     {
         var user = Users.Include(u => u.Tags).FirstOrDefault(u => u.ClerkId == userId);
         if (user is null) return DbErrorStatusCodes.UserNotFound;
-        var projects = Projects.Where(p => p.AuthorId == userId);
+        var projects = Projects.Where(p => p.Author.ClerkId == userId);
         if (projects is not null)
         {
             foreach (var p in projects)

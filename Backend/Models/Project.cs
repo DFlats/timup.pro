@@ -10,9 +10,6 @@ public class Project
     public string Title { get; set; } = null!;
     [Required]
     public User Author { get; set; } = null!;
-    [Required]
-    [ForeignKey("AuthorId")]
-    public string AuthorId { get; set; } = null!;
     public List<Collaborator> Collaborators { get; set; } = [];
     [Required]
     public Description Description { get; set; } = null!;
