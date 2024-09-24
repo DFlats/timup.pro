@@ -7,6 +7,7 @@ import { TagContainer } from "../tags";
 import { useCollaborators } from "../../hooks/users/useCollaborators";
 import { useRecommendedUsersForProject } from "../../hooks/users";
 import { useTransactions } from "../../hooks";
+import { Tags, TagType } from "../../types";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
@@ -25,15 +26,18 @@ export function ProjectPage() {
 
     if (!collaboratorsInProject) return;
 
-    for (const tag of project.tags['skill']) {
-        for (const collaborator of collaboratorsInProject) {
-            for (const collaboratorTag of collaborator.tags['skill']) {
-                if (collaboratorTag.title == tag.title) {
-                    tag.count = tag.count == undefined ? 0 : tag.count + 1;
-                }
-            }
-        }
-    }
+    const projectTags = {
+        'skill': project.tags['skill'].map(projectTag => ({
+            ...projectTag,
+            count: collaboratorsInProject.reduce((currentSum, collaborator) =>
+                currentSum + (collaborator.tags['skill'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
+        })),
+        'interest': project.tags['skill'].map(projectTag => ({
+            ...projectTag,
+            count: collaboratorsInProject.reduce((currentSum, collaborator) =>
+                currentSum + (collaborator.tags['interest'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
+        })),
+    } as Tags;
 
     const handleInvite = (userId: string) => {
         console.log(`Invites user ${userId} to project ${projectId}`);
@@ -48,8 +52,8 @@ export function ProjectPage() {
                 <div className="max-w-screen-lg">
                     <h1 className="text-5xl font-bold">{project.title}</h1>
                     <p className="py-6">{project.description}</p>
-                    <TagContainer tags={project.tags['skill']} tagType='skill' />
-                    <TagContainer tags={project.tags['interest']} tagType='interest' />
+                    <TagContainer tags={projectTags['skill']} tagType='skill' />
+                    <TagContainer tags={projectTags['interest']} tagType='interest' />
                     <h2 className='text-2xl m-2'>Collaborators</h2>
                     {collaboratorsInProject &&
                         <UserTable
