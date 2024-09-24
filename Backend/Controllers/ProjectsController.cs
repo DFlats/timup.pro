@@ -82,7 +82,6 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.Ok => Ok(),
             _ => StatusCode(500),
         };
-
     }
 
     [HttpPatch("UpdateProject")]

@@ -54,7 +54,6 @@ export const getProjectByProjectId = async (projectId: number) => {
     return projectFromProjectResponse(data);
 }
 
-//!!! Endpoint returns ProjectOverviewResponse
 export const getProjectsByUserId = async (userId: string) => {
     const { response, data, error } = await client.GET('/api/Projects/GetOwnedProjects/{userId}', {
         params: {
@@ -76,6 +75,7 @@ export const createProject = async (projectCore: ProjectCore) => {
         description: projectCore.description,
         title: projectCore.title
     } as components['schemas']['ProjectRequest'];
+    console.log(requestBody)
 
     const { response, data, error } = await client.POST('/api/Projects/CreateProject', {
         body: requestBody
