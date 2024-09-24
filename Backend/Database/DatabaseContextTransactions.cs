@@ -7,9 +7,12 @@ public partial class DatabaseContext
     private bool RemoveCollaboratorFromProject(User user, Project project)
     {
         if (project.AuthorId == user.ClerkId) return false;
-        if (!project.Collaborators.Any(u => u.ClerkId == user.ClerkId)) return false;
-        project.Collaborators.Remove(user);
-        user.Projects.Remove(project);
+        if (!project.Collaborators.Any(u => u.UserId == user.ClerkId)) return false;
+        var collaborator = project.Collaborators.First(c => c.UserId == user.ClerkId);
+        project.Collaborators.Remove(collaborator);
+        var collaborationRef = user.ProjectsCollaborated.FirstOrDefault(c => c.ProjectId == project.Id);
+        if(collaborationRef == null) return false;
+        user.ProjectsCollaborated.Remove(collaborationRef);
         SaveChanges();
         return true;
     }
@@ -24,7 +27,7 @@ public partial class DatabaseContext
 
         if (project.AuthorId == userId) return DbErrorStatusCodes.UserAlreadyInProject;
 
-        if (project.Collaborators.Any(u => u.ClerkId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
+        if (project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
 
         if (project.ProjectInvites.Any(p => p.User.ClerkId == userId)) return DbErrorStatusCodes.UserAlreadyInvited;
 
@@ -54,7 +57,7 @@ public partial class DatabaseContext
 
         if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
-        if (project.Collaborators.Any(u => u.ClerkId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
+        if (project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
 
         if (!project.ProjectInvites.Any(p => p.User.ClerkId == userId)) return DbErrorStatusCodes.UserNotFoundInProject;
 
@@ -99,7 +102,7 @@ public partial class DatabaseContext
 
         if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
-        if (!project.Collaborators.Any(u => u.ClerkId == userId)) return DbErrorStatusCodes.UserNotFoundInProject;
+        if (!project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserNotFoundInProject;
 
         RemoveCollaboratorFromProject(user, project);
 
@@ -116,7 +119,7 @@ public partial class DatabaseContext
 
         if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
-        if (!project.Collaborators.Any(u => u.ClerkId == userId)) return DbErrorStatusCodes.UserNotFoundInProject;
+        if (!project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserNotFoundInProject;
 
         RemoveCollaboratorFromProject(user, project);
 
@@ -133,7 +136,7 @@ public partial class DatabaseContext
 
         if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
-        if (project.Collaborators.Any(u => u.ClerkId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
+        if (project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
 
         if (user.ProjectInvites.Any(i => i.Project.Id == projectId)) return DbErrorStatusCodes.UserAlreadyInvited;
 
@@ -164,7 +167,7 @@ public partial class DatabaseContext
 
         if (project.AuthorId == userId) return DbErrorStatusCodes.UserIsAlreadyOwner;
 
-        if (project.Collaborators.Any(u => u.ClerkId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
+        if (project.Collaborators.Any(u => u.UserId == userId)) return DbErrorStatusCodes.UserAlreadyInProject;
 
         if (!project.ProjectInvites.Any(p => p.User.ClerkId == userId)) return DbErrorStatusCodes.NoInviteFound;
 

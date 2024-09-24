@@ -11,6 +11,7 @@ public partial class DatabaseContext
         return [.. Projects.Include(p => p.Author)
                             .Include(p => p.Description)
                             .ThenInclude(p => p.Tags)
+                            .Include(p => p.Collaborators).ThenInclude(u => u.User)
                             .Skip(((int)page! - 1) * _pageSize)
                             .Take(_pageSize)
                             .Select(p => (ProjectResponse) p)];
@@ -25,6 +26,7 @@ public partial class DatabaseContext
             .Include(p => p.Author)
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
+            .Include(p => p.Collaborators).ThenInclude(u => u.User)
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
@@ -44,6 +46,7 @@ public partial class DatabaseContext
             .Include(p => p.Author)
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
+            .Include(p => p.Collaborators).ThenInclude(u => u.User)
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
@@ -68,7 +71,7 @@ public partial class DatabaseContext
         };
         Descriptions.Add(description);
         Projects.Add(project);
-        user.Projects.Add(project);
+        user.ProjectsAuthored.Add(project);
         SaveChanges();
         return (DbErrorStatusCodes.Ok, project);
     }
@@ -78,6 +81,7 @@ public partial class DatabaseContext
         return Projects.Include(p => p.Description).ThenInclude(d => d.Tags)
                         .Include(p => p.Author)
                         .Include(P => P.Progress)
+                        .Include(p => p.Collaborators).ThenInclude(u => u.User)
                         .Include(p => p.ProjectInvites).ThenInclude(i => i.User)
                         .FirstOrDefault(p => p.Id == id);
     }
@@ -86,18 +90,21 @@ public partial class DatabaseContext
     {
         var user = GetUserById(id);
         if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
-        return (DbErrorStatusCodes.Ok, user.Projects);
+        var projects = new List<Project>();
+        projects.AddRange(user.ProjectsAuthored);
+        projects.AddRange(user.ProjectsCollaborated.Select(p => p.Project));
+        return (DbErrorStatusCodes.Ok, projects);
     }
 
     internal DbErrorStatusCodes UpdateProject(ProjectPatchRequest requestBody)
     {
         var user = Users.
-        Include(u => u.Projects).ThenInclude(p => p.Progress)
-            .Include(u => u.Projects).ThenInclude(p => p.Description).ThenInclude(d => d.Tags)
+        Include(u => u.ProjectsAuthored).ThenInclude(p => p.Progress)
+            .Include(u => u.ProjectsAuthored).ThenInclude(p => p.Description).ThenInclude(d => d.Tags)
             .FirstOrDefault(u => u.ClerkId == requestBody.AuthorId);
         if (user is null) return DbErrorStatusCodes.UserNotFound;
 
-        var project = user.Projects.FirstOrDefault(p => p.Id == requestBody.ProjectId);
+        var project = user.ProjectsAuthored.FirstOrDefault(p => p.Id == requestBody.ProjectId);
         if (project is null) return DbErrorStatusCodes.UserNotAuthorized;
 
         project.Title = requestBody.Title is not null ? requestBody.Title : project.Title;
@@ -155,9 +162,9 @@ public partial class DatabaseContext
     private bool AddUserToProject(User user, Project project)
     {
         if (project.AuthorId == user.ClerkId) return false;
-        if (project.Collaborators.Any(u => u.ClerkId == user.ClerkId)) return false;
-        project.Collaborators.Add(user);
-        user.Projects.Add(project);
+        if (project.Collaborators.Any(u => u.UserId == user.ClerkId)) return false;
+        project.Collaborators.Add(new Collaborator { UserId = user.ClerkId, User = user });
+        user.ProjectsAuthored.Add(project);
         SaveChanges();
         return true;
     }
