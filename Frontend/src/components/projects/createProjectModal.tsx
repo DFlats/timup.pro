@@ -13,8 +13,11 @@ export function CreateProjectModal() {
                 </h3>
                 <p className="pb-8 pt-1 text-center">Fill in the details to create a new project.</p>
                 <CreateProjectForm />
+                <form method="dialog">
+                    <button className="btn btn-lg btn-ghost absolute right-2 top-2">✕</button>
+                </form>
             </div>
-        
+
             <form
                 method="dialog"
                 className="modal-backdrop">
