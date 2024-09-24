@@ -13,7 +13,7 @@ export function useProjectsOwnedByClientUser() {
         queryKey,
         queryFn: async () => {
             if (!clientUser) return [];
-            return await endpoints.projects.getProjectsByUserId(clientUser.id) ?? [];
+            return await endpoints.projects.getOwnedProjects(clientUser.id) ?? [];
         }
     });
 

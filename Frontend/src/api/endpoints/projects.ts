@@ -150,7 +150,7 @@ function projectsFromProjectBatchResponse(dto: components['schemas']['ProjectBat
 function projectBatchFromProjectBatchResponse(dto: components['schemas']['ProjectBatchResponse']) {
     return {
         projects: dto.projectResponses!.map(project => projectFromProjectResponse(project)),
-        page: dto.currentPage!,
+        currentPage: dto.currentPage!,
         nextPage: dto.nextPage!
     } as ProjectBatch;
 }
