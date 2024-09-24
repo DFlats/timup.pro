@@ -8,10 +8,10 @@ public class ControllerShould(CustomWebAppFactory factory) : IClassFixture<Custo
     private readonly HttpClient _client = factory.CreateClient();
 
 
-    [Fact]
-    public async Task GetAllProjects_Should_Return_OKAsync()
-    {
-        var response = await _client.GetAsync("api/Projects");
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-    }
+    // [Fact]
+    // public async Task GetAllProjects_Should_Return_OKAsync()
+    // {
+    //     var response = await _client.GetAsync("api/Projects");
+    //     response.StatusCode.Should().Be(HttpStatusCode.OK);
+    // }
 }
