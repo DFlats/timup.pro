@@ -7,7 +7,7 @@ interface Props {
 
 export function ProjectFeed({ children }: Props) {
     return (
-        <div className="p-12 w-screen flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center ">
             {children}
         </div>
     )

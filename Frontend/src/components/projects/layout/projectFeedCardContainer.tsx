@@ -7,7 +7,7 @@ interface Props {
 
 export function ProjectFeedCardContainer({ children }: Props) {
     return (
-        <div className='flex flex-row flex-wrap gap-4'>
+        <div className='flex flex-row flex-wrap justify-center gap-4 p-12'>
             {children}
         </div>
     )
