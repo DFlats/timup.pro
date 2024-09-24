@@ -11,8 +11,8 @@ interface Props {
 export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
     const heading = () => {
         switch (tagType) {
-            case 'skill': return 'Skills'
-            case 'interest': return 'Interests'
+            case 'skill': return 'Required Skills'
+            case 'interest': return 'Topics'
         }
     }
 
