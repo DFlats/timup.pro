@@ -416,6 +416,13 @@ export interface components {
             interestTags?: string[];
             skillTags?: string[];
         };
+        UserBatchResponse: {
+            userResponses?: components["schemas"]["UserResponse"][];
+            /** Format: int32 */
+            currentPage?: number;
+            /** Format: int32 */
+            nextPage?: number | null;
+        };
         UserRequest: {
             clerkId?: string;
             name?: string;
@@ -545,7 +552,9 @@ export interface operations {
     };
     Projects_GetProjectsByUserId: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+            };
             header?: never;
             path: {
                 userId: string;
@@ -559,7 +568,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ProjectResponse"][];
+                    "application/json": components["schemas"]["ProjectBatchResponse"];
                 };
             };
             404: {
@@ -1060,7 +1069,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UserResponse"][];
+                    "application/json": components["schemas"]["UserBatchResponse"];
                 };
             };
             404: {
