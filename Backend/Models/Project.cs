@@ -13,8 +13,7 @@ public class Project
     [Required]
     [ForeignKey("AuthorId")]
     public string AuthorId { get; set; } = null!;
-    [Required]
-    public virtual List<User> Collaborators { get; } = [];
+    public List<Collaborator> Collaborators { get; set; } = [];
     [Required]
     public Description Description { get; set; } = null!;
     public Progress Progress { get; set; } = new Progress();

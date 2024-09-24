@@ -12,8 +12,7 @@ public partial class DatabaseContext
 
     internal bool PopulateDatabase(int count = 100)
     {
-        try
-        {
+
             var (seededProjects, seededUsers, seededTags) = GenerateData(count);
 
             Users.AddRange(seededUsers);
@@ -24,11 +23,6 @@ public partial class DatabaseContext
             SeedCollaborators();
 
             return true;
-        }
-        catch
-        {
-            return false;
-        }
     }
 
     internal (List<Project>, List<User>, List<Tag>) GenerateData(int count)
@@ -82,12 +76,16 @@ public partial class DatabaseContext
         {
             Random random = new();
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var user = users.ElementAt(random.Next(users.Count - 1));
+                var collaborator = new Collaborator {
+                    UserId = user.ClerkId,
+                    User = user
+                };
                 // if (project.AuthorId == user.ClerkId) continue;
                 // if (project.Collaborators.Count != 0 && project.Collaborators.Any(u => u.ClerkId == user.ClerkId)) continue;
-                project.Collaborators.Add(user);
+                project.Collaborators.Add(collaborator);
                 user.Projects.Add(project);
                 SaveChanges();
             }
