@@ -1,28 +1,24 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
-import { useProjectById, useProjectsOwnedByClientUser } from "../../hooks/projects";
+import { useProjectById } from "../../hooks/projects";
 import { NotFound } from "../routing";
 import { UserTable } from "../users";
 import { TagContainer } from "../tags";
 import { useCollaborators } from "../../hooks/users/useCollaborators";
+import { useRecommendedUsersForProject } from "../../hooks/users";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
     const projectId = Number.parseInt(Route.useParams().id);
     const { projectById: project } = useProjectById(projectId);
-    const { projectsOwnedByClientUser } = useProjectsOwnedByClientUser();
     const { collaboratorsInProject } = useCollaborators(projectId);
+    const { recommendedUsersForProject } = useRecommendedUsersForProject(projectId);
 
     if (!project) {
         return (<NotFound>
             <p>{`Sorry, project with id ${projectId} doesn't exist ${String.raw`¯\_(ツ)_/¯`}`}</p>
         </NotFound>)
     }
-
-    const clientOwnsProject =
-        projectsOwnedByClientUser
-            ? projectsOwnedByClientUser.some(p => p.id == project.id)
-            : false;
 
     if (!collaboratorsInProject) return;
 
@@ -37,28 +33,21 @@ export function ProjectPage() {
                 <div className="max-w-screen-lg">
                     <h1 className="text-5xl font-bold">{project.title}</h1>
                     <p className="py-6">{project.description}</p>
-                    {clientOwnsProject &&
-                        <p>You are a part of this project</p>
-                    }
                     <TagContainer tags={project.tags['skill']} tagType='skill' />
                     <TagContainer tags={project.tags['interest']} tagType='interest' />
-                    <h2>Collaborators</h2>
+                    <h2 className='text-2xl m-2'>Collaborators</h2>
                     {collaboratorsInProject &&
                         <UserTable
-                            users={collaboratorsInProject}
+                            users={collaboratorsInProject} />
+                    }
+                    <h2 className='text-2xl m-2'>Suggested Collaborators</h2>
+                    {recommendedUsersForProject &&
+                        <UserTable
+                            users={recommendedUsersForProject}
                             onInvite={(userId) => console.log(`Invite user ${userId}`)} />
                     }
-                    <h2>Suggested Collaborators</h2>
                 </div>
             </div>
         </div>
         </>);
-
-
-    // return (
-    //     <>
-    //         {ownedProject && <h2>Your project</h2>}
-    //         <ProjectCard project={project} />
-    //         {/* <UserTable projectId={project.id}/> */}
-    //     </>)
 }

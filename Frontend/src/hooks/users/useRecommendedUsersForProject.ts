@@ -7,7 +7,7 @@ export function useRecommendedUsersForProject(projectId: number) {
     const query = useQuery({
         queryKey,
         queryFn: async () => {
-            return await endpoints.users.getRecommendedUsersByProjectId(projectId!);
+            return (await endpoints.users.getRecommendedUsersByProjectId(projectId!)).users;
         }
     });
 
