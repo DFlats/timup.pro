@@ -16,13 +16,11 @@ export function UserRow({ user, onInvite }: Props) {
                 <td><Link className="btn" to='/profile/$userId' params={{ userId: user.id.toString() }}> {user.name} </Link> </td>
                 <td>
                     <TagContainerCompact
-                        tags={user.tags['skill']}
-                        tagType={"skill"} />
+                        tags={user.tags['skill']} />
                 </td>
                 <td>
                     <TagContainerCompact
-                        tags={user.tags['interest']}
-                        tagType={"interest"} />
+                        tags={user.tags['interest']} />
                 </td>
                 {onInvite &&
                     (<td><button onClick={() => onInvite(user.id)} className="btn">Invite</button></td>)}

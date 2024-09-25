@@ -14,7 +14,8 @@ export function useProjectsOwnedByClientUser() {
         queryFn: async () => {
             if (!clientUser) return [];
             return (await endpoints.projects.getOwnedProjects(clientUser.id)).projects ?? [];
-        }
+        },
+        enabled: !!clientUser
     });
 
     const addProjectToCache = (project: Project) => {

@@ -16,7 +16,6 @@ export function HomePage() {
                 <FeaturedProjects />
             </SignedOut>
 
-
             <SignedIn>
                 <RecommendedProjectsForClientUser />
             </SignedIn>
