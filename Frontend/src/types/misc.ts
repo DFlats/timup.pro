@@ -1,6 +1,9 @@
 export type TagType = 'skill' | 'interest';
 
-export type Invite = {
-    userId: string,
+export type ClientUserInviteToProject = {
     projectId: number
+}
+
+export type ProjectPendingInviteRequest = {
+    userId: string
 }

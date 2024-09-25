@@ -142,7 +142,9 @@ function projectFromProjectResponse(dto: components['schemas']['ProjectResponse'
         collaborators: collaboratorsFrom(dto.collaborators!),
         tags: tagsFrom(dto.skillTags, dto.interestTags!),
         isCompleted: dto.isCompleted!,
-        invitedUsersIds: dto.invitedUsers!
+        pendingInvites: dto.pendingInvites!,
+        joinRequests: dto.joinRequests!,
+        imageUrl: dto.imageUrl
     } as Project;
 }
 
