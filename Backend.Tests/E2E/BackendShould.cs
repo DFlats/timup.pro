@@ -23,4 +23,5 @@ public class BackendShould(CustomWebAppFactory factory) : IClassFixture<CustomWe
         var responseString = await response.Content.ReadAsStringAsync();
         Assert.NotNull(responseString);
     }
+    
 }
