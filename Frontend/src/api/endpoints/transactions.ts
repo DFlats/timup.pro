@@ -70,7 +70,7 @@ export const kickUserFromProject = async (userId: string, projectId: number) => 
     });
 
     if (!response.ok && error)
-        throw error;
+        throw new Error(error);
 }
 
 export const getUserInvites = async (userId: string) => {
