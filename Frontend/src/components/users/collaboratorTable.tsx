@@ -1,16 +1,20 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { UserRow } from "../../components/users";
-import { User } from "../../types";
+
+import { useCollaborators } from "../../hooks/users";
+import { CollaboratorRow } from "./collaboratorRow";
 
 interface props {
-    users: User[],
-    onNextPage?: () => void,
-    onPreviousPage?: () => void,
-    onInvite?: (userId: string) => void,
-    onKick?: (userId: string) => void
+    projectId: number
 }
 
-export function UserTable({ users, onNextPage, onPreviousPage, onInvite, onKick }: props) {
+export function CollaboratorTable({ projectId }: props) {
+    const {
+        collaboratorsInProject,
+        collaboratorsNextPage,
+        collaboratorsPreviousPage,
+        kickCollaborator
+    } = useCollaborators(projectId);
+
     return (
         <div className="bg-[#010624] rounded-xl border border-white border-opacity-10 p-10 mb-16">
             <table className="table">
@@ -20,27 +24,25 @@ export function UserTable({ users, onNextPage, onPreviousPage, onInvite, onKick 
                         <th className="text-lg">User Profile</th>
                         <th className="text-lg">Matching Skills</th>
                         <th className="text-lg">Matching Interests</th>
-                        {onInvite && <th></th>}
-                        {onKick && <th></th>}
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
-                {users && users.map(user =>
-                    <UserRow
+                {collaboratorsInProject && collaboratorsInProject.map(user =>
+                    <CollaboratorRow
                         key={user.id}
-                        onInvite={onInvite}
-                        onKick={onKick}
                         user={user}
-                        size='compact' />)}
+                        onKick={kickCollaborator} />)}
             </table>
-            {onPreviousPage &&
+            {collaboratorsPreviousPage &&
                 <button
                     className='btn btn-secondary m-4'
-                    onClick={() => onPreviousPage()}>Previous Page</button>
+                    onClick={() => collaboratorsPreviousPage()}>Previous Page</button>
             }
-            {onNextPage &&
+            {collaboratorsNextPage &&
                 <button
                     className='btn btn-secondary m-4'
-                    onClick={() => onNextPage()}>Next Page</button>
+                    onClick={() => collaboratorsNextPage()}>Next Page</button>
             }
         </div>
     )

@@ -1,5 +1,4 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { UserRow } from "../../components/users";
 import { useProjectInvites } from "../../hooks/transactions";
 import { useRecommendedUsersForProject } from "../../hooks/users";
 import { RecommendedUserRow } from "./recommendedUserRow";
@@ -18,35 +17,40 @@ export function RecommendedUserTable({ projectId }: props) {
 
     const { projectInvites } = useProjectInvites(projectId);
 
+    if (!projectInvites) return;
+
+    const userIsInvited = (userId: string) =>
+        projectInvites.map(invite => invite.userId).includes(userId)
+
     return (
         <div className="bg-[#010624] rounded-xl border border-white border-opacity-10 p-10 mb-16">
             <table className="table">
                 <thead>
                     <tr className="border-b border-white border-opacity-10" >
                         <th></th>
-                        <th className="text-lg">Suggested User</th>
+                        <th className="text-lg"></th>
                         <th className="text-lg">Matching Skills</th>
                         <th className="text-lg">Matching Interests</th>
-                        {onInvite && <th></th>}
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
-                {users && users.map(user =>
+                {recommendedUsersForProject && recommendedUsersForProject.map(user =>
                     <RecommendedUserRow
                         key={user.id}
-                        onInvite={onInvite}
-                        onKick={onKick}
-                        user={user}
-                        size='compact' />)}
+                        onInvite={userIsInvited(user.id) ? undefined : inviteSuggestedUser}
+                        user={user} />)
+                }
             </table>
-            {onPreviousPage &&
+            {recommendedUsersNextPage &&
                 <button
                     className='btn btn-secondary m-4'
-                    onClick={() => onPreviousPage()}>Previous Page</button>
+                    onClick={() => recommendedUsersNextPage()}>Previous Page</button>
             }
-            {onNextPage &&
+            {recommendedUsersPreviousPage &&
                 <button
                     className='btn btn-secondary m-4'
-                    onClick={() => onNextPage()}>Next Page</button>
+                    onClick={() => recommendedUsersPreviousPage()}>Next Page</button>
             }
         </div>
     )

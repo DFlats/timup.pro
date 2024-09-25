@@ -44,8 +44,8 @@ export function useRecommendedUsersForProject(projectId: number) {
     }
 
     const inviteSuggestedUser = async (userId: string) => {
-        await endpoints.transactions.inviteUserToProject(userId, projectId);
         console.log('invite');
+        await endpoints.transactions.inviteUserToProject(userId, projectId);
     }
 
     return {

@@ -10,9 +10,14 @@ interface Props {
 
 export function RecommendedUserRow({ user, onInvite }: Props) {
     const inviteButtonProps = {
-        onClick: () => onInvite ? () => onInvite(user.id) : undefined,
+        onClick: () => {
+            if (onInvite) {
+                console.log('onInvate is defined')
+                onInvite(user.id);
+            }
+        },
         className: "btn btn-accent text-lg text-white pl-10 pr-10  w-32",
-        disabled: onInvite != undefined
+        disabled: onInvite == undefined
     };
 
     return (
