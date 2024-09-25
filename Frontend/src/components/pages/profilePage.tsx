@@ -1,10 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
-import { TagContainer } from "../../components/tags";
 import { EditUserModal } from "../users";
 import { openEditUserModal } from "../../modalControllers";
 import { useClientUser, useUserById } from "../../hooks/users";
 import { ProjectsOwnedByClientUser } from "..";
+import { UserCard } from "../users/userCard";
 
 export function ProfilePage() {
     const Route = getRouteApi('/profile/$userId');
@@ -17,22 +17,19 @@ export function ProfilePage() {
 
     const userIsClient = clientUser && user.id == clientUser.id;
 
-    const finalUser = userIsClient ? clientUser : user;
-
     return (
         <>
-            <h1>{finalUser.name}</h1>
-            <TagContainer tags={finalUser.tags['skill']} tagType='skill' />
-            <TagContainer tags={finalUser.tags['interest']} tagType='interest' />
-            <EditUserModal />
             {userIsClient &&
                 <>
-                    <button
-                        className='btn'
-                        onClick={openEditUserModal}>
-                        Edit Profile
-                    </button>
-
+                    <div className="flex flex-col items-center">
+                        <UserCard userId={user.id} pageTitle={`Profile`} />
+                        <EditUserModal />
+                        <button
+                            className='btn btn-accent w-full text-slate-50 text-xl mt-5 '
+                            onClick={openEditUserModal}>
+                            Edit Profile
+                        </button>
+                    </div>
                     <ProjectsOwnedByClientUser />
                 </>
             }
