@@ -12,7 +12,8 @@ export function useRecommendedProjectsForClientUser() {
             if (!clientUser) return [];
 
             return await endpoints.projects.getRecommendedProjects(clientUser.id);
-        }
+        },
+        enabled: !!clientUser
     });
 
     return {
