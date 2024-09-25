@@ -7,18 +7,20 @@ import { useCollaborators } from "../../hooks/users";
 import { NotFound } from "../routing";
 import { CollaboratorTable, RecommendedUserTable, UserCard } from "../users";
 import { TagContainer } from "../tags";
-import { Tags } from "../../types";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
-    const { id: id } = Route.useParams() as { id: string };
+    const { id } = Route.useParams() as { id: string };
     const projectId = parseInt(id);
 
-    const { projectById: project } = useProjectById(projectId);
+    const { projectById } = useProjectById(projectId);
 
-    const { collaboratorsInProject } = useCollaborators(projectId);
+    const {
+        collaboratorsInProject,
+        countCollaboratorTags
+    } = useCollaborators(projectId);
 
-    if (!project) {
+    if (!projectById) {
         return (<NotFound>
             <p>{`Sorry, project with id ${projectId} doesn't exist ${String.raw`¯\_(ツ)_/¯`}`}</p>
         </NotFound>)
@@ -26,18 +28,7 @@ export function ProjectPage() {
 
     if (!collaboratorsInProject) return;
 
-    const projectTags = {
-        'skill': project.tags['skill'].map(projectTag => ({
-            ...projectTag,
-            count: collaboratorsInProject.reduce((currentSum, collaborator) =>
-                currentSum + (collaborator.tags['skill'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
-        })),
-        'interest': project.tags['interest'].map(projectTag => ({
-            ...projectTag,
-            count: collaboratorsInProject.reduce((currentSum, collaborator) =>
-                currentSum + (collaborator.tags['interest'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
-        })),
-    } as Tags;
+    const countedProjectTags = countCollaboratorTags(projectById.tags);
 
     return (
         <><div
@@ -48,23 +39,23 @@ export function ProjectPage() {
                     <div className="flex justify-between mt-10 mb-16 gap-20">
                         <div className="flex flex-col">
                             <div>
-                                <h1 className="text-5xl text-slate-50 text-left font-bold pt-4 pb-6">{project.title}</h1>
-                                <p className="max-w-3xl text-left">{project.description}</p>
+                                <h1 className="text-5xl text-slate-50 text-left font-bold pt-4 pb-6">{projectById.title}</h1>
+                                <p className="max-w-3xl text-left">{projectById.description}</p>
                             </div>
 
                             <div className="flex-1"></div>
 
                             <div className="self-start pt-4 pb-2">
-                                <p>{`Collaborators: ${project.collaborators.length}`}</p>
+                                <p>{`Collaborators: ${projectById.collaborators.length}`}</p>
                             </div>
 
                             <div className="w-full">
-                                <TagContainer tags={projectTags['skill']} tagType='skill' />
-                                <TagContainer tags={projectTags['interest']} tagType='interest' />
+                                <TagContainer tags={countedProjectTags['skill']} tagType='skill' />
+                                <TagContainer tags={countedProjectTags['interest']} tagType='interest' />
                             </div>
                         </div>
-                        
-                        <UserCard userId={project.authorId} pageTitle='Project Owner' />
+
+                        <UserCard userId={projectById.authorId} pageTitle='Project Owner' />
                     </div>
 
                     <h2 className='text-4xl m-2 p-10'>Collaborators</h2>

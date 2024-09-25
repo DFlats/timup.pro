@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { endpoints } from "../../api";
-import { User } from "../../types";
+import { Tags, User } from "../../types";
 import { useState } from "react";
 
 export function useCollaborators(projectId: number) {
@@ -61,10 +61,24 @@ export function useCollaborators(projectId: number) {
         queryClient.invalidateQueries({ queryKey });
     }
 
+    const countCollaboratorTags = (projectTags: Tags) => ({
+        'skill': projectTags['skill'].map(projectTag => ({
+            ...projectTag,
+            count: query.data!.reduce((currentSum, collaborator) =>
+                currentSum + (collaborator.tags['skill'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
+        })),
+        'interest': projectTags['interest'].map(projectTag => ({
+            ...projectTag,
+            count: query.data!.reduce((currentSum, collaborator) =>
+                currentSum + (collaborator.tags['interest'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
+        })),
+    } as Tags);
+
     return {
         collaboratorsInProject: query.data,
         collaboratorsPreviousPage: totalPages > 1 ? nextPage : undefined,
         collaboratorsNextPage: totalPages > 1 ? previousPage : undefined,
-        kickCollaborator
+        kickCollaborator,
+        countCollaboratorTags
     }
 }
