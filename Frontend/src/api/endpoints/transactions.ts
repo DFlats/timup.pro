@@ -1,4 +1,6 @@
+import { Invite } from '../../types';
 import { client } from '../client';
+import { components } from '../schema';
 
 export const joinProjectRequest = async (userId: string, projectId: number) => {
     const { response, error } = await client.POST('/api/Transactions/JoinProjectRequest/{userId}/{projectId}', {
@@ -72,5 +74,32 @@ export const kickUserFromProject = async (userId: string, projectId: number) => 
         throw error;
 }
 
+export const getUserInvites = async (userId: string) => {
+    const { response, data, error } = await client.GET('/api/Transactions/GetUserInvites/{userId}', {
+        params: { path: { userId } }
+    });
 
+    if (!data || (!response.ok && error))
+        throw error;
+
+    return data.map(invite => inviteFromProjectInviteResponse(invite));
+}
+
+export const getProjectInvites = async (projectId: number) => {
+    const { response, data, error } = await client.GET('/api/Transactions/GetProjectInvites/{projectId}', {
+        params: { path: { projectId } }
+    });
+
+    if (!data || (!response.ok && error))
+        throw error;
+
+    return data.map(invite => inviteFromProjectInviteResponse(invite));
+}
+
+function inviteFromProjectInviteResponse(dto: components['schemas']['ProjectInviteResponse']) {
+    return {
+        userId: dto.userId!,
+        projectId: dto.projectId!
+    } as Invite;
+}
 
