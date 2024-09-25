@@ -29,9 +29,10 @@ export function UserRow({ user, onInvite }: Props) {
                         tags={user.tags['interest']} />
                 </td>
                 {onInvite &&
-                    (<td><button onClick={() => onInvite(user.id)} className="btn btn-accent text-lg text-white pl-10 pr-10">Invite</button></td>)}
+                    (<td><button onClick={() => onInvite(user.id)} className="btn btn-accent text-lg text-white pl-10 pr-10  w-32">Invite</button></td>)}
                 {!onInvite &&
-                    (<td><Link to='/profile/$userId' className="btn btn-accent text-lg text-white pl-10 pr-10" params={{ userId: user.id.toString() }}>Details</Link></td>)}
+                    (<td><button className="btn btn-accent text-lg text-white pl-10 pr-10  w-32">Kick</button></td>)}
+                <td><Link to='/profile/$userId' className="btn bg-slate-700 text-lg text-white pl-10 pr-10 w-32" params={{ userId: user.id.toString() }}>Details</Link></td>
             </tr>
         </tbody>
     )
