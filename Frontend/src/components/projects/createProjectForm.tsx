@@ -50,6 +50,7 @@ export function CreateProjectForm() {
         if (!createdProject) return;
 
         const modal: HTMLDialogElement = document.getElementById(import.meta.env.VITE_CREATE_PROJECT_MODAL_ID) as HTMLDialogElement;
+        reset();
         modal?.close();
 
         navigate({
