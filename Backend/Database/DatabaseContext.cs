@@ -36,13 +36,8 @@ public partial class DatabaseContext(DbContextOptions options) : DbContext(optio
     {
         try
         {
-            Users.RemoveRange(Users);
-            Projects.RemoveRange(Projects);
-            Progresses.RemoveRange(Progresses);
-            Tags.RemoveRange(Tags);
-            Descriptions.RemoveRange(Descriptions);
-            ProjectInvites.RemoveRange(ProjectInvites);
-            SaveChanges();
+            Database.ExecuteSqlRaw("DELETE FROM Projects");
+            //Database.ExecuteSqlRaw("DELETE FROM Users");
             
             return true;
         }
