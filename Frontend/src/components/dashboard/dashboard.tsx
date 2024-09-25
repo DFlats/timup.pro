@@ -1,10 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { SignedIn, SignedOut, SignInButton, SignOutButton, SignUpButton } from "@clerk/clerk-react";
 import { Link } from "@tanstack/react-router";
-import { CreateProjectModal } from "./projects";
-import { openCreateProjectModal } from "../modalControllers";
-import { useClientUser } from "../hooks/users";
-import { InvitesDropdown } from "./transactions";
+import { CreateProjectModal } from "../projects";
+import { openCreateProjectModal } from "../../modalControllers";
+import { useClientUser } from "../../hooks/users";
+import { Logo, InvitesDropdown } from "../../components/dashboard";
 
 
 export function Dashboard() {
@@ -19,7 +19,10 @@ export function Dashboard() {
     ) : null;
 
     return (
-        <div className="flex items-center justify-center">
+        <>
+            <Link to="/" className='mr-auto'>
+                <Logo />
+            </Link>
             <SignedIn>
                 <InvitesDropdown />
                 {profileLink}
@@ -42,6 +45,6 @@ export function Dashboard() {
                     </button>
                 </SignUpButton>
             </SignedOut>
-        </div>
+        </>
     );
 }

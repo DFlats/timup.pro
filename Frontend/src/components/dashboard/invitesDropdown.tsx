@@ -23,8 +23,6 @@ export function InvitesDropdown() {
         },
     ]
 
-    console.log(clientUserInvites);
-
     if (clientUserInvites.length == 0) return null;
 
     return (
