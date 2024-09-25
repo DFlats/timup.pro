@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/clerk-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { endpoints } from "../../api";
-import { Tag, UserPatch } from "../../types";
+import { Project, Tag, UserPatch } from "../../types";
 
 export function useClientUser() {
     const { user } = useUser();
@@ -65,10 +65,23 @@ export function useClientUser() {
         patchClientUser(patch);
     }
 
+    const clientUserIsCollaboratorOrAuthorOfProject = (project: Project) => {
+        if (!clientUser) {
+            throw new Error("clientUser is not defined")
+        };
+
+        console.log(project.authorId);
+        console.log(project.collaborators);
+
+        return clientUser.id == project.authorId ||
+            Object.keys(project.collaborators).includes(clientUser.id);
+    }
+
     return {
         clientUser: query.data,
         addTagToClientUser: async (tag: Tag) => updateTags(tag, 'add'),
         removeTagFromClientUser: async (tag: Tag) => updateTags(tag, 'remove'),
-        patchClientUser
+        patchClientUser,
+        clientUserIsCollaboratorOrAuthorOfProject
     }
 }
