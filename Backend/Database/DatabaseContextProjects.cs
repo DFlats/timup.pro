@@ -1,4 +1,5 @@
 using Backend.Dtos;
+using Backend.Dtos.Internal;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
