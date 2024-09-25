@@ -2,18 +2,21 @@
 import { getRouteApi } from "@tanstack/react-router";
 
 import { useProjectById } from "../../hooks/projects";
-import { useCollaborators } from "../../hooks/users";
+import { useClientUser, useCollaborators } from "../../hooks/users";
 
 import { NotFound } from "../routing";
 import { CollaboratorTable, RecommendedUserTable, UserCard } from "../users";
 import { TagContainer } from "../tags";
+import { useTransactionActions } from "../../hooks";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
     const { id } = Route.useParams() as { id: string };
     const projectId = parseInt(id);
 
+    const { clientUser, clientUserIsCollaboratorOrAuthorOfProject } = useClientUser();
     const { projectById } = useProjectById(projectId);
+    const { joinProjectRequest } = useTransactionActions();
 
     const {
         collaboratorsInProject,
@@ -57,6 +60,14 @@ export function ProjectPage() {
 
                         <UserCard userId={projectById.authorId} pageTitle='Project Owner' />
                     </div>
+
+                    {clientUser && !clientUserIsCollaboratorOrAuthorOfProject(projectById) &&
+                        <button
+                            className='btn'
+                            onClick={() => joinProjectRequest(clientUser.id, projectId)}>
+                            Ask to join project
+                        </button>
+                    }
 
                     <h2 className='text-4xl m-2 p-10'>Collaborators</h2>
                     <CollaboratorTable projectId={projectId} />
