@@ -76,7 +76,7 @@ public partial class DatabaseContext
         {
             Random random = new();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < random.NextInt64(1, 6); i++)
             {
                 var user = users.ElementAt(random.Next(users.Count - 1));
                 var collaborator = new Collaborator
