@@ -1,17 +1,17 @@
 using Backend.Dtos;
+using Backend.Dtos.Internal;
 using Backend.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
 
 public partial class DatabaseContext
 {
-    internal (List<UserResponse>, bool) GetAllUsers(int? page = 1)
+    internal UsersDbResponse GetAllUsers(int? page = 1)
     {
         var users = Users
             .Include(u => u.Tags)
-            .Select(u => (UserResponse)u).ToList();
+            .ToList();
 
         bool hasNext = page * _pageSize < users.Count;
 
@@ -20,10 +20,10 @@ public partial class DatabaseContext
             .Take(_pageSize)
             .ToList();
 
-        return (users, hasNext);
+        return new UsersDbResponse(DbErrorStatusCodes.Ok, users, hasNext);
     }
 
-    internal (List<UserResponse>, bool) GetUsersByFilter(string[]? skills, string[]? interests, int? page = 1)
+    internal UsersDbResponse GetUsersByFilter(string[]? skills, string[]? interests, int? page = 1)
     {
 
         skills ??= [];
@@ -32,7 +32,7 @@ public partial class DatabaseContext
         var users = Users
             .Include(u => u.Tags)
             .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
-            .Select(u => (UserResponse)u).ToList();
+            .ToList();
 
         bool hasNext = page * _pageSize < users.Count;
 
@@ -41,7 +41,7 @@ public partial class DatabaseContext
             .Take(_pageSize)
             .ToList();
 
-        return (users, hasNext);
+        return new UsersDbResponse(DbErrorStatusCodes.Ok, users, hasNext);
     }
 
     internal User? GetUserById(string id)
@@ -65,9 +65,9 @@ public partial class DatabaseContext
         return user;
     }
 
-    internal (DbErrorStatusCodes, User?) CreateUser(UserRequest userToAdd)
+    internal UserDbResponse CreateUser(UserRequest userToAdd)
     {
-        if (Users.Any(u => u.ClerkId == userToAdd.ClerkId)) return (DbErrorStatusCodes.UserAlreadyExists, null);
+        if (Users.Any(u => u.ClerkId == userToAdd.ClerkId)) return new UserDbResponse(DbErrorStatusCodes.UserAlreadyExists, null);
         try
         {
             var user = new User
@@ -78,11 +78,11 @@ public partial class DatabaseContext
             };
             Users.Add(user);
             SaveChanges();
-            return (DbErrorStatusCodes.Ok, user);
+            return new UserDbResponse(DbErrorStatusCodes.Ok, user);
         }
         catch
         {
-            return (DbErrorStatusCodes.FatalError, null);
+            return new UserDbResponse(DbErrorStatusCodes.FatalError, null);
         }
     }
 
@@ -128,11 +128,11 @@ public partial class DatabaseContext
         return Users.FirstOrDefault(u => u.ClerkId == userId);
     }
 
-    internal (DbErrorStatusCodes, List<User>?) GetRecommendedUsersByProjectId(int id, int? page = 1)
+    internal UsersDbResponse GetRecommendedUsersByProjectId(int id, int? page = 1)
     {
         var project = GetProjectById(id);
 
-        if (project is null) return (DbErrorStatusCodes.ProjectNotFound, null);
+        if (project is null) return new UsersDbResponse(DbErrorStatusCodes.ProjectNotFound, null, null);
 
         var interests = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
         var skills = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
@@ -144,7 +144,7 @@ public partial class DatabaseContext
             .Take(_pageSize)
             .ToList();
 
-        return (DbErrorStatusCodes.Ok, users);
+        return new UsersDbResponse(DbErrorStatusCodes.Ok, users, null);
     }
 
     internal DbErrorStatusCodes UpdateUser(UserPatchRequest requestBody)

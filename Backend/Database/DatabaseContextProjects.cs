@@ -34,11 +34,11 @@ public partial class DatabaseContext
             .Select(p => (ProjectResponse)p)];
     }
 
-    internal (DbErrorStatusCodes, List<ProjectResponse>?) GetRecommendedProjectsByUserId(string id, int? page = 1)
+    internal ProjectsDbResponse GetRecommendedProjectsByUserId(string id, int? page = 1)
     {
         var user = GetUserById(id);
 
-        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
+        if (user is null) return new ProjectsDbResponse(DbErrorStatusCodes.UserNotFound, null);
 
         var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
         var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
@@ -51,10 +51,9 @@ public partial class DatabaseContext
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
-            .Select(p => (ProjectResponse)p)
             .ToList();
 
-        return (DbErrorStatusCodes.Ok, projects);
+        return new ProjectsDbResponse(DbErrorStatusCodes.Ok, projects);
     }
 
     internal ProjectDbResponse CreateProject(ProjectRequest projectRequest)
@@ -99,7 +98,7 @@ public partial class DatabaseContext
         return new ProjectsDbResponse
         (
             DbErrorStatusCodes.Ok,
-            projects.Skip(((int)page! - 1) * _pageSize).Take(_pageSize).ToArray(),
+            projects.Skip(((int)page! - 1) * _pageSize).Take(_pageSize).ToList(),
             hasNext
         );
     }
