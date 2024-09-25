@@ -94,7 +94,7 @@ public partial class DatabaseContext
         projects.AddRange(user.ProjectsAuthored);
         projects.AddRange(user.ProjectsCollaborated.Select(p => p.Project));
         bool hasNext = (page * _pageSize) < projects.Count;
-        
+
         return new ProjectsDbResponse
         (
             DbErrorStatusCodes.Ok,
@@ -181,6 +181,16 @@ public partial class DatabaseContext
         var project = Projects.FirstOrDefault(p => p.Id == projectId);
         if (project is null) return DbErrorStatusCodes.UserNotFound;
         Projects.Remove(project);
+        SaveChanges();
+        return DbErrorStatusCodes.Ok;
+    }
+
+    internal DbErrorStatusCodes PutImageOnProject(int projectId, string ImageUrl)
+    {
+        var project = Projects.FirstOrDefault(p => p.Id == projectId);
+        if (project is null) return DbErrorStatusCodes.ProjectNotFound;
+
+        project.ImageUrl = ImageUrl;
         SaveChanges();
         return DbErrorStatusCodes.Ok;
     }

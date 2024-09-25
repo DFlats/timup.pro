@@ -118,4 +118,15 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
             _ => StatusCode(500),
         };
     }
+
+    [HttpPut("PutProjectImageUrl/{projectId}")]
+    public IActionResult PutImageOnProject(int projectId, [FromBody] string ImageUrl)
+    {
+        return db.PutImageOnProject(projectId, ImageUrl) switch
+        {
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.Ok => NoContent(),
+            _ => StatusCode(500)
+        };
+    }
 }

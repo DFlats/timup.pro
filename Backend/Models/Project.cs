@@ -8,6 +8,8 @@ public class Project
     public int Id { get; set; }
     [Required]
     public string Title { get; set; } = null!;
+    
+    public string? ImageUrl {get; set;}
     [Required]
     public User Author { get; set; } = null!;
     [Required]

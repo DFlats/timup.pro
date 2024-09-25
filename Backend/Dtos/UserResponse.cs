@@ -1,7 +1,7 @@
 using Backend.Models;
 
 namespace Backend.Dtos;
-public record UserResponse(string Id, string Name, string Email, string[] InterestTags, string[] SkillTags)
+public record UserResponse(string Id, string Name, string Email, string[] InterestTags, string[] SkillTags,  string? ImageUrl)
 {
 
     public static implicit operator UserResponse(User user)
@@ -14,7 +14,8 @@ public record UserResponse(string Id, string Name, string Email, string[] Intere
             user.Name,
             user.Email,
             interestTags,
-            skillTags
+            skillTags,
+            user.ImageUrl
         );
 
     }
