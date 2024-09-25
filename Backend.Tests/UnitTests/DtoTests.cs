@@ -119,7 +119,7 @@ public class DtoTests
     {
         var projectResponse = (ProjectResponse)TemplateProject;
 
-        Assert.Equal(TemplateProject.ProjectInvites.Count, projectResponse.PendingInvites.Length + projectResponse.UserJoinRequests.Length);
+        Assert.Equal(TemplateProject.ProjectInvites.Count, projectResponse.PendingInvites.Length + projectResponse.JoinRequests.Length);
     }
 
     static readonly Project TemplateProject = new()
