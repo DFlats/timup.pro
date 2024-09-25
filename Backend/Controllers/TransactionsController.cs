@@ -23,6 +23,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is already owner"),
+            DbErrorStatusCodes.UserAlreadyInvited => Conflict("User is already invited"),
             DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
@@ -75,6 +76,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
+            DbErrorStatusCodes.UserAlreadyInvited => Conflict("User already invited"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
             DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
