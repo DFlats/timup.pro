@@ -16,7 +16,7 @@ export function ProjectPage() {
 
     const { projectById: project } = useProjectById(projectId);
     const { collaboratorsInProject, collaboratorsNextPage, collaboratorsPreviousPage } = useCollaborators(projectId);
-    const { recommendedUsersForProject } = useRecommendedUsersForProject(projectId);
+    const { recommendedUsersForProject, recommendedUsersNextPage, recommendedUsersPreviousPage } = useRecommendedUsersForProject(projectId);
     const { inviteUserToProjectRequest } = useTransactionActions();
 
     if (!project) {
@@ -80,8 +80,8 @@ export function ProjectPage() {
                         <UserTable
                             users={recommendedUsersForProject}
                             onInvite={handleInvite}
-                            onPreviousPage={() => console.log("previous page")}
-                            onNextPage={() => console.log("next page")} />
+                            onPreviousPage={recommendedUsersNextPage}
+                            onNextPage={recommendedUsersPreviousPage} />
                     }
                 </div>
             </div>

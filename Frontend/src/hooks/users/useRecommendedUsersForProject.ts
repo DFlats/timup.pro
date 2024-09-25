@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export function useRecommendedUsersForProject(projectId: number) {
     const [currentPage, setCurrentPage] = useState(1);
-    const queryKey = ['projects', 'recommendedForProject', projectId];
+    const queryKey = ['users', 'recommendedForProject', projectId, 'page', currentPage];
 
     const query = useQuery({
         queryKey,
