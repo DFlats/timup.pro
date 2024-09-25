@@ -4,7 +4,7 @@ import { useProjectById } from "../../hooks/projects";
 import { NotFound } from "../routing";
 import { UserTable } from "../users";
 import { TagContainer } from "../tags";
-import { useTransactions } from "../../hooks";
+import { useTransactionActions } from "../../hooks";
 import { Tags } from "../../types";
 import { useCollaborators, useRecommendedUsersForProject } from "../../hooks/users";
 
@@ -16,7 +16,7 @@ export function ProjectPage() {
     const { projectById: project } = useProjectById(projectId);
     const { collaboratorsInProject } = useCollaborators(projectId);
     const { recommendedUsersForProject } = useRecommendedUsersForProject(projectId);
-    const { inviteUserToProjectRequest } = useTransactions();
+    const { inviteUserToProjectRequest } = useTransactionActions();
 
     if (!project) {
         return (<NotFound>
