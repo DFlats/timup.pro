@@ -33,12 +33,12 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     [ProducesResponseType(500)]
     public ActionResult<ProjectBatchResponse> GetRecommendedProjectsBatchByUserId(string userId, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var projects) = db.GetRecommendedProjectBatchByUserId(userId, page);
+        var projectBatchDbResponse = db.GetRecommendedProjectBatchByUserId(userId, page);
 
-        return status switch
+        return projectBatchDbResponse.DbErrorStatusCode switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => projects!,
+            DbErrorStatusCodes.Ok => projectBatchDbResponse.ProjectBatchResponse,
             _ => StatusCode(500),
         };
     }
@@ -59,12 +59,12 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     [ProducesResponseType(500)]
     public ActionResult<ProjectBatchResponse> GetProjectsByUserId(string userId, [FromQuery(Name = "page")] int? page = 1)
     {
-        (var status, var batch) = db.GetProjectBatchByUserId(userId, page);
+        var projectBatchDbResponse = db.GetProjectBatchByUserId(userId, page);
 
-        return status switch
+        return projectBatchDbResponse.DbErrorStatusCode switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => batch!,
+            DbErrorStatusCodes.Ok => projectBatchDbResponse.ProjectBatchResponse,
             _ => StatusCode(500),
         };
     }
@@ -75,12 +75,12 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     [ProducesResponseType(500)]
     public ActionResult<ProjectResponse> CreateProject(ProjectRequest projectRequest)
     {
-        (var status, var project) = db.CreateProject(projectRequest);
+        var projectDbResponse = db.CreateProject(projectRequest);
 
-        return status switch
+        return projectDbResponse.DbErrorStatusCode switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("Could not find a user for given project"),
-            DbErrorStatusCodes.Ok => Ok((ProjectResponse)project!),
+            DbErrorStatusCodes.Ok => Ok((ProjectResponse)projectDbResponse.Project!),
             _ => StatusCode(500),
         };
     }
