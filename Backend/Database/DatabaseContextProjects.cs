@@ -56,10 +56,10 @@ public partial class DatabaseContext
         return (DbErrorStatusCodes.Ok, projects);
     }
 
-    internal (DbErrorStatusCodes, Project?) CreateProject(ProjectRequest projectRequest)
+    internal ProjectDbResponse CreateProject(ProjectRequest projectRequest)
     {
         User? user = GetUser(projectRequest.AuthorId, Users);
-        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
+        if (user is null) return new ProjectDbResponse(DbErrorStatusCodes.UserNotFound, null);
         var description = new Description { Text = projectRequest.Description };
 
         var project = new Project
@@ -73,7 +73,7 @@ public partial class DatabaseContext
         Projects.Add(project);
         user.ProjectsAuthored.Add(project);
         SaveChanges();
-        return (DbErrorStatusCodes.Ok, project);
+        return new ProjectDbResponse(DbErrorStatusCodes.Ok, project);
     }
 
     internal Project? GetProjectById(int id)
@@ -86,17 +86,21 @@ public partial class DatabaseContext
                         .FirstOrDefault(p => p.Id == id);
     }
 
-    internal (DbErrorStatusCodes, List<Project>?, bool) GetProjectsByUserId(string id, int? page = 1)
+    internal ProjectsDbResponse GetProjectsByUserId(string id, int? page = 1)
     {
         var user = GetUserById(id);
-        if (user is null) return (DbErrorStatusCodes.UserNotFound, null, false);
+        if (user is null) return new ProjectsDbResponse(DbErrorStatusCodes.UserNotFound, null, false);
         var projects = new List<Project>();
         projects.AddRange(user.ProjectsAuthored);
         projects.AddRange(user.ProjectsCollaborated.Select(p => p.Project));
         bool hasNext = (page * _pageSize) < projects.Count;
-        return (DbErrorStatusCodes.Ok, projects
-            .Skip(((int)page! - 1) * _pageSize)
-            .Take(_pageSize).ToList(), hasNext);
+        
+        return new ProjectsDbResponse
+        (
+            DbErrorStatusCodes.Ok,
+            projects.Skip(((int)page! - 1) * _pageSize).Take(_pageSize).ToArray(),
+            hasNext
+        );
     }
 
     internal DbErrorStatusCodes UpdateProject(ProjectPatchRequest requestBody)
@@ -167,7 +171,7 @@ public partial class DatabaseContext
         if (project.AuthorId == user.ClerkId) return false;
         if (project.Collaborators.Any(u => u.UserId == user.ClerkId)) return false;
         project.Collaborators.Add(new Collaborator { UserId = user.ClerkId, User = user });
-        user.ProjectsCollaborated.Add(new ProjectCollaborated {Project = project, ProjectId = project.Id});
+        user.ProjectsCollaborated.Add(new ProjectCollaborated { Project = project, ProjectId = project.Id });
         SaveChanges();
         return true;
     }
