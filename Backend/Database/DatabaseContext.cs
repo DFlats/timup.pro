@@ -32,6 +32,18 @@ public partial class DatabaseContext(DbContextOptions options) : DbContext(optio
             .OnDelete(DeleteBehavior.Restrict);
     }
 
+    internal int ClearDatabase()
+    {
+        Users.RemoveRange(Users);
+        Projects.RemoveRange(Projects);
+        ProjectInvites.RemoveRange(ProjectInvites);
+        Progresses.RemoveRange(Progresses);
+        Tags.RemoveRange(Tags);
+        Descriptions.RemoveRange(Descriptions);
+        ProjectInvites.RemoveRange(ProjectInvites);
+        return SaveChanges();
+    }
+
     internal bool ClearDatabase()
     {
         try
