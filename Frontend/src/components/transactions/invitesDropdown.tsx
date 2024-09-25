@@ -1,11 +1,59 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { useClientUserInvites } from "../../hooks/transactions";
+import { useClientUser } from "../../hooks/users";
 
 export function InvitesDropdown() {
-    <div className="dropdown dropdown-bottom">
-        <div tabIndex={0} role="button" className="btn m-1">Click</div>
-        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-            <li><a>Item 1</a></li>
-            <li><a>Item 2</a></li>
-        </ul>
-    </div>
+    const { clientUser } = useClientUser();
+    const { acceptInvite, denyInvite } = useClientUserInvites();
+
+    if (!clientUser) return;
+
+    const clientUserInvites = [
+        {
+            title: "A nice project",
+            id: 2
+        },
+        {
+            title: "Another project",
+            id: 3
+        },
+        {
+            title: "Third project",
+            id: 4
+        },
+    ]
+
+    console.log(clientUserInvites);
+
+    if (clientUserInvites.length == 0) return null;
+
+    return (
+        <div className="dropdown dropdown-bottom">
+            <div tabIndex={0} role="button" className="btn m-1">
+                <div className="badge badge-secondary">
+                    {`+${clientUserInvites.length}`}
+                </div>
+                <h2 className='text-3xl'>{` Invites`}</h2>
+            </div>
+            <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                {clientUserInvites.map(invite => (
+                    <li key={invite.id}>
+                        <div className="flex flex-row w-full">
+                            <button className='btn'>{invite.title}</button>
+                            <button
+                                className='btn'
+                                onClick={() => acceptInvite(invite.id)}>
+                                Accept
+                            </button>
+                            <button
+                                className='btn'
+                                onClick={() => denyInvite(invite.id)}>
+                                Deny
+                            </button>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }

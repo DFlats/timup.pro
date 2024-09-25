@@ -1,10 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useClientUser } from "../users";
 import { endpoints } from "../../api";
 
 export function useClientUserInvites() {
     const { clientUser } = useClientUser();
+    const queryClient = useQueryClient();
     const queryKey = ['invites', 'clientUser'];
+
+    type ProjectInvite = {
+        title: string,
+        id: number
+    }
 
     const query = useQuery({
         queryKey,
@@ -15,12 +21,37 @@ export function useClientUserInvites() {
             }
 
             const invites = await endpoints.transactions.getUserInvites(clientUser.id);
-            return invites;
+            const projects = await Promise.all(invites.map(async (invite) => await endpoints.projects.getProject(invite.projectId)));
+            return projects.map(project => ({ title: project.title, id: project.id } as ProjectInvite));
         },
         enabled: !!clientUser
     });
 
+    const acceptInvite = async (projectId: number) => {
+        if (!clientUser) {
+            console.error("clientUser is not defined");
+            return;
+        }
+
+        await endpoints.transactions.inviteUserToProjectAccept(clientUser.id, projectId);
+
+        queryClient.invalidateQueries({ queryKey });
+    }
+
+    const denyInvite = async (projectId: number) => {
+        if (!clientUser) {
+            console.error("clientUser is not defined");
+            return;
+        }
+
+        await endpoints.transactions.inviteUserToProjectDeny(clientUser.id, projectId);
+
+        queryClient.invalidateQueries({ queryKey });
+    }
+
     return {
-        clientUserInvites: query.data
+        projectsInvitedTo: query.data,
+        acceptInvite,
+        denyInvite,
     }
 }

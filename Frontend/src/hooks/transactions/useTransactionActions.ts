@@ -1,9 +1,13 @@
 import { endpoints } from "../../api";
 
-export function useTransactions() {
+export function useTransactionActions() {
+    const joinProjectRequestAccept = async (userId: string, projectId: number) => {
+        await endpoints.transactions.joinProjectRequestAccept(userId, projectId);
+    }
+
     return {
         joinProjectRequest: endpoints.transactions.joinProjectRequest,
-        joinProjectRequestAccept: endpoints.transactions.joinProjectRequestAccept,
+        joinProjectRequestAccept,
         joinProjectRequestDeny: endpoints.transactions.joinProjectRequestDeny,
         inviteUserToProjectRequest: endpoints.transactions.inviteUserToProject,
         inviteUserToProjectRequestAccept: endpoints.transactions.inviteUserToProjectAccept,
