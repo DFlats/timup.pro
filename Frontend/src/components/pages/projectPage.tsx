@@ -46,20 +46,28 @@ export function ProjectPage() {
 
     return (
         <><div
-            className="hero min-h-screen" >
-            <div className="hero-overlay bg-opacity-95"></div>
-            <div className="hero-content text-neutral-content text-center">
-                <div className="max-w-screen-lg">
-                    <h1 className="text-5xl font-bold">{project.title}</h1>
-                    <p className="py-6">{project.description}</p>
-                    <TagContainer tags={projectTags['skill']} tagType='skill' />
-                    <TagContainer tags={projectTags['interest']} tagType='interest' />
-                    <h2 className='text-2xl m-2'>Collaborators</h2>
+            className="min-h-screen" >
+            <div className="bg-opacity-95"></div>
+            <div className="text-neutral-content text-center">
+                <div className="max-w-screen">
+                    <div className="flex flex-col justify-center items-center mt-10 mb-16">
+                        <div>
+                            <div>
+                                <h1 className="text-5xl text-slate-50 text-left font-bold">{project.title}</h1>
+                                <p className="max-w-3xl py-6 text-left">{project.description}</p>
+                            </div>
+                            <div className="flex gap-4">
+                                <TagContainer tags={projectTags['skill']} tagType='skill' />
+                                <TagContainer tags={projectTags['interest']} tagType='interest' />
+                            </div>
+                        </div>
+                    </div>
+                    <h2 className='text-4xl m-2 p-10'>Collaborators</h2>
                     {collaboratorsInProject &&
                         <UserTable
                             users={collaboratorsInProject} />
                     }
-                    <h2 className='text-2xl m-2'>Suggested Collaborators</h2>
+                    <h2 className='text-4xl m-2 p-10'>Suggested Collaborators</h2>
                     {recommendedUsersForProject &&
                         <UserTable
                             users={recommendedUsersForProject}
