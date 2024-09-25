@@ -4,9 +4,8 @@ import { useProjectById } from "../../hooks/projects";
 import { NotFound } from "../routing";
 import { UserTable } from "../users";
 import { TagContainer } from "../tags";
-import { useTransactionActions } from "../../hooks";
 import { Tags } from "../../types";
-import { useCollaborators, useRecommendedUsersForProject } from "../../hooks/users";
+import { useCollaborators } from "../../hooks/users";
 import { UserCard } from "../users/userCard";
 
 export function ProjectPage() {
@@ -23,12 +22,7 @@ export function ProjectPage() {
         kickCollaborator
     } = useCollaborators(projectId);
 
-    const {
-        recommendedUsersForProject,
-        recommendedUsersNextPage,
-        recommendedUsersPreviousPage
-    } = useRecommendedUsersForProject(projectId);
-    const { inviteUserToProjectRequest } = useTransactionActions();
+
 
     if (!project) {
         return (<NotFound>
@@ -50,11 +44,6 @@ export function ProjectPage() {
                 currentSum + (collaborator.tags['interest'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
         })),
     } as Tags;
-
-    const handleInvite = (userId: string) => {
-        console.log(`Invites user ${userId} to project ${projectId}`);
-        inviteUserToProjectRequest(userId, projectId);
-    }
 
     return (
         <><div
@@ -91,7 +80,7 @@ export function ProjectPage() {
                     {recommendedUsersForProject &&
                         <UserTable
                             users={recommendedUsersForProject}
-                            onInvite={handleInvite}
+                            onInvite={inviteSuggestedUser}
                             onPreviousPage={recommendedUsersNextPage}
                             onNextPage={recommendedUsersPreviousPage} />
                     }
