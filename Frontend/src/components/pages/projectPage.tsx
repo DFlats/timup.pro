@@ -7,6 +7,7 @@ import { TagContainer } from "../tags";
 import { useTransactions } from "../../hooks";
 import { Tags } from "../../types";
 import { useCollaborators, useRecommendedUsersForProject } from "../../hooks/users";
+import { UserCard } from "../users/userCard";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
@@ -50,17 +51,22 @@ export function ProjectPage() {
             <div className="bg-opacity-95"></div>
             <div className="text-neutral-content text-center">
                 <div className="max-w-screen">
-                    <div className="flex flex-col justify-center items-center mt-10 mb-16">
-                        <div>
+                    <div className="flex justify-between mt-10 mb-16 gap-20">
+                        <div className="flex flex-col">
                             <div>
-                                <h1 className="text-5xl text-slate-50 text-left font-bold">{project.title}</h1>
-                                <p className="max-w-3xl py-6 text-left">{project.description}</p>
+                                <h1 className="text-5xl text-slate-50 text-left font-bold pt-4 pb-6">{project.title}</h1>
+                                <p className="max-w-3xl text-left">{project.description}</p>
                             </div>
-                            <div className="flex gap-4">
+                            <div className="flex-1"></div>
+                            <div className="self-start pt-4 pb-2">
+                                <p>{`Collaborators: ${project.collaborators.length}`}</p>
+                            </div>
+                            <div className="w-full">
                                 <TagContainer tags={projectTags['skill']} tagType='skill' />
                                 <TagContainer tags={projectTags['interest']} tagType='interest' />
                             </div>
                         </div>
+                        <UserCard authorId={project.authorId} />
                     </div>
                     <h2 className='text-4xl m-2 p-10'>Collaborators</h2>
                     {collaboratorsInProject &&
