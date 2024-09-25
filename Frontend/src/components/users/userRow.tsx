@@ -6,10 +6,11 @@ import { User } from "../../types";
 interface Props {
     user: User,
     onInvite?: (userId: string) => void
+    onKick?: (userId: string) => void
     size?: 'full' | 'compact'
 }
 
-export function UserRow({ user, onInvite }: Props) {
+export function UserRow({ user, onInvite, onKick }: Props) {
     return (
         <tbody>
             <tr className="hover:bg-gray-500 hover:bg-opacity-15 border-b border-white border-opacity-10">
@@ -29,9 +30,21 @@ export function UserRow({ user, onInvite }: Props) {
                         tags={user.tags['interest']} />
                 </td>
                 {onInvite &&
-                    (<td><button onClick={() => onInvite(user.id)} className="btn btn-accent text-lg text-white pl-10 pr-10  w-32">Invite</button></td>)}
-                {!onInvite &&
-                    (<td><button className="btn btn-accent text-lg text-white pl-10 pr-10  w-32">Kick</button></td>)}
+                    (<td>
+                        <button
+                            onClick={() => onInvite(user.id)}
+                            className="btn btn-accent text-lg text-white pl-10 pr-10  w-32">
+                            Invite
+                        </button>
+                    </td>)}
+                {onKick &&
+                    (<td>
+                        <button
+                            onClick={() => onKick(user.id)}
+                            className="btn btn-accent text-lg text-white pl-10 pr-10  w-32">
+                            Kick
+                        </button>
+                    </td>)}
                 <td><Link to='/profile/$userId' className="btn bg-slate-700 text-lg text-white pl-10 pr-10 w-32" params={{ userId: user.id.toString() }}>Details</Link></td>
             </tr>
         </tbody>

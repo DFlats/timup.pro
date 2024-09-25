@@ -43,6 +43,10 @@ export function useRecommendedUsersForProject(projectId: number) {
         }
     }
 
+    const inviteSuggestedUser = () => {
+        
+    }
+
     return {
         recommendedUsersForProject: query.data?.users,
         recommendedUsersPreviousPage: nextPage,

@@ -15,8 +15,19 @@ export function ProjectPage() {
     const projectId = parseInt(id);
 
     const { projectById: project } = useProjectById(projectId);
-    const { collaboratorsInProject, collaboratorsNextPage, collaboratorsPreviousPage } = useCollaborators(projectId);
-    const { recommendedUsersForProject, recommendedUsersNextPage, recommendedUsersPreviousPage } = useRecommendedUsersForProject(projectId);
+
+    const {
+        collaboratorsInProject,
+        collaboratorsNextPage,
+        collaboratorsPreviousPage,
+        kickCollaborator
+    } = useCollaborators(projectId);
+
+    const {
+        recommendedUsersForProject,
+        recommendedUsersNextPage,
+        recommendedUsersPreviousPage
+    } = useRecommendedUsersForProject(projectId);
     const { inviteUserToProjectRequest } = useTransactionActions();
 
     if (!project) {
@@ -73,7 +84,8 @@ export function ProjectPage() {
                         <UserTable
                             users={collaboratorsInProject}
                             onPreviousPage={collaboratorsPreviousPage}
-                            onNextPage={collaboratorsNextPage} />
+                            onNextPage={collaboratorsNextPage}
+                            onKick={kickCollaborator} />
                     }
                     <h2 className='text-4xl m-2 p-10'>Suggested Collaborators</h2>
                     {recommendedUsersForProject &&

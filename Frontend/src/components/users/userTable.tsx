@@ -6,10 +6,11 @@ interface props {
     users: User[],
     onNextPage?: () => void,
     onPreviousPage?: () => void,
-    onInvite?: (userId: string) => void
+    onInvite?: (userId: string) => void,
+    onKick?: (userId: string) => void
 }
 
-export function UserTable({ users, onNextPage, onPreviousPage, onInvite }: props) {
+export function UserTable({ users, onNextPage, onPreviousPage, onInvite, onKick }: props) {
     return (
         <div className="bg-[#010624] rounded-xl border border-white border-opacity-10 p-10 mb-16">
             <table className="table">
@@ -20,9 +21,16 @@ export function UserTable({ users, onNextPage, onPreviousPage, onInvite }: props
                         <th className="text-lg">Matching Skills</th>
                         <th className="text-lg">Matching Interests</th>
                         {onInvite && <th></th>}
+                        {onKick && <th></th>}
                     </tr>
                 </thead>
-                {users && users.map(user => <UserRow key={user.id} onInvite={onInvite} user={user} size='compact' />)}
+                {users && users.map(user =>
+                    <UserRow
+                        key={user.id}
+                        onInvite={onInvite}
+                        onKick={onKick}
+                        user={user}
+                        size='compact' />)}
             </table>
             {onPreviousPage &&
                 <button
