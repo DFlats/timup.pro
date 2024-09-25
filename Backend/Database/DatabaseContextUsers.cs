@@ -214,4 +214,14 @@ public partial class DatabaseContext
         SaveChanges();
         return DbErrorStatusCodes.Ok;
     }
+
+    internal DbErrorStatusCodes PutImageOnUser(string userId, string ImageUrl)
+    {
+        var user = Users.FirstOrDefault(u => u.ClerkId == userId);
+        if(user is null) return DbErrorStatusCodes.UserNotFound;
+
+        user.ImageUrl = ImageUrl;
+        SaveChanges();
+        return DbErrorStatusCodes.Ok;
+    }
 }

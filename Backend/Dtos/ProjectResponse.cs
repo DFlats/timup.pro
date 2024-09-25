@@ -2,7 +2,8 @@ using Backend.Models;
 
 namespace Backend.Dtos;
 
-public record ProjectResponse(int Id, string Title, string AuthorName, string AuthorId, CollaboratorsResponse[] Collaborators, string Description, string[] SkillTags, string[] InterestTags, bool IsCompleted, string[] PendingInvites, string[] UserJoinRequests)
+public record ProjectResponse(int Id, string Title, string AuthorName, string AuthorId, CollaboratorsResponse[] Collaborators, string Description, string[] SkillTags, string[] InterestTags, bool IsCompleted, string[] PendingInvites, string[] JoinRequests, string? ImageUrl)
+
 {
     public static implicit operator ProjectResponse(Project project)
     {
@@ -25,7 +26,7 @@ public record ProjectResponse(int Id, string Title, string AuthorName, string Au
             project.Progress.IsCompleted,
             pendingInvites,
             joinRequests
+            project.ImageUrl
         );
-
     }
 }

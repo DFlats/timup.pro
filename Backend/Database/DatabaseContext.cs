@@ -31,4 +31,19 @@ public partial class DatabaseContext(DbContextOptions options) : DbContext(optio
             .HasForeignKey(t => t.UserId)
             .OnDelete(DeleteBehavior.Restrict);
     }
+
+    internal bool ClearDatabase()
+    {
+        try
+        {
+            Database.ExecuteSqlRaw("DELETE FROM Projects");
+            //Database.ExecuteSqlRaw("DELETE FROM Users");
+            
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

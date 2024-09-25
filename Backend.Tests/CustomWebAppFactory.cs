@@ -4,18 +4,15 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Testcontainers.SqlEdge;
 
 namespace Backend.Tests;
 
-public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public class CustomWebAppFactory : WebApplicationFactory<Program>
 {
-    private readonly SqlEdgeContainer _sqlContainer = new SqlEdgeBuilder().Build();
-
+    private readonly string _remoteDbConnectionString = "Server=rorycraft.com,1433;Database=TeamUpDbTEST3;User Id=sa;Password=Password_2_Change_4_Real_Cases_&;TrustServerCertificate=true";
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        var updatedConnectionString = _sqlContainer.GetConnectionString().Replace("Database=master", "Database=testing");
-        builder.UseSetting("ConnectionStrings:DefaultConnection", updatedConnectionString);
+        builder.UseSetting("ConnectionStrings:DefaultConnection", _remoteDbConnectionString);
 
         builder.ConfigureServices(services =>
         {
@@ -23,18 +20,8 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetim
             services.RemoveAll<DatabaseContext>();
             services.AddDbContext<DatabaseContext>(options =>
             {
-                options.UseSqlServer(_sqlContainer.GetConnectionString());
+                options.UseSqlServer(_remoteDbConnectionString);
             });
         });
     }
-
-    public async Task InitializeAsync()
-    {
-        await _sqlContainer.StartAsync();
-        using var serviceScope = this.Services.CreateAsyncScope();
-        var service = serviceScope.ServiceProvider.GetService<DatabaseContext>()!;
-        service.Database.EnsureCreated();
-    }
-
-    public new Task DisposeAsync() => _sqlContainer.DisposeAsync().AsTask();
 }
