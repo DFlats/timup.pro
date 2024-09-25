@@ -9,8 +9,10 @@ public class User
     public string Name { get; set; } = null!;
     [Required]
     public string Email { get; set; } = null!;
+    public string? ImageUrl { get; set; }
+
     public virtual List<Project> ProjectsAuthored { get; set; } = [];
-    public virtual List<ProjectCollaborated> ProjectsCollaborated {get; } = [];
+    public virtual List<ProjectCollaborated> ProjectsCollaborated { get; } = [];
     public List<Tag> Tags { get; set; } = [];
     public List<ProjectInvite> ProjectInvites { get; set; } = [];
 }
