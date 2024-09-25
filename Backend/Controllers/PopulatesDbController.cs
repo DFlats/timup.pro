@@ -13,4 +13,11 @@ public class PopulatesController(DatabaseContext db) : ControllerBase
     {
         return Ok(db.PopulateDatabase());
     }
+
+    [HttpPost("ClearDatabase")]
+    [ProducesResponseType(typeof(bool), 200)]
+    public IActionResult ClearDatabase()
+    {
+        return Ok(db.ClearDatabase());
+    }
 }
