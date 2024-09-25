@@ -59,6 +59,8 @@ public class UsersController(DatabaseContext db) : ControllerBase
     {
         var userDbResponse = db.CreateUser(userToCheck);
 
+        if(userDbResponse.DbErrorStatusCode == DbErrorStatusCodes.Ok) db.InviteUserToSomeRandomProjects(userDbResponse.User!.ClerkId);
+
         return userDbResponse.DbErrorStatusCode switch
         {
             DbErrorStatusCodes.UserAlreadyExists => Ok((UserResponse)db.GetUserById(userToCheck.ClerkId)!),
