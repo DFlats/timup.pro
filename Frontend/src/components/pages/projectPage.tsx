@@ -32,7 +32,7 @@ export function ProjectPage() {
             count: collaboratorsInProject.reduce((currentSum, collaborator) =>
                 currentSum + (collaborator.tags['skill'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
         })),
-        'interest': project.tags['skill'].map(projectTag => ({
+        'interest': project.tags['interest'].map(projectTag => ({
             ...projectTag,
             count: collaboratorsInProject.reduce((currentSum, collaborator) =>
                 currentSum + (collaborator.tags['interest'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
