@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { endpoints } from "../../api";
-import { User } from "../../types";
-import { useState } from "react";
+import { User } from "../../types"
+import { useState } from "react"
 
 export function useRecommendedUsersForProject(projectId: number) {
     const [currentPage, setCurrentPage] = useState(1);
