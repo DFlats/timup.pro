@@ -1,5 +1,8 @@
 using Backend.Database;
+using Backend.Dtos;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using SQLitePCL;
 
 namespace Backend.Controllers;
 
@@ -20,6 +23,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is already owner"),
+            DbErrorStatusCodes.UserAlreadyInvited => Conflict("User is already invited"),
             DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
         };
@@ -72,6 +76,7 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
             DbErrorStatusCodes.UserAlreadyInProject => Conflict("User already in project"),
+            DbErrorStatusCodes.UserAlreadyInvited => Conflict("User already invited"),
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
             DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
@@ -147,6 +152,30 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
             DbErrorStatusCodes.UserIsAlreadyOwner => Conflict("User is owner of the project"),
             DbErrorStatusCodes.Ok => NoContent(),
             _ => StatusCode(500),
+        };
+    }
+
+    [HttpGet("GetUserInvites/{userId}")]
+    public ActionResult<List<ProjectInviteResponse>> GetUserInvites(string userId)
+    {
+        var (status, invites) = db.GetUserInvites(userId);
+        return status switch
+        {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.Ok => invites!.Select(i => (ProjectInviteResponse)i).ToList(),
+            _ => StatusCode(500)
+        };
+    }
+
+    [HttpGet("GetProjectInvites/{projectId}")]
+    public ActionResult<List<ProjectInviteResponse>> GetProjectInvites(int projectId)
+    {
+        var (status, invites) = db.GetProjectInvites(projectId);
+        return status switch
+        {
+            DbErrorStatusCodes.ProjectNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.Ok => invites!.Select(i => (ProjectInviteResponse)i).ToList(),
+            _ => StatusCode(500)
         };
     }
 }

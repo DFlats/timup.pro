@@ -128,7 +128,7 @@ public partial class DatabaseContext
                 {
                     TagValue = skill,
                     IsSkill = true,
-                    UserId = requestBody.AuthorId
+                    DescriptionId = project.Description.Id
                 };
                 Tags.Add(newTag);
                 project.Description.Tags.Add(newTag);
@@ -149,7 +149,7 @@ public partial class DatabaseContext
                 {
                     TagValue = interest,
                     IsSkill = false,
-                    UserId = requestBody.AuthorId
+                    DescriptionId = project.Description.Id
                 };
                 Tags.Add(newTag);
                 project.Description.Tags.Add(newTag);
@@ -168,7 +168,7 @@ public partial class DatabaseContext
         if (project.AuthorId == user.ClerkId) return false;
         if (project.Collaborators.Any(u => u.UserId == user.ClerkId)) return false;
         project.Collaborators.Add(new Collaborator { UserId = user.ClerkId, User = user });
-        user.ProjectsAuthored.Add(project);
+        user.ProjectsCollaborated.Add(new ProjectCollaborated {Project = project, ProjectId = project.Id});
         SaveChanges();
         return true;
     }

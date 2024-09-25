@@ -9,5 +9,6 @@ public class ProjectInvite
     public User User { get; set; } = null!;
     [Required]
     public Project Project { get; set; } = null!;
-    public bool Accepted { get; set; } = false;
+    public bool UserAccepted { get; set; } = false;
+    public bool ProjectAccepted { get; set; } = false;
 }
