@@ -8,10 +8,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 namespace Backend.Tests;
 
 public class CustomWebAppFactory : WebApplicationFactory<Program>
-public class CustomWebAppFactory : WebApplicationFactory<Program>
 {
-    private readonly SqlEdgeContainer _sqlContainer = new SqlEdgeBuilder().Build();
-
+    private readonly string _remoteDbConnectionString = "Server=rorycraft.com,1433;Database=TeamUpDbTEST2;User Id=sa;Password=Password_2_Change_4_Real_Cases_&;TrustServerCertificate=true";
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseSetting("ConnectionStrings:DefaultConnection", _remoteDbConnectionString);
