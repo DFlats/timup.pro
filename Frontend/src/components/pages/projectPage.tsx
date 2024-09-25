@@ -66,7 +66,7 @@ export function ProjectPage() {
                                 <TagContainer tags={projectTags['interest']} tagType='interest' />
                             </div>
                         </div>
-                        <UserCard authorId={project.authorId} />
+                        <UserCard userId={project.authorId} pageTitle='Project Owner' />
                     </div>
                     <h2 className='text-4xl m-2 p-10'>Collaborators</h2>
                     {collaboratorsInProject &&

@@ -12,7 +12,9 @@ export function ProjectsOwnedByClientUser() {
 
     return (
         <ProjectFeed>
-            <ProjectFeedTitle title={`Projects you're a part of`} />
+            <div className="mt-20">
+                <ProjectFeedTitle title={`Projects you're a part of`} />
+            </div>
             <ProjectFeedCardContainer>
                 <NewProjectCard />
                 {projects && projects.map(project => <ProjectCard key={project.id} project={project} />)}
