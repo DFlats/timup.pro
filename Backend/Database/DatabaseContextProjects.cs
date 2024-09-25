@@ -128,7 +128,7 @@ public partial class DatabaseContext
                 {
                     TagValue = skill,
                     IsSkill = true,
-                    UserId = requestBody.AuthorId
+                    DescriptionId = project.Description.Id
                 };
                 Tags.Add(newTag);
                 project.Description.Tags.Add(newTag);
@@ -149,7 +149,7 @@ public partial class DatabaseContext
                 {
                     TagValue = interest,
                     IsSkill = false,
-                    UserId = requestBody.AuthorId
+                    DescriptionId = project.Description.Id
                 };
                 Tags.Add(newTag);
                 project.Description.Tags.Add(newTag);
