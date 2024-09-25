@@ -56,32 +56,6 @@ export function InvitesDropdown() {
                     </tbody>
                 </table>
             </div>
-            {/* <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                {projectsInvitedTo.map(invite => (
-                    <li key={invite.id}>
-                        <div className="flex flex-row w-full">
-                            <button
-                                className='btn'
-                                onClick={() => {
-                                    navigate({ to: '/project/$id', params: { id: invite.id.toString() } });
-                                }
-                                }>
-                                {invite.title}
-                            </button>
-                            <button
-                                className='btn'
-                                onClick={() => acceptInvite(invite.id)}>
-                                Accept
-                            </button>
-                            <button
-                                className='btn'
-                                onClick={() => denyInvite(invite.id)}>
-                                Deny
-                            </button>
-                        </div>
-                    </li>
-                ))}
-            </ul> */}
         </div >
     );
 }
