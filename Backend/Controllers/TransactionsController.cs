@@ -155,26 +155,26 @@ public class TransactionsController(DatabaseContext db) : ControllerBase
         };
     }
 
-    [HttpGet("GetUserInvites/{userId}")]
-    public ActionResult<List<ProjectInviteResponse>> GetUserInvites(string userId)
+    [HttpGet("GetInvites/{userId}")]
+    public ActionResult<List<int>> GetUserInvites(string userId)
     {
         var (status, invites) = db.GetUserInvites(userId);
         return status switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => invites!.Select(i => (ProjectInviteResponse)i).ToList(),
+            DbErrorStatusCodes.Ok => invites!.Select(i => ((ProjectInviteResponse)i).ProjectId).ToList(),
             _ => StatusCode(500)
         };
     }
 
-    [HttpGet("GetProjectInvites/{projectId}")]
-    public ActionResult<List<ProjectInviteResponse>> GetProjectInvites(int projectId)
+    [HttpGet("GetJoinRequests/{projectId}")]
+    public ActionResult<List<string>> GetProjectInvites(int projectId)
     {
         var (status, invites) = db.GetProjectInvites(projectId);
         return status switch
         {
-            DbErrorStatusCodes.ProjectNotFound => NotFound("User not found"),
-            DbErrorStatusCodes.Ok => invites!.Select(i => (ProjectInviteResponse)i).ToList(),
+            DbErrorStatusCodes.ProjectNotFound => NotFound("Project not found"),
+            DbErrorStatusCodes.Ok => invites!.Select(i => ((ProjectInviteResponse)i).UserId ).ToList(),
             _ => StatusCode(500)
         };
     }
