@@ -65,10 +65,10 @@ export function CreateProjectForm() {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <label className="pt-8 text-white" htmlFor="name">Title {errors.title && <span className="text-red-500">: This field is required</span>}</label>
-            <input className="input input-bordered bg-[#0e132f] w-full mb-6 mt-2 text-cyan-300" {...register("title", { required: true })} />
+            <input className="input input-bordered bg-[#0e132f] w-full mb-6 mt-2 text-cyan-300" placeholder="Enter a catchy title for your project?" {...register("title", { required: true })} />
 
             <label className="pt-8 text-white" htmlFor="name">Description {errors.description && <span className="text-red-500">: This field is required</span>}</label>
-            <textarea className="textarea textarea-bordered bg-[#0e132f] w-full mb-4 mt-2 text-cyan-300" {...register("description", { required: true })} />
+            <textarea className="textarea textarea-bordered bg-[#0e132f] w-full mb-4 mt-2 text-cyan-300 text-base" placeholder="What is the main idea behind your project?" {...register("description", { required: true })} />
 
             <TagEditor
                 tags={tags}
