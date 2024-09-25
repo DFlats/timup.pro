@@ -6,7 +6,6 @@ import { openCreateProjectModal } from "../../modalControllers";
 import { useClientUser } from "../../hooks/users";
 import { Logo, InvitesDropdown } from "../../components/dashboard";
 
-
 export function Dashboard() {
     const { clientUser } = useClientUser();
 

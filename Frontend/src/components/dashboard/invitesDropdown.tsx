@@ -1,10 +1,12 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useClientUserInvites } from "../../hooks/transactions";
 import { useClientUser } from "../../hooks/users";
+import { useNavigate } from '@tanstack/react-router';
 
 export function InvitesDropdown() {
     const { clientUser } = useClientUser();
     const { acceptInvite, denyInvite } = useClientUserInvites();
+    const navigate = useNavigate();
 
     if (!clientUser) return;
 
@@ -37,7 +39,11 @@ export function InvitesDropdown() {
                 {clientUserInvites.map(invite => (
                     <li key={invite.id}>
                         <div className="flex flex-row w-full">
-                            <button className='btn'>{invite.title}</button>
+                            <button
+                                className='btn'
+                                onClick={() => navigate({ to: '/project/$id', params: { id: invite.id.toString() } })}>
+                                {invite.title}
+                            </button>
                             <button
                                 className='btn'
                                 onClick={() => acceptInvite(invite.id)}>
@@ -52,6 +58,6 @@ export function InvitesDropdown() {
                     </li>
                 ))}
             </ul>
-        </div>
+        </div >
     );
 }
