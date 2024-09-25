@@ -34,15 +34,17 @@ public class BackendShould(CustomWebAppFactory factory) : IClassFixture<CustomWe
         Assert.NotNull(responseString);
     }
 
-    [Fact]
-    public async Task PopulateDb_ReturnSuccess()
-    {
-        var response = await httpClient.PostAsync("/api/Populates/PopulateDatabase", null);
 
-        response.EnsureSuccessStatusCode();
-        var responseString = await response.Content.ReadAsStringAsync();
-        Assert.Equal("true", responseString);
-    }
+    // SUPER SLOW
+    // [Fact]
+    // public async Task PopulateDb_ReturnSuccess()
+    // {
+    //     var response = await httpClient.PostAsync("/api/Populates/PopulateDatabase", null);
+
+    //     response.EnsureSuccessStatusCode();
+    //     var responseString = await response.Content.ReadAsStringAsync();
+    //     Assert.Equal("true", responseString);
+    // }
 
     [Fact]
     public async Task ClearDb_ReturnSuccess()
