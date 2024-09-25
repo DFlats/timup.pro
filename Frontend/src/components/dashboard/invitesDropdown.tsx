@@ -41,7 +41,10 @@ export function InvitesDropdown() {
                         <div className="flex flex-row w-full">
                             <button
                                 className='btn'
-                                onClick={() => navigate({ to: '/project/$id', params: { id: invite.id.toString() } })}>
+                                onClick={() => {
+                                    navigate({ to: '/project/$id', params: { id: invite.id.toString() } });
+                                }
+                                }>
                                 {invite.title}
                             </button>
                             <button
