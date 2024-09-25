@@ -15,7 +15,7 @@ export function ProjectPage() {
     const projectId = parseInt(id);
 
     const { projectById: project } = useProjectById(projectId);
-    const { collaboratorsInProject } = useCollaborators(projectId);
+    const { collaboratorsInProject, collaboratorsNextPage, collaboratorsPreviousPage } = useCollaborators(projectId);
     const { recommendedUsersForProject } = useRecommendedUsersForProject(projectId);
     const { inviteUserToProjectRequest } = useTransactionActions();
 
@@ -71,13 +71,17 @@ export function ProjectPage() {
                     <h2 className='text-4xl m-2 p-10'>Collaborators</h2>
                     {collaboratorsInProject &&
                         <UserTable
-                            users={collaboratorsInProject} />
+                            users={collaboratorsInProject}
+                            onPreviousPage={collaboratorsPreviousPage}
+                            onNextPage={collaboratorsNextPage} />
                     }
                     <h2 className='text-4xl m-2 p-10'>Suggested Collaborators</h2>
                     {recommendedUsersForProject &&
                         <UserTable
                             users={recommendedUsersForProject}
-                            onInvite={handleInvite} />
+                            onInvite={handleInvite}
+                            onPreviousPage={() => console.log("previous page")}
+                            onNextPage={() => console.log("next page")} />
                     }
                 </div>
             </div>
