@@ -2,7 +2,7 @@
 import { getRouteApi } from "@tanstack/react-router";
 
 import { useProjectById } from "../../hooks/projects";
-import { useClientUser, useCollaborators } from "../../hooks/users";
+import { useClientUser, useCollaborators, useProjectAuthor } from "../../hooks/users";
 
 import { NotFound } from "../routing";
 import { CollaboratorTable, RecommendedUserTable, UserCard } from "../users";
@@ -15,12 +15,13 @@ export function ProjectPage() {
     const projectId = parseInt(id);
 
     const { clientUser, clientUserIsCollaboratorOrAuthorOfProject } = useClientUser();
+    const { author } = useProjectAuthor(projectId);
     const { projectById } = useProjectById(projectId);
     const { joinProjectRequest } = useTransactionActions();
 
     const {
         collaboratorsInProject,
-        countCollaboratorTags
+        countSuppliedProjectTags
     } = useCollaborators(projectId);
 
     if (!projectById) {
@@ -29,9 +30,9 @@ export function ProjectPage() {
         </NotFound>)
     }
 
-    if (!collaboratorsInProject) return;
+    if (!collaboratorsInProject || !author) return;
 
-    const countedProjectTags = countCollaboratorTags(projectById.tags);
+    const countedProjectTags = countSuppliedProjectTags(author, projectById.tags);
 
     return (
         <><div
