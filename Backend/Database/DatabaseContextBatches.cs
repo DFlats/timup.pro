@@ -1,4 +1,5 @@
 using Backend.Dtos;
+using Backend.Dtos.Internal;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -37,11 +38,11 @@ partial class DatabaseContext
         );
     }
 
-    internal (DbErrorStatusCodes, ProjectBatchResponse?) GetRecommendedProjectBatchByUserId(string id, int? page = 1)
+    internal ProjectBatchDbResponse GetRecommendedProjectBatchByUserId(string id, int? page = 1)
     {
         var user = GetUserById(id);
 
-        if (user is null) return (DbErrorStatusCodes.UserNotFound, null);
+        if (user is null) return new ProjectBatchDbResponse(DbErrorStatusCodes.UserNotFound, null);
 
         var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
         var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
@@ -53,17 +54,17 @@ partial class DatabaseContext
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
             .Count();
 
-        var (status, projectsResponse) = GetRecommendedProjectsByUserId(id, page);
+        var projectsDbResponse = GetRecommendedProjectsByUserId(id, page);
 
-        return status switch
+        return projectsDbResponse.DbErrorStatusCode switch
         {
-            DbErrorStatusCodes.UserNotFound => (DbErrorStatusCodes.UserNotFound, null),
-            DbErrorStatusCodes.Ok => (DbErrorStatusCodes.Ok, new ProjectBatchResponse(
-                projectsResponse!,
+            DbErrorStatusCodes.UserNotFound => new ProjectBatchDbResponse(DbErrorStatusCodes.UserNotFound, null),
+            DbErrorStatusCodes.Ok => new ProjectBatchDbResponse(DbErrorStatusCodes.Ok, new ProjectBatchResponse(
+                projectsDbResponse.Projects.Select(p => (ProjectResponse)p).ToList(),
                 (int)page!,
                 projectsCount / _pageSize > page ? page + 1 : null)
             ),
-            _ => (DbErrorStatusCodes.FatalError, null)
+            _ => new ProjectBatchDbResponse(DbErrorStatusCodes.FatalError, null)
         };
     }
 
@@ -82,13 +83,13 @@ partial class DatabaseContext
             .Count();
 
 
-        var (status, usersResponse) = GetRecommendedUsersByProjectId(id, page);
+        var usersDbResponse = GetRecommendedUsersByProjectId(id, page);
 
-        return status switch
+        return usersDbResponse.DbErrorStatusCode switch
         {
             DbErrorStatusCodes.ProjectNotFound => (DbErrorStatusCodes.UserNotFound, null),
             DbErrorStatusCodes.Ok => (DbErrorStatusCodes.Ok, new UserBatchResponse(
-                usersResponse!.Select(u => (UserResponse)u).ToList(),
+                usersDbResponse.Users.Select(u => (UserResponse)u).ToList(),
                 (int)page!,
                 usersCount / _pageSize > page ? page + 1 : null)
             ),
@@ -96,30 +97,28 @@ partial class DatabaseContext
         };
     }
 
-    internal (DbErrorStatusCodes, ProjectBatchResponse?) GetProjectBatchByUserId(string id, int? page)
+    internal ProjectBatchDbResponse GetProjectBatchByUserId(string id, int? page)
     {
-        var (status, projects, hasNext) = GetProjectsByUserId(id, page);
-        if (status != DbErrorStatusCodes.Ok) return (status, null);
-        var projectResponses = projects!.Select(p => (ProjectResponse)p).ToList();
-        int? nextPage = hasNext ? page + 1 : null;
+        var projectsDbResponse = GetProjectsByUserId(id, page);
+        if (projectsDbResponse.DbErrorStatusCode != DbErrorStatusCodes.Ok) return new ProjectBatchDbResponse(projectsDbResponse.DbErrorStatusCode, null);
+        var projectResponses = projectsDbResponse.Projects.Select(p => (ProjectResponse)p).ToList();
+        int? nextPage = projectsDbResponse.HasNext ? page + 1 : null;
         int CurrentPage = (int)page!;
-        return (DbErrorStatusCodes.Ok, new ProjectBatchResponse(projectResponses, (int)page!, nextPage));
+        return new ProjectBatchDbResponse(DbErrorStatusCodes.Ok, new ProjectBatchResponse(projectResponses, (int)page!, nextPage));
     }
 
-    internal  UserBatchResponse GetUserBatchByFilter(string[]? skills, string[]? interests, int? page = 1)
+    internal UserBatchResponse GetUserBatchByFilter(string[]? skills, string[]? interests, int? page = 1)
     {
-        var (users, hasNext) = GetUsersByFilter(skills, interests, page);
-        int? nextPage = hasNext ? page + 1 : null;
-        return  new UserBatchResponse(users, (int)page!, nextPage);
+        var usersDbResponse = GetUsersByFilter(skills, interests, page);
+        int? nextPage = usersDbResponse.HasNext ? page + 1 : null;
+        return new UserBatchResponse(usersDbResponse.Users.Select(u => (UserResponse)u).ToList(), (int)page!, nextPage);
     }
 
-    internal  UserBatchResponse GetAllUserBatch(int? page = 1)
+    internal UserBatchResponse GetAllUserBatch(int? page = 1)
     {
-        var (users, hasNext) = GetAllUsers(page);
-        int? nextPage = hasNext ? page + 1 : null;
-        return  new UserBatchResponse(users, (int)page!, nextPage);
+        var usersDbResponse = GetAllUsers(page);
+        int? nextPage = usersDbResponse.HasNext ? page + 1 : null;
+        return new UserBatchResponse(usersDbResponse.Users.Select(u => (UserResponse)u).ToList(), (int)page!, nextPage);
     }
-
-
 
 }
