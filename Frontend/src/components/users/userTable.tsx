@@ -1,15 +1,16 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { UserRow } from "../../components/users";
-import { User } from "../../types";
+import { Project, User } from "../../types";
 
 interface props {
     users: User[],
     onNextPage?: () => void,
     onPreviousPage?: () => void,
-    onInvite?: (userId: string) => void
+    onInvite?: (userId: string) => Promise<"Error" | "Success" | undefined>,
+    project: Project
 }
 
-export function UserTable({ users, onNextPage, onPreviousPage, onInvite }: props) {
+export function UserTable({ users, onNextPage, onPreviousPage, onInvite, project }: props) {
     return (
         <div className="bg-[#010624] rounded-xl border border-white border-opacity-10 p-10 mb-16">
             <table className="table">
@@ -22,7 +23,7 @@ export function UserTable({ users, onNextPage, onPreviousPage, onInvite }: props
                         {onInvite && <th></th>}
                     </tr>
                 </thead>
-                {users && users.map(user => <UserRow key={user.id} onInvite={onInvite} user={user} size='compact' />)}
+                {users && users.map(user => <UserRow key={user.id} onInvite={onInvite} user={user} size='compact' project={project}/>)}
             </table>
             {onPreviousPage &&
                 <button

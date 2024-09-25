@@ -1,15 +1,33 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Link } from "@tanstack/react-router";
 import { TagContainerCompact } from "../tags";
-import { User } from "../../types";
+import { Project, User } from "../../types";
+import { useState } from "react";
 
 interface Props {
     user: User,
-    onInvite?: (userId: string) => void
-    size?: 'full' | 'compact'
+    onInvite?: (userId: string) => Promise<"Error" | "Success" | undefined>,
+    size?: 'full' | 'compact',
+    project: Project
 }
 
-export function UserRow({ user, onInvite }: Props) {
+export function UserRow({ user, onInvite, project }: Props) {
+    const [invite, setInvite] = useState("Invite")
+    const pendingInvite = project.pendingInvites.includes(user.id)
+
+    async function handleInvite() {
+        if (onInvite) {
+            const result = await onInvite(user.id)
+            if (result === "Success") {
+                setInvite("Success")
+            }
+            if (result === "Error") {
+                console.log("Error")
+                setInvite("Error")
+            }
+        }
+    }
+
     return (
         <tbody>
             <tr className="hover:bg-gray-500 hover:bg-opacity-15 border-b border-white border-opacity-10">
@@ -29,7 +47,7 @@ export function UserRow({ user, onInvite }: Props) {
                         tags={user.tags['interest']} />
                 </td>
                 {onInvite &&
-                    (<td><button onClick={() => onInvite(user.id)} className="btn btn-accent text-lg text-white pl-10 pr-10  w-32">Invite</button></td>)}
+                    (<td><button onClick={() => handleInvite()} className={`btn btn-accent text-lg text-white pl-10 pr-10 w-32 ${invite === 'Error' && 'btn-error'} ${invite === 'Success' && 'btn-success'} ${pendingInvite && 'btn-disabled'}`} >{invite === 'Success' ? 'Sent' : pendingInvite ? 'Pending' : invite === 'Error' ? 'Error' : 'Invite'}</button></td>)}
                 {!onInvite &&
                     (<td><button className="btn btn-accent text-lg text-white pl-10 pr-10  w-32">Kick</button></td>)}
                 <td><Link to='/profile/$userId' className="btn bg-slate-700 text-lg text-white pl-10 pr-10 w-32" params={{ userId: user.id.toString() }}>Details</Link></td>

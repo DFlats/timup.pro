@@ -34,7 +34,7 @@ export const inviteUserToProject = async (userId: string, projectId: number) => 
     });
 
     if (!response.ok && error)
-        throw error;
+        throw new Error(error);
 }
 
 export const inviteUserToProjectAccept = async (userId: string, projectId: number) => {

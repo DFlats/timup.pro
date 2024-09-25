@@ -40,9 +40,20 @@ export function ProjectPage() {
         })),
     } as Tags;
 
-    const handleInvite = (userId: string) => {
-        console.log(`Invites user ${userId} to project ${projectId}`);
-        inviteUserToProjectRequest(userId, projectId);
+    const handleInvite = async (userId: string) => {
+        try {
+            await inviteUserToProjectRequest(userId, projectId);
+            return "Success";
+        } catch (error) {
+            if (error instanceof Error) { 
+                console.log(error.message);
+                if (error.message === "User already invited") {
+                    return "Success";
+                }
+                return "Error";
+            }
+            return "Error";
+        }
     }
 
     return (
@@ -72,6 +83,7 @@ export function ProjectPage() {
                     {collaboratorsInProject &&
                         <UserTable
                             users={collaboratorsInProject}
+                            project={project}
                             onPreviousPage={collaboratorsPreviousPage}
                             onNextPage={collaboratorsNextPage} />
                     }
@@ -80,6 +92,7 @@ export function ProjectPage() {
                         <UserTable
                             users={recommendedUsersForProject}
                             onInvite={handleInvite}
+                            project={project}
                             onPreviousPage={() => console.log("previous page")}
                             onNextPage={() => console.log("next page")} />
                     }
