@@ -96,7 +96,7 @@ export const getProjectInvites = async (projectId: number) => {
     return data.map(invite => inviteFromProjectInviteResponse(invite));
 }
 
-export function inviteFromProjectInviteResponse(dto: components['schemas']['ProjectInviteResponse']) {
+function inviteFromProjectInviteResponse(dto: components['schemas']['ProjectInviteResponse']) {
     return {
         userId: dto.userId!,
         projectId: dto.projectId!

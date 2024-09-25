@@ -10,5 +10,7 @@ export function useTransactions() {
         inviteUserToProjectRequestDeny: endpoints.transactions.inviteUserToProjectDeny,
         leaveProjectRequest: endpoints.transactions.leaveProjectRequest,
         kickUserFromProject: endpoints.transactions.kickUserFromProject,
+        getUserInvites: endpoints.transactions.getUserInvites,
+        getProjectInvites: endpoints.transactions.getProjectInvites
     }
 }
