@@ -260,6 +260,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Transactions/GetUserInvites/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Transactions_GetUserInvites"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Transactions/GetProjectInvites/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Transactions_GetProjectInvites"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Users/GetUsers": {
         parameters: {
             query?: never;
@@ -408,6 +440,11 @@ export interface components {
             skillTags?: string[] | null;
             interestTags?: string[] | null;
             isCompleted?: boolean | null;
+        };
+        ProjectInviteResponse: {
+            userId?: string;
+            /** Format: int32 */
+            projectId?: number;
         };
         UserResponse: {
             id?: string;
@@ -1025,6 +1062,48 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    Transactions_GetUserInvites: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectInviteResponse"][];
+                };
+            };
+        };
+    };
+    Transactions_GetProjectInvites: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectInviteResponse"][];
+                };
             };
         };
     };
