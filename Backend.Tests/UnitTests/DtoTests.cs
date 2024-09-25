@@ -119,7 +119,7 @@ public class DtoTests
     {
         var projectResponse = (ProjectResponse)TemplateProject;
 
-        Assert.Equal(TemplateProject.ProjectInvites.Count, projectResponse.InvitedUsers.Length);
+        Assert.Equal(TemplateProject.ProjectInvites.Count, projectResponse.PendingInvites.Length + projectResponse.UserJoinRequests.Length);
     }
 
     static readonly Project TemplateProject = new()
@@ -182,14 +182,17 @@ public class DtoTests
                 {
                     ClerkId = "101112",
                     Name = "Invited User 1"
-                }
+                },
+                ProjectAccepted = true
             },
             new() {
                 User = new User
                 {
                     ClerkId = "131415",
                     Name = "Invited User 2"
-                }
+                },
+            UserAccepted = true
+
             }
         ]
     };
