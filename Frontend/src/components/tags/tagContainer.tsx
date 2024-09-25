@@ -24,7 +24,7 @@ export function TagContainer({ tags, tagType, onRemoveTag }: Props) {
     };
 
     return (
-        <div className='rounded-xl border border-white border-opacity-10 bg-opacity-5 bg-white p-3 mb-2'>
+        <div className='rounded-xl border border-white border-opacity-10 bg-opacity-5 bg-white p-3 mb-2 h-[7.5rem]'>
             <h2>{heading()}</h2>
             <div className="flex flex-row overflow-x-auto no-scrollbar">
                 {tags.length > 0 &&
