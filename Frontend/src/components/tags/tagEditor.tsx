@@ -11,13 +11,18 @@ interface Props {
 
 const tagKinds: TagType[] = ['skill', 'interest'];
 
+const labels: Record<TagType, string> = {
+    'interest': 'Topics',
+    'skill': 'Skills'
+};
+
 const placeHolders: Record<TagType, string> = {
     'interest': 'What are you interested in?',
     'skill': 'What are you good at?'
 };
 
 const submitLabels: Record<TagType, string> = {
-    'interest': 'Add Interest',
+    'interest': 'Add Topic',
     'skill': 'Add Skill'
 }
 
@@ -64,8 +69,9 @@ export function TagEditor({ tags, onAddTag, onRemoveTag }: Props) {
         <div className="my-4 gap-2 flex flex-col">
             {tagKinds.map(kind => (
                 <div key={kind}>
+                    <h4 className="text-white mb-2">{labels[kind]}</h4>
                     <TagContainer tags={tags[kind]} tagType={kind} onRemoveTag={onRemoveTag} />
-                    <div className="flex flex-row">
+                    <div className="flex flex-row mb-6">
                         <input
                             ref={(element) => {
                                 inputRefs.current[kind] = element!;
@@ -74,11 +80,11 @@ export function TagEditor({ tags, onAddTag, onRemoveTag }: Props) {
                             value={inputValues[kind]}
                             placeholder={placeHolders[kind]}
                             onChange={(e) => handleInputChange(e, kind)}
-                            className="input input-bordered w-full max-w-xs"
+                            className="input input-bordered bg-[#0e132f] w-full max-w-xs text-cyan-300"
                         />
 
                         <button
-                            className={`btn m-4 ${inputValues[kind] ?? 'btn-disabled'}`}
+                            className={`btn bg-slate-700 ml-2 ${inputValues[kind] ?? 'btn-disabled'}`}
                             onClick={(e) => handleSubmit(e, kind)}
                             disabled={!inputValues[kind]}
                         >

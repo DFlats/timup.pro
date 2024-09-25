@@ -10,7 +10,8 @@ import { useCollaborators, useRecommendedUsersForProject } from "../../hooks/use
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
-    const projectId = Number.parseInt(Route.useParams().id);
+    const { id: id } = Route.useParams() as { id: string };
+    const projectId = parseInt(id);
 
     const { projectById: project } = useProjectById(projectId);
     const { collaboratorsInProject } = useCollaborators(projectId);
