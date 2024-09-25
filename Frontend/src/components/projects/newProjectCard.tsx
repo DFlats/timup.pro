@@ -1,26 +1,19 @@
-import { CardTitle, CardDescription, CardFooter } from "..";
+/* eslint-disable react/react-in-jsx-scope */
+import { CardDescription} from "..";
 import { openCreateProjectModal } from "../../modalControllers";
 import { Card } from "../layouts";
 import { CreateProjectModal } from "./createProjectModal";
 
-/* eslint-disable react/react-in-jsx-scope */
 export function NewProjectCard() {
     return (
-        <>
-            <button onClick={openCreateProjectModal} className="button button-primary flex justify-center items-center m-4 w-96 h-96 shadow-xl">
-                <Card>
-                    <div className="h-1/2">
-                        <CardTitle title={``} />
-                        <CardDescription>
-                            {`Click to create a new project`}
-                        </CardDescription>
-                        <CardFooter>
-                            {``}
-                        </CardFooter>
-                    </div>
-                </Card>
+        <Card>
+            <button onClick={openCreateProjectModal} className="button w-full h-full">
+                <CardDescription>
+                    {`Click to create a new project`}
+                </CardDescription>
+                <p className="text-9xl pb-10">+</p>
+                <CreateProjectModal />
             </button>
-            <CreateProjectModal />
-        </>
+        </Card>
     );
 }

@@ -62,49 +62,11 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/profile/$userId': typeof ProfileUserIdRoute
-  '/project/$id': typeof ProjectIdRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/profile/$userId': typeof ProfileUserIdRoute
-  '/project/$id': typeof ProjectIdRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/profile/$userId': typeof ProfileUserIdRoute
-  '/project/$id': typeof ProjectIdRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile/$userId' | '/project/$id'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile/$userId' | '/project/$id'
-  id: '__root__' | '/' | '/profile/$userId' | '/project/$id'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ProfileUserIdRoute: typeof ProfileUserIdRoute
-  ProjectIdRoute: typeof ProjectIdRoute
-}
-
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ProfileUserIdRoute: ProfileUserIdRoute,
-  ProjectIdRoute: ProjectIdRoute,
-}
-
-export const routeTree = rootRoute
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+export const routeTree = rootRoute.addChildren({
+  IndexRoute,
+  ProfileUserIdRoute,
+  ProjectIdRoute,
+})
 
 /* prettier-ignore-end */
 
