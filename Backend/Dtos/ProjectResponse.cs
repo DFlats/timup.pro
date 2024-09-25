@@ -25,7 +25,7 @@ public record ProjectResponse(int Id, string Title, string AuthorName, string Au
             interestTags,
             project.Progress.IsCompleted,
             pendingInvites,
-            joinRequests
+            joinRequests,
             project.ImageUrl
         );
     }
