@@ -1,2 +1,2 @@
 export * from './useProjectInvites'
-export * from './useUserInvites'
+export * from './useClientUserInvites'
