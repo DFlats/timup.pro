@@ -111,7 +111,7 @@ public partial class DatabaseContext
 
         List<Tag> fakedTags = [];
 
-        List<string> skills = ["Data", "Art", "C#", "JS", "Java"];
+        List<string> skills = ["JavaScript", "Painting", "Dancing", "Rhetorics", "C#", "Juggling", "Visual Design", "Guitar", "Football", "Writing"];
         for (int j = 0; j < skillsAmount; j++)
         {
             int index = random.Next(skills.Count);
@@ -123,7 +123,7 @@ public partial class DatabaseContext
             skills.RemoveAt(index);
         }
 
-        List<string> interests = ["Data", "Art", "C#", "JS", "Java"];
+        List<string> interests = ["Game Development", "Movies", "Literature", "Sports", "Poetry", "Gaming", "Exploration", "Science", "Cooking"];
         for (int j = 0; j < interestsAmount; j++)
         {
             int index = random.Next(interests.Count);
