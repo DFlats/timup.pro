@@ -8,7 +8,9 @@ import { ProjectsOwnedByClientUser } from "..";
 
 export function ProfilePage() {
     const Route = getRouteApi('/profile/$userId');
-    const { userId } = Route.useParams() as { userId: string };
+    const { userId } = Route.useParams();
+
+    if (!userId) return;
 
     const { userById: user } = useUserById(userId);
     const { clientUser } = useClientUser();
