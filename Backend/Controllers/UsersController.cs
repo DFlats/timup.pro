@@ -57,12 +57,12 @@ public class UsersController(DatabaseContext db) : ControllerBase
     [ProducesResponseType(500)]
     public IActionResult ConfirmUserExists(UserRequest userToCheck)
     {
-        var (status, user) = db.CreateUser(userToCheck);
+        var userDbResponse = db.CreateUser(userToCheck);
 
-        return status switch
+        return userDbResponse.DbErrorStatusCode switch
         {
-            DbErrorStatusCodes.UserAlreadyExists => Ok((UserResponse) db.GetUserById(userToCheck.ClerkId)!),
-            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetUserByUserId), new {userId = user!.ClerkId},(UserResponse) user),
+            DbErrorStatusCodes.UserAlreadyExists => Ok((UserResponse)db.GetUserById(userToCheck.ClerkId)!),
+            DbErrorStatusCodes.Ok => CreatedAtAction(nameof(GetUserByUserId), new { userId = userDbResponse.User!.ClerkId }, (UserResponse)userDbResponse.User),
             DbErrorStatusCodes.FatalError => StatusCode(500),
             _ => StatusCode(500),
         };
@@ -95,4 +95,15 @@ public class UsersController(DatabaseContext db) : ControllerBase
             _ => StatusCode(500),
         };
     }
+
+    [HttpPut("PutUserImageUrl/{userId}")]
+    public IActionResult PutImageOnUser(string userId, [FromBody] string ImageUrl)
+    {
+        return db.PutImageOnUser(userId, ImageUrl) switch {
+            DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
+            DbErrorStatusCodes.Ok => NoContent(),
+            _ => StatusCode(500)
+        };
+    }
+
 }

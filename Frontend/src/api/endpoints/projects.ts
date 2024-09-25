@@ -36,6 +36,8 @@ export const getRecommendedProjects = async (userId: string, page?: number) => {
     if (!data || (!response.ok && error))
         throw error;
 
+    console.log(data);
+
     return projectsFromProjectBatchResponse(data);
 }
 

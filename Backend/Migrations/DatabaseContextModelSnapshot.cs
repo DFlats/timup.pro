@@ -94,6 +94,9 @@ namespace Backend.Migrations
                     b.Property<int>("DescriptionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ProgressId")
                         .HasColumnType("int");
 
@@ -202,6 +205,9 @@ namespace Backend.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
