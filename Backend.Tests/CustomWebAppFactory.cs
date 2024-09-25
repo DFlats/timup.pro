@@ -9,7 +9,7 @@ namespace Backend.Tests;
 
 public class CustomWebAppFactory : WebApplicationFactory<Program>
 {
-    private readonly string _remoteDbConnectionString = "Server=rorycraft.com,1433;Database=TeamUpDbTEST;User Id=sa;Password=Password_2_Change_4_Real_Cases_&;TrustServerCertificate=true";
+    private readonly string _remoteDbConnectionString = "Server=rorycraft.com,1433;Database=TeamUpDbTEST2;User Id=sa;Password=Password_2_Change_4_Real_Cases_&;TrustServerCertificate=true";
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

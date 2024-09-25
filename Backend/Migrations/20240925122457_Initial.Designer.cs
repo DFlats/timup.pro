@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240917105854_Initial")]
+    [Migration("20240925122457_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,30 @@ namespace Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Backend.Models.Collaborator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Collaborator");
+                });
 
             modelBuilder.Entity("Backend.Models.Description", b =>
                 {
@@ -91,6 +115,59 @@ namespace Backend.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("Backend.Models.ProjectCollaborated", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserClerkId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserClerkId");
+
+                    b.ToTable("ProjectCollaborated");
+                });
+
+            modelBuilder.Entity("Backend.Models.ProjectInvite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("ProjectAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("UserAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserClerkId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserClerkId");
+
+                    b.ToTable("ProjectInvites");
+                });
+
             modelBuilder.Entity("Backend.Models.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -134,20 +211,30 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProjectId")
-                        .HasColumnType("int");
-
                     b.HasKey("ClerkId");
 
-                    b.HasIndex("ProjectId");
-
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Backend.Models.Collaborator", b =>
+                {
+                    b.HasOne("Backend.Models.Project", null)
+                        .WithMany("Collaborators")
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("Backend.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Backend.Models.Project", b =>
                 {
                     b.HasOne("Backend.Models.User", "Author")
-                        .WithMany("Projects")
+                        .WithMany("ProjectsAuthored")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -171,6 +258,40 @@ namespace Backend.Migrations
                     b.Navigation("Progress");
                 });
 
+            modelBuilder.Entity("Backend.Models.ProjectCollaborated", b =>
+                {
+                    b.HasOne("Backend.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Models.User", null)
+                        .WithMany("ProjectsCollaborated")
+                        .HasForeignKey("UserClerkId");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Backend.Models.ProjectInvite", b =>
+                {
+                    b.HasOne("Backend.Models.Project", "Project")
+                        .WithMany("ProjectInvites")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Models.User", "User")
+                        .WithMany("ProjectInvites")
+                        .HasForeignKey("UserClerkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Backend.Models.Tag", b =>
                 {
                     b.HasOne("Backend.Models.Description", null)
@@ -184,13 +305,6 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Backend.Models.User", b =>
-                {
-                    b.HasOne("Backend.Models.Project", null)
-                        .WithMany("Collaborators")
-                        .HasForeignKey("ProjectId");
-                });
-
             modelBuilder.Entity("Backend.Models.Description", b =>
                 {
                     b.Navigation("Tags");
@@ -199,11 +313,17 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Project", b =>
                 {
                     b.Navigation("Collaborators");
+
+                    b.Navigation("ProjectInvites");
                 });
 
             modelBuilder.Entity("Backend.Models.User", b =>
                 {
-                    b.Navigation("Projects");
+                    b.Navigation("ProjectInvites");
+
+                    b.Navigation("ProjectsAuthored");
+
+                    b.Navigation("ProjectsCollaborated");
 
                     b.Navigation("Tags");
                 });
