@@ -12,7 +12,9 @@ export type Project = ProjectCore & {
     collaborators: UserIdName[],
     tags: Tags,
     isCompleted: boolean;
-    invitedUsersIds: string[];
+    pendingInvites: string[],
+    joinRequests: string[],
+    imageUrl?: string
 }
 
 export type UserIdName = Record<string, string>;
