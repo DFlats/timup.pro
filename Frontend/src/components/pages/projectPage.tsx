@@ -51,7 +51,7 @@ export function ProjectPage() {
 
                         <div className="flex flex-col w-full">
                             <div>
-                                <h1 className="text-5xl text-slate-50 text-left font-bold pt-4 pb-6">{projectById.title}</h1>
+                                <h1 className="max-w-3xl text-5xl text-slate-50 text-left font-bold pt-4 pb-6">{projectById.title}</h1>
                                 <p className="max-w-3xl text-left">{projectById.description}</p>
                             </div>
 
