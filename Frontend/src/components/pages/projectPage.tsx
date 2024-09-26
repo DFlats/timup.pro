@@ -47,7 +47,7 @@ export function ProjectPage() {
             <div className="bg-opacity-95"></div>
             <div className="text-neutral-content text-center">
                 <div className="max-w-screen">
-                    <div className="flex justify-between mt-10 mb-16 gap-20">
+                    <div className="flex justify-between mt-10 mb-16 gap-10">
 
                         <div className="flex flex-col w-full">
                             <div>
