@@ -33,6 +33,7 @@ export function useClientProjectInvites() {
     const acceptInviteRequest = async (invite: ProjectInvite) => {
         await endpoints.transactions.joinProjectRequestAccept(invite.userId, invite.projectId);
         queryClient.invalidateQueries({ queryKey });
+        queryClient.invalidateQueries({ queryKey: ["projects", "ownedByClientUser"] });
     }
 
     const denyInviteRequest = async (invite: ProjectInvite) => {

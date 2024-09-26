@@ -34,7 +34,9 @@ export function useClientUser() {
 
         const patchedClientUser = await endpoints.users.updateUser(userPatch, clientUser.id);
 
-        queryClient.setQueryData(queryKey, patchedClientUser)
+        queryClient.setQueryData(queryKey, patchedClientUser);
+        queryClient.invalidateQueries({ queryKey: ["users", "byId", clientUser.id] })
+        queryClient.invalidateQueries({ queryKey: ['projects', 'recommendedForClientUser'] })
     }
 
     const updateTags = async (tag: Tag, operation: 'add' | 'remove') => {
@@ -60,8 +62,6 @@ export function useClientUser() {
             tags: newTags,
         } as UserPatch;
 
-        console.log(patch);
-
         patchClientUser(patch);
     }
 
@@ -69,9 +69,6 @@ export function useClientUser() {
         if (!clientUser) {
             throw new Error("clientUser is not defined")
         };
-
-        console.log(project.authorId);
-        console.log(project.collaborators);
 
         return clientUser.id == project.authorId ||
             Object.keys(project.collaborators).includes(clientUser.id);
