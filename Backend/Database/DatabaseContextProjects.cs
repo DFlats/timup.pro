@@ -49,6 +49,7 @@ public partial class DatabaseContext
             .ThenInclude(p => p.Tags)
             .Include(p => p.Collaborators).ThenInclude(u => u.User)
             .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill) && p.Author.ClerkId != id && !p.Collaborators.Select(c => c.UserId).Contains(id) && !p.ProjectInvites.Select(i => i.User.ClerkId).Contains(id))
+            .OrderByDescending(p => GetSumOfMatchingTags(p, user))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
             .ToList();
@@ -194,4 +195,11 @@ public partial class DatabaseContext
         SaveChanges();
         return DbErrorStatusCodes.Ok;
     }
+
+    private int GetSumOfMatchingTags(Project project, User user)
+    {
+        return project.Description.Tags.Where(projectTag => user.Tags.Any(userTag => userTag.IsSkill == projectTag.IsSkill && userTag.TagValue == projectTag.TagValue)).Count();
+    }
+
+
 }
