@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { CreateProjectModal } from "../projects";
 import { openCreateProjectModal } from "../../modalControllers";
 import { useClientUser } from "../../hooks/users";
-import { Logo, InvitesDropdown } from "../../components/dashboard";
+import { Logo, UserInvites } from "../../components/dashboard";
 
 export function Dashboard() {
     const { clientUser } = useClientUser();
@@ -23,7 +23,7 @@ export function Dashboard() {
                 <Logo />
             </Link>
             <SignedIn>
-                <InvitesDropdown />
+                <UserInvites />
                 {profileLink}
                 <button className='text-slate-50 text-3xl mr-8' onClick={openCreateProjectModal}>Create Project</button>
                 <CreateProjectModal />
