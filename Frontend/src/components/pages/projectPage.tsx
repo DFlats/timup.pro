@@ -8,11 +8,13 @@ import { NotFound } from "../routing";
 import { CollaboratorTable, RecommendedUserTable, UserCard } from "../users";
 import { TagContainer } from "../tags";
 import { useTransactionActions } from "../../hooks";
+import { useState } from "react";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
     const { id } = Route.useParams() as { id: string };
     const projectId = parseInt(id);
+    const [projectRequest, setProjectRequest] = useState("Request");
 
     const { clientUser, clientUserIsCollaboratorOrAuthorOfProject } = useClientUser();
     const { author } = useProjectAuthor(projectId);
@@ -34,6 +36,11 @@ export function ProjectPage() {
 
     const countedProjectTags = countSuppliedProjectTags(author, projectById.tags);
 
+    function handleJoinProjectRequest(userId: string, projectId: number) {
+        joinProjectRequest(userId, projectId);
+        setProjectRequest("Success");
+    }
+
     return (
         <><div
             className="min-h-screen" >
@@ -41,7 +48,8 @@ export function ProjectPage() {
             <div className="text-neutral-content text-center">
                 <div className="max-w-screen">
                     <div className="flex justify-between mt-10 mb-16 gap-20">
-                        <div className="flex flex-col">
+
+                        <div className="flex flex-col w-full">
                             <div>
                                 <h1 className="text-5xl text-slate-50 text-left font-bold pt-4 pb-6">{projectById.title}</h1>
                                 <p className="max-w-3xl text-left">{projectById.description}</p>
@@ -63,11 +71,16 @@ export function ProjectPage() {
                     </div>
 
                     {clientUser && !clientUserIsCollaboratorOrAuthorOfProject(projectById) &&
-                        <button
-                            className='btn'
-                            onClick={() => joinProjectRequest(clientUser.id, projectId)}>
-                            Ask to join project
-                        </button>
+                        <div className="flex flex-col items-center">
+                            <div className="animate-bounce w-8 h-8">
+                                <div className="h-0 w-0 border-x-[16px] border-x-transparent border-t-[32px] border-slate-50"></div>
+                            </div>
+                            <button
+                                className={`btn w-96 text-slate-50 text-xl m-5 mb-10 ${projectRequest === "Success" ? "btn-success" : "btn-accent"}`}
+                                onClick={() => handleJoinProjectRequest(clientUser.id, projectId)}>
+                               {projectRequest === "Success" ? "Request Sent" : "Ask to Join Project"}
+                            </button>
+                        </div>
                     }
 
                     <h2 className='text-4xl m-2 p-10'>Collaborators</h2>

@@ -31,6 +31,9 @@ export function EditUserModal() {
                         onAddTag={addTagToClientUser}
                         onRemoveTag={removeTagFromClientUser} />
                     <form method="dialog">
+                        <button className="btn btn-primary mb-4 w-full" type="submit" >Submit</button>
+                    </form>
+                    <form method="dialog">
                         <button className="btn btn-lg btn-ghost absolute right-2 top-2">✕</button>
                     </form>
                 </div>

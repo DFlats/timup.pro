@@ -44,14 +44,15 @@ partial class DatabaseContext
 
         if (user is null) return new ProjectBatchDbResponse(DbErrorStatusCodes.UserNotFound, null);
 
-        var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
-        var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+        var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue.ToLower()).ToArray();
+        var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue.ToLower()).ToArray();
+
 
         int projectsCount = Projects
             .Include(p => p.Author)
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
-            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue.ToLower()) && t.IsSkill || interests.Contains(t.TagValue.ToLower()) && !t.IsSkill) && p.Author.ClerkId != id && !p.Collaborators.Select(c => c.UserId).Contains(id) && !p.ProjectInvites.Select(i => i.User.ClerkId).Contains(id))
             .Count();
 
         var projectsDbResponse = GetRecommendedProjectsByUserId(id, page);
@@ -76,10 +77,13 @@ partial class DatabaseContext
 
         var interests = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
         var skills = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+        var collaborators = project.Collaborators.Select(c => c.User.ClerkId).ToArray();
+        var invitedUsers = project.ProjectInvites.Select(p => p.User.ClerkId).ToArray();
+
 
         int usersCount = Users
             .Include(u => u.Tags)
-            .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill) && !collaborators.Contains(u.ClerkId) && u.ClerkId != project.Author.ClerkId && !invitedUsers.Contains(u.ClerkId))
             .Count();
 
 

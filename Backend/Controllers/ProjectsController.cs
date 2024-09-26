@@ -35,10 +35,17 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
     {
         var projectBatchDbResponse = db.GetRecommendedProjectBatchByUserId(userId, page);
 
+        if(projectBatchDbResponse.ProjectBatchResponse.ProjectResponses.Count == 0)
+        {
+            projectBatchDbResponse.ProjectBatchResponse = db.GetProjectBatch(page);
+            projectBatchDbResponse.DbErrorStatusCode = DbErrorStatusCodes.NoRecommendedProjects;
+        }
+
         return projectBatchDbResponse.DbErrorStatusCode switch
         {
             DbErrorStatusCodes.UserNotFound => NotFound("User not found"),
             DbErrorStatusCodes.Ok => projectBatchDbResponse.ProjectBatchResponse,
+            DbErrorStatusCodes.NoRecommendedProjects => projectBatchDbResponse.ProjectBatchResponse,
             _ => StatusCode(500),
         };
     }
