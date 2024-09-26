@@ -16,7 +16,7 @@ export function CollaboratorTable({ projectId }: props) {
     } = useCollaborators(projectId);
 
     return (
-        <div className="bg-[#010624] rounded-xl border border-white border-opacity-10 p-10 mb-16">
+        <div className="bg-[#010624] rounded-xl shadow-md shadow-gray-600 border border-white border-opacity-10 p-10 mb-16">
             <table className="table">
                 <thead>
                     <tr className="border-b border-white border-opacity-10" >
