@@ -1,0 +1,34 @@
+import { useQuery } from "@tanstack/react-query";
+import { endpoints } from "../../api";
+import { useProjectsOwnedByClientUser } from "../projects";
+import { ProjectInvite } from "../../types";
+
+export function useClientProjectInvites() {
+    const { projectsAuthoredByClientUser } = useProjectsOwnedByClientUser();
+    const queryKey = ['invites', 'project', 'clientUser'];
+
+    const query = useQuery({
+        queryKey,
+        queryFn: async () => {
+            if (!projectsAuthoredByClientUser) {
+                console.error('projectsOwnedByClientUser is undefined');
+                return;
+            }
+
+            return (await Promise.all(
+                projectsAuthoredByClientUser.map(async (project) => {
+                    const projectInvites = await endpoints.transactions.getProjectInvites(project.id);
+                    return projectInvites.map(projectInvite => ({
+                        projectId: project.id,
+                        userId: projectInvite.userId
+                    } as ProjectInvite))
+                })
+            )).flat();
+        },
+        enabled: !!projectsAuthoredByClientUser
+    });
+
+    return {
+        clientProjectInvites: query.data
+    }
+}

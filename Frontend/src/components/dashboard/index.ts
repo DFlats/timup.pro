@@ -1,3 +1,3 @@
 export * from './dashboard'
-export * from './invitesDropdown'
+export * from './userInvites'
 export * from './logo'

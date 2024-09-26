@@ -27,8 +27,15 @@ export function useProjectsOwnedByClientUser() {
         queryClient.setQueryData(queryKey, [...query.data, project])
     }
 
+    const projectsAuthoredByClientUser = () => {
+        if (!query.data || !clientUser) return;
+
+        return query.data.filter(project => project.authorId == clientUser.id);
+    }
+
     return {
         projectsOwnedByClientUser: query.data,
+        projectsAuthoredByClientUser: projectsAuthoredByClientUser(),
         addProjectToCache
     }
 }

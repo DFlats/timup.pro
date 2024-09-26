@@ -7,3 +7,8 @@ export type ClientUserInviteToProject = {
 export type ProjectPendingInviteRequest = {
     userId: string
 }
+
+export type ProjectInvite = {
+    projectId: number,
+    userId: string
+}

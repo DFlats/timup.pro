@@ -1,11 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useClientUserInvites } from "../../hooks/transactions";
+import { useProjectInvites } from "../../hooks/transactions";
 import { useClientUser } from "../../hooks/users";
 import { useNavigate } from '@tanstack/react-router';
 
-export function InvitesDropdown() {
+export function ProjectInvites() {
     const { clientUser } = useClientUser();
-    const { projectsInvitedTo, acceptInvite, denyInvite } = useClientUserInvites();
+    const { projectInvites, acceptInvite, denyInvite } = useProjectInvites();
     const navigate = useNavigate();
 
     if (!clientUser || !projectsInvitedTo) return;
