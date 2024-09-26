@@ -103,7 +103,7 @@ public partial class DatabaseContext
                                 .Take(1)
                                 .FirstOrDefault();
             if(projectAtIndex is null) continue;
-            var invite =  InviteToProject(user.ClerkId, projectAtIndex.Id);//new ProjectInvite {Project = projectAtIndex, ProjectAccepted = true, User = user };
+            var invite =  InviteToProject(user.ClerkId, projectAtIndex.Id);
         }
         SaveChanges();
         return DbErrorStatusCodes.Ok;
@@ -160,10 +160,13 @@ public partial class DatabaseContext
 
         var interests = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
         var skills = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+        var collaborators = project.Collaborators.Select( c => c.User.ClerkId).ToArray();
+        var invitedUsers = project.ProjectInvites.Select(p => p.User.ClerkId).ToArray();
+
 
         var users = Users
             .Include(u => u.Tags)
-            .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Where(u => u.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill) && !collaborators.Contains(u.ClerkId) && u.ClerkId != project.Author.ClerkId && !invitedUsers.Contains(u.ClerkId))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
             .ToList();
