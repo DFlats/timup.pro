@@ -19,20 +19,24 @@ export function ProfilePage() {
 
     return (
         <>
-            {userIsClient &&
-                <>
-                    <div className="flex flex-col items-center">
-                        <UserCard userId={user.id} pageTitle={`Profile`} />
-                        <EditUserModal />
-                        <button
-                            className='btn btn-accent w-full text-slate-50 text-xl mt-5 '
-                            onClick={openEditUserModal}>
-                            Edit Profile
-                        </button>
-                    </div>
-                    <ProjectsOwnedByClientUser />
-                </>
-            }
+
+            <>
+                <div className="flex flex-col items-center">
+                    <UserCard userId={user.id} pageTitle={`Profile`} />
+                    {userIsClient &&
+                        <>
+                            <EditUserModal />
+                            <button
+                                className='btn btn-accent w-full text-slate-50 text-xl mt-5 '
+                                onClick={openEditUserModal}>
+                                Edit Profile
+                            </button>
+                        </>
+                    }
+                </div>
+                <ProjectsOwnedByClientUser />
+            </>
+
         </>
     );
 }

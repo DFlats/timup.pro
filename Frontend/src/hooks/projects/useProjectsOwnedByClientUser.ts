@@ -1,21 +1,17 @@
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { endpoints } from "../../api";
-import { useClientUser } from "../users";
 import { Project } from "../../types";
 
-export function useProjectsOwnedByClientUser() {
-    const { clientUser } = useClientUser();
+export function useProjectsOwnedByClientUser(userId: string) {
     const queryClient = useQueryClient();
 
     const queryKey = ["projects", "ownedByClientUser"];
 
     const query = useQuery({
-        queryKey,
+        queryKey: [userId],
         queryFn: async () => {
-            if (!clientUser) return [];
-            return (await endpoints.projects.getOwnedProjects(clientUser.id)).projects ?? [];
-        },
-        enabled: !!clientUser
+            return (await endpoints.projects.getOwnedProjects(userId)).projects ?? [];
+        }
     });
 
     const addProjectToCache = (project: Project) => {
