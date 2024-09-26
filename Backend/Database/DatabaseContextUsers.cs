@@ -189,10 +189,9 @@ public partial class DatabaseContext
 
             foreach (var skill in requestBody.SkillTags)
             {
-                if(user.Tags.Any(t => t.TagValue.Equals(skill, StringComparison.CurrentCultureIgnoreCase) && t.IsSkill == true)) continue;
                 Tag newTag = new()
                 {
-                    TagValue = skill.ToLower(),
+                    TagValue = skill,
                     IsSkill = true,
                     UserId = requestBody.ClerkId
                 };
@@ -211,10 +210,9 @@ public partial class DatabaseContext
 
             foreach (var interest in requestBody.InterestTags)
             {
-                if(user.Tags.Any(t => t.TagValue.Equals(interest, StringComparison.CurrentCultureIgnoreCase) && t.IsSkill == false)) continue;
                 Tag newTag = new()
                 {
-                    TagValue = interest.ToLower(),
+                    TagValue = interest,
                     IsSkill = false,
                     UserId = requestBody.ClerkId
                 };
