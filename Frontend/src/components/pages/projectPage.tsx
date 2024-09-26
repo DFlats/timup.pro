@@ -41,6 +41,8 @@ export function ProjectPage() {
         setProjectRequest("Success");
     }
 
+    console.log(clientUserIsCollaboratorOrAuthorOfProject(projectById))
+
     return (
         <><div
             className="min-h-screen" >
@@ -70,7 +72,7 @@ export function ProjectPage() {
                         <UserCard userId={projectById.authorId} pageTitle='Project Owner' />
                     </div>
 
-                    {clientUser && !clientUserIsCollaboratorOrAuthorOfProject(projectById) &&
+                    {!clientUserIsCollaboratorOrAuthorOfProject(projectById) && clientUser &&
                         <div className="flex flex-col items-center">
                             <div className="animate-bounce w-8 h-8">
                                 <div className="h-0 w-0 border-x-[16px] border-x-transparent border-t-[32px] border-slate-50"></div>
