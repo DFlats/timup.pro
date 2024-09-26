@@ -2,6 +2,7 @@
 import { Link } from "@tanstack/react-router";
 import { TagContainerCompact } from "../tags";
 import { User } from "../../types";
+import { useState } from "react";
 
 interface Props {
     user: User,
@@ -9,14 +10,17 @@ interface Props {
 }
 
 export function RecommendedUserRow({ user, onInvite }: Props) {
+    const [isInvited, setIsInvited] = useState("Invite")
+    
     const inviteButtonProps = {
         onClick: () => {
             if (onInvite) {
                 console.log('onInvate is defined')
                 onInvite(user.id);
+                setIsInvited("Success")
             }
         },
-        className: "btn btn-accent text-lg text-white pl-10 pr-10  w-32",
+        className: `btn btn-accent text-lg text-white pl-10 pr-10 w-32 ${isInvited === "Success" && "btn-success"}`,
         disabled: onInvite == undefined
     };
 
