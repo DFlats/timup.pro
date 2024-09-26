@@ -103,7 +103,7 @@ public partial class DatabaseContext
                                 .Take(1)
                                 .FirstOrDefault();
             if(projectAtIndex is null) continue;
-            var invite =  InviteToProject(user.ClerkId, projectAtIndex.Id);//new ProjectInvite {Project = projectAtIndex, ProjectAccepted = true, User = user };
+            var invite =  InviteToProject(user.ClerkId, projectAtIndex.Id);
         }
         SaveChanges();
         return DbErrorStatusCodes.Ok;
