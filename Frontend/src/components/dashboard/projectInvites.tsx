@@ -33,27 +33,25 @@ export function ProjectInvites() {
                             <tr
                                 key={(invite.userId + invite.projectId)}>
                                 <td>
-                                    <button
-                                        className='btn w-96 btn-secondary'
-                                        onClick={() => {
-                                            navigate({ to: '/profile/$userId', params: { userId: invite.userId } });
-                                        }
-                                        }>
-                                        <p className='p-2'>{invite.userId}</p>
-                                    </button>
-                                </td>
-                                <td>
-                                    <p> wants to join </p>
-                                </td>
-                                <td>
-                                    <button
-                                        className='btn w-96 btn-secondary'
-                                        onClick={() => {
-                                            navigate({ to: '/project/$id', params: { id: invite.projectId.toString() } });
-                                        }
-                                        }>
-                                        <p className='p-2'>{invite.projectTitle}</p>
-                                    </button>
+                                    <div className='flex flex-row'>
+                                        <button
+                                            onClick={() => {
+                                                navigate({ to: '/profile/$userId', params: { userId: invite.userId } });
+                                            }
+                                            }>
+                                            <p className='p-2'>{invite.userName}</p>
+                                        </button>
+                                        <button>
+                                            wants to join
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                navigate({ to: '/project/$id', params: { id: invite.projectId.toString() } });
+                                            }
+                                            }>
+                                            <p className='p-2'>{invite.projectTitle}</p>
+                                        </button>
+                                    </div>
                                 </td>
                                 <td>
                                     <button
