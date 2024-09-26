@@ -34,7 +34,9 @@ export function ProfilePage() {
                         </>
                     }
                 </div>
-                <ProjectsOwnedByClientUser />
+                {userIsClient &&
+                    <ProjectsOwnedByClientUser />
+                }
             </>
 
         </>

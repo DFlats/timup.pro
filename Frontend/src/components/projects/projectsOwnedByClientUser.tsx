@@ -8,26 +8,23 @@ import { ProjectFeedCardContainer } from "./layout/projectFeedCardContainer";
 import { ProjectFeedTitle } from "./layout/projectFeedTitle";
 
 export function ProjectsOwnedByClientUser() {
+    const { projectsOwnedByClientUser: projects } = useProjectsOwnedByClientUser();
     const Route = getRouteApi('/profile/$userId');
     const { userId } = Route.useParams() as { userId: string };
-    const { projectsOwnedByClientUser: projects } = useProjectsOwnedByClientUser(userId);
+
     const { userById: user } = useUserById(userId);
-    
     const { clientUser } = useClientUser();
 
     if (!user) return;
 
     const userIsClient = clientUser && user.id == clientUser.id;
-
     if (!projects) return;
 
     return (
         <ProjectFeed>
             <div className="mt-20">
-                {userIsClient ?
+                {userIsClient &&
                     <ProjectFeedTitle title={`Projects you're a part of`} />
-                    :
-                    <ProjectFeedTitle title={`Projects they're a part of`} />
                 }
             </div>
             <ProjectFeedCardContainer>
