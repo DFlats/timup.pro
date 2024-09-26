@@ -52,6 +52,7 @@ export function useRecommendedUsersForProject(projectId: number) {
         recommendedUsersForProject: query.data?.users,
         recommendedUsersPreviousPage: nextPage,
         recommendedUsersNextPage: previousPage,
+        recommendedUsersCurrentPage: currentPage,
         inviteSuggestedUser
     }
 }

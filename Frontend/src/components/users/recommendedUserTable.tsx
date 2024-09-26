@@ -12,6 +12,7 @@ export function RecommendedUserTable({ projectId }: props) {
         recommendedUsersForProject,
         recommendedUsersNextPage,
         recommendedUsersPreviousPage,
+        recommendedUsersCurrentPage,
         inviteSuggestedUser
     } = useRecommendedUsersForProject(projectId);
 
@@ -42,16 +43,19 @@ export function RecommendedUserTable({ projectId }: props) {
                         user={user} />)
                 }
             </table>
-            {recommendedUsersNextPage &&
-                <button
-                    className='btn btn-secondary m-4'
-                    onClick={() => recommendedUsersNextPage()}>Previous Page</button>
-            }
-            {recommendedUsersPreviousPage &&
-                <button
-                    className='btn btn-secondary m-4'
-                    onClick={() => recommendedUsersPreviousPage()}>Next Page</button>
-            }
+            <div className="join mt-8">
+                {recommendedUsersNextPage &&
+                    <button
+                        className='join-item btn bg-[#010624] text-xl'
+                        onClick={() => recommendedUsersNextPage()}>«</button>
+                }
+                <button className="join-item btn bg-[#010624] text-xl">{recommendedUsersCurrentPage}</button>
+                {recommendedUsersPreviousPage &&
+                    <button
+                        className='join-item btn bg-[#010624] text-xl'
+                        onClick={() => recommendedUsersPreviousPage()}>»</button>
+                }
+            </div>
         </div>
     )
 }
