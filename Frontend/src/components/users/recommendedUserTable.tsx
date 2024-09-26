@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useProjectInvites } from "../../hooks/transactions";
+import { useProjectById } from "../../hooks/projects/useProjectById";
 import { useRecommendedUsersForProject } from "../../hooks/users";
 import { RecommendedUserRow } from "./recommendedUserRow";
 
@@ -16,12 +16,11 @@ export function RecommendedUserTable({ projectId }: props) {
         inviteSuggestedUser
     } = useRecommendedUsersForProject(projectId);
 
-    const { projectInvites } = useProjectInvites(projectId);
+    const { projectById } = useProjectById(projectId);
 
-    if (!projectInvites) return;
 
     const userIsInvited = (userId: string) =>
-        projectInvites.map(invite => invite.userId).includes(userId)
+        projectById?.pendingInvites.includes(userId)
 
     return (
         <div className="bg-[#010624] rounded-xl border border-white border-opacity-10 p-10 mb-16">
