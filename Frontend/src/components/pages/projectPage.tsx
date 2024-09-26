@@ -1,48 +1,38 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getRouteApi } from "@tanstack/react-router";
+
 import { useProjectById } from "../../hooks/projects";
+import { useClientUser, useCollaborators, useProjectAuthor } from "../../hooks/users";
+
 import { NotFound } from "../routing";
-import { UserTable } from "../users";
+import { CollaboratorTable, RecommendedUserTable, UserCard } from "../users";
 import { TagContainer } from "../tags";
 import { useTransactionActions } from "../../hooks";
-import { Tags } from "../../types";
-import { useCollaborators, useRecommendedUsersForProject } from "../../hooks/users";
 
 export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
-    const { id: id } = Route.useParams() as { id: string };
+    const { id } = Route.useParams() as { id: string };
     const projectId = parseInt(id);
 
-    const { projectById: project } = useProjectById(projectId);
-    const { collaboratorsInProject } = useCollaborators(projectId);
-    const { recommendedUsersForProject } = useRecommendedUsersForProject(projectId);
-    const { inviteUserToProjectRequest } = useTransactionActions();
+    const { clientUser, clientUserIsCollaboratorOrAuthorOfProject } = useClientUser();
+    const { author } = useProjectAuthor(projectId);
+    const { projectById } = useProjectById(projectId);
+    const { joinProjectRequest } = useTransactionActions();
 
-    if (!project) {
+    const {
+        collaboratorsInProject,
+        countSuppliedProjectTags
+    } = useCollaborators(projectId);
+
+    if (!projectById) {
         return (<NotFound>
             <p>{`Sorry, project with id ${projectId} doesn't exist ${String.raw`¯\_(ツ)_/¯`}`}</p>
         </NotFound>)
     }
 
-    if (!collaboratorsInProject) return;
+    if (!collaboratorsInProject || !author) return;
 
-    const projectTags = {
-        'skill': project.tags['skill'].map(projectTag => ({
-            ...projectTag,
-            count: collaboratorsInProject.reduce((currentSum, collaborator) =>
-                currentSum + (collaborator.tags['skill'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
-        })),
-        'interest': project.tags['interest'].map(projectTag => ({
-            ...projectTag,
-            count: collaboratorsInProject.reduce((currentSum, collaborator) =>
-                currentSum + (collaborator.tags['interest'].find(t => t.title == projectTag.title) ? 1 : 0), 0)
-        })),
-    } as Tags;
-
-    const handleInvite = (userId: string) => {
-        console.log(`Invites user ${userId} to project ${projectId}`);
-        inviteUserToProjectRequest(userId, projectId);
-    }
+    const countedProjectTags = countSuppliedProjectTags(author, projectById.tags);
 
     return (
         <><div
@@ -50,29 +40,41 @@ export function ProjectPage() {
             <div className="bg-opacity-95"></div>
             <div className="text-neutral-content text-center">
                 <div className="max-w-screen">
-                    <div className="flex flex-col justify-center items-center mt-10 mb-16">
-                        <div>
+                    <div className="flex justify-between mt-10 mb-16 gap-20">
+                        <div className="flex flex-col">
                             <div>
-                                <h1 className="text-5xl text-slate-50 text-left font-bold">{project.title}</h1>
-                                <p className="max-w-3xl py-6 text-left">{project.description}</p>
+                                <h1 className="text-5xl text-slate-50 text-left font-bold pt-4 pb-6">{projectById.title}</h1>
+                                <p className="max-w-3xl text-left">{projectById.description}</p>
                             </div>
-                            <div className="flex gap-4">
-                                <TagContainer tags={projectTags['skill']} tagType='skill' />
-                                <TagContainer tags={projectTags['interest']} tagType='interest' />
+
+                            <div className="flex-1"></div>
+
+                            <div className="self-start pt-4 pb-2">
+                                <p>{`Collaborators: ${projectById.collaborators.length}`}</p>
+                            </div>
+
+                            <div className="w-full">
+                                <TagContainer tags={countedProjectTags['skill']} tagType='skill' />
+                                <TagContainer tags={countedProjectTags['interest']} tagType='interest' />
                             </div>
                         </div>
+
+                        <UserCard userId={projectById.authorId} pageTitle='Project Owner' />
                     </div>
+
+                    {clientUser && !clientUserIsCollaboratorOrAuthorOfProject(projectById) &&
+                        <button
+                            className='btn'
+                            onClick={() => joinProjectRequest(clientUser.id, projectId)}>
+                            Ask to join project
+                        </button>
+                    }
+
                     <h2 className='text-4xl m-2 p-10'>Collaborators</h2>
-                    {collaboratorsInProject &&
-                        <UserTable
-                            users={collaboratorsInProject} />
-                    }
+                    <CollaboratorTable projectId={projectId} />
+
                     <h2 className='text-4xl m-2 p-10'>Suggested Collaborators</h2>
-                    {recommendedUsersForProject &&
-                        <UserTable
-                            users={recommendedUsersForProject}
-                            onInvite={handleInvite} />
-                    }
+                    <RecommendedUserTable projectId={projectId} />
                 </div>
             </div>
         </div >

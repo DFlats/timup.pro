@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { endpoints } from "../../api";
 
 export function useProjectInvites(projectId: number) {
-    const queryKey = ['invites', 'clientUser'];
+    const queryKey = ['invites', 'projectById', projectId];
 
     const query = useQuery({
         queryKey,

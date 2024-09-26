@@ -77,6 +77,7 @@ public partial class DatabaseContext
                 Email = userToAdd.Email
             };
             Users.Add(user);
+
             SaveChanges();
             return new UserDbResponse(DbErrorStatusCodes.Ok, user);
         }
@@ -84,6 +85,29 @@ public partial class DatabaseContext
         {
             return new UserDbResponse(DbErrorStatusCodes.FatalError, null);
         }
+    }
+
+    internal DbErrorStatusCodes InviteUserToSomeRandomProjects(string userId, int nrOfInvites = 5)
+    {
+        var user = Users
+                    .Include(u => u.ProjectInvites)
+                    .FirstOrDefault(u => u.ClerkId == userId);
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
+        var Random = new Random();
+        for (int i = 0; i < nrOfInvites; i++)
+        {
+            var randomIndex = Random.Next(1, Projects.Count());
+            var projectAtIndex = Projects
+                                .OrderBy(p => p.Id)
+                                .Skip(randomIndex)
+                                .Take(1)
+                                .FirstOrDefault();
+            if(projectAtIndex is null) continue;
+            var invite =  InviteToProject(user.ClerkId, projectAtIndex.Id);//new ProjectInvite {Project = projectAtIndex, ProjectAccepted = true, User = user };
+        }
+        SaveChanges();
+        return DbErrorStatusCodes.Ok;
+
     }
 
     internal DbErrorStatusCodes AddTagToUser(string id, TagRequest tagToAdd)
@@ -218,7 +242,7 @@ public partial class DatabaseContext
     internal DbErrorStatusCodes PutImageOnUser(string userId, string ImageUrl)
     {
         var user = Users.FirstOrDefault(u => u.ClerkId == userId);
-        if(user is null) return DbErrorStatusCodes.UserNotFound;
+        if (user is null) return DbErrorStatusCodes.UserNotFound;
 
         user.ImageUrl = ImageUrl;
         SaveChanges();

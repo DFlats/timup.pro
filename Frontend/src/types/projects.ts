@@ -11,8 +11,10 @@ export type Project = ProjectCore & {
     authorName: string;
     collaborators: UserIdName[],
     tags: Tags,
-    isCompleted: boolean;
-    invitedUsersIds: string[];
+    isCompleted: boolean,
+    pendingInvites: string[],
+    joinRequests: string[],
+    imageUrl?: string
 }
 
 export type UserIdName = Record<string, string>;
@@ -21,7 +23,7 @@ export type ProjectPatch = {
     title?: string;
     description?: string;
     tags?: Tags,
-    isCompleted?: boolean;
+    isCompleted?: boolean
 }
 
 export type ProjectBatch = {

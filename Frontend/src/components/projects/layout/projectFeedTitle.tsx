@@ -4,5 +4,5 @@ interface Props {
 }
 
 export function ProjectFeedTitle({ title }: Props) {
-    return <h1 className='text-5xl mb-8'>{title}</h1>
+    return <h2 className='text-5xl mb-8'>{title}</h2>
 }

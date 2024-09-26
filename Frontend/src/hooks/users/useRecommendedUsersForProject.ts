@@ -1,17 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { endpoints } from "../../api";
-import { User } from "../../types";
+import { User } from "../../types"
+import { useState } from "react"
 
 export function useRecommendedUsersForProject(projectId: number) {
-    const queryKey = ['projects', 'recommendedForProject', projectId];
+    const [currentPage, setCurrentPage] = useState(1);
+    const queryKey = ['users', 'recommendedForProject', projectId, 'page', currentPage];
 
     const query = useQuery({
         queryKey,
         queryFn: async () => {
             const project = await endpoints.projects.getProject(projectId);
-            let users = (await endpoints.users.getRecommendedUsersByProjectId(projectId!)).users;
+            const batch = await endpoints.users.getRecommendedUsersByProjectId(projectId!, currentPage);
 
-            users = users.map(user => ({
+            batch.users = batch.users.map(user => ({
                 ...user,
                 tags: {
                     'skill': user.tags['skill']
@@ -23,11 +25,34 @@ export function useRecommendedUsersForProject(projectId: number) {
                 }
             } as User));
 
-            return users;
+            return batch;
         }
     });
 
+    const nextPage = () => {
+        if (query.data?.nextPage) {
+            setCurrentPage(currentPage => currentPage + 1);
+            console.log(`Next page ${currentPage + 1}`);
+        }
+    }
+
+    const previousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage => currentPage - 1);
+            console.log(`Previous page ${currentPage - 1}`);
+        }
+    }
+
+    const inviteSuggestedUser = async (userId: string) => {
+        console.log('invite');
+        await endpoints.transactions.inviteUserToProject(userId, projectId);
+    }
+
     return {
-        recommendedUsersForProject: query.data
+        recommendedUsersForProject: query.data?.users,
+        recommendedUsersPreviousPage: nextPage,
+        recommendedUsersNextPage: previousPage,
+        recommendedUsersCurrentPage: currentPage,
+        inviteSuggestedUser
     }
 }

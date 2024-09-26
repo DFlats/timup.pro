@@ -2,7 +2,8 @@ using Backend.Models;
 
 namespace Backend.Dtos;
 
-public record ProjectResponse(int Id, string Title, string AuthorName, string AuthorId, CollaboratorsResponse[] Collaborators, string Description, string[] SkillTags, string[] InterestTags, bool IsCompleted, string[] InvitedUsers, string? ImageUrl)
+public record ProjectResponse(int Id, string Title, string AuthorName, string AuthorId, CollaboratorsResponse[] Collaborators, string Description, string[] SkillTags, string[] InterestTags, bool IsCompleted, string[] PendingInvites, string[] JoinRequests, string? ImageUrl)
+
 {
     public static implicit operator ProjectResponse(Project project)
     {
@@ -10,7 +11,8 @@ public record ProjectResponse(int Id, string Title, string AuthorName, string Au
         var skillTags = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
         var interestTags = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
 
-        var invitedUsers = project.ProjectInvites.Select(i => i.User.ClerkId).ToArray();
+        var pendingInvites = project.ProjectInvites.Where(i => i.ProjectAccepted == true).Select(i => i.User.ClerkId).ToArray();
+        var joinRequests = project.ProjectInvites.Where(i => i.UserAccepted == true).Select(i => i.User.ClerkId).ToArray();
 
         return new ProjectResponse(
             project.Id,
@@ -22,9 +24,9 @@ public record ProjectResponse(int Id, string Title, string AuthorName, string Au
             skillTags,
             interestTags,
             project.Progress.IsCompleted,
-            invitedUsers,   
+            pendingInvites,
+            joinRequests,
             project.ImageUrl
         );
-
     }
 }

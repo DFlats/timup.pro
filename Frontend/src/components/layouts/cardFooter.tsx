@@ -7,7 +7,7 @@ interface Props {
 
 export function CardFooter({ children }: Props) {
     return (
-        <div className="card-actions justify-end">
+        <div className="card-actions justify-end pb-8">
             {children}
         </div>
     )

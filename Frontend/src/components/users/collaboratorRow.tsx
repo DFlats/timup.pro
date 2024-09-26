@@ -5,11 +5,10 @@ import { User } from "../../types";
 
 interface Props {
     user: User,
-    onInvite?: (userId: string) => void
-    size?: 'full' | 'compact'
+    onKick: (userId: string) => void
 }
 
-export function UserRow({ user, onInvite }: Props) {
+export function CollaboratorRow({ user, onKick }: Props) {
     return (
         <tbody>
             <tr className="hover:bg-gray-500 hover:bg-opacity-15 border-b border-white border-opacity-10">
@@ -28,10 +27,14 @@ export function UserRow({ user, onInvite }: Props) {
                     <TagContainerCompact
                         tags={user.tags['interest']} />
                 </td>
-                {onInvite &&
-                    (<td><button onClick={() => onInvite(user.id)} className="btn btn-accent text-lg text-white pl-10 pr-10">Invite</button></td>)}
-                {!onInvite &&
-                    (<td><Link to='/profile/$userId' className="btn btn-accent text-lg text-white pl-10 pr-10" params={{ userId: user.id.toString() }}>Details</Link></td>)}
+                <td>
+                    <button
+                        onClick={() => onKick(user.id)}
+                        className="btn btn-accent text-lg text-white pl-10 pr-10  w-32">
+                        Kick
+                    </button>
+                </td>
+                <td><Link to='/profile/$userId' className="btn bg-slate-700 text-lg text-white pl-10 pr-10 w-32" params={{ userId: user.id.toString() }}>Details</Link></td>
             </tr>
         </tbody>
     )

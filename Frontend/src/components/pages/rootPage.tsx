@@ -2,7 +2,6 @@
 import { ClerkProvider } from "@clerk/clerk-react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { Header, FullWidthCentered } from "../layouts";
 import { shadesOfPurple } from '@clerk/themes'
 import Stars from "../layouts/stars";
@@ -27,7 +26,6 @@ export function RootPage() {
                 <Stars />
                 <Outlet />
             </FullWidthCentered>
-            <TanStackRouterDevtools />
             <ReactQueryDevtools />
         </ClerkProvider>
     );
