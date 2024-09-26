@@ -41,8 +41,6 @@ export function ProjectPage() {
         setProjectRequest("Success");
     }
 
-    console.log(clientUserIsCollaboratorOrAuthorOfProject(projectById))
-
     return (
         <><div
             className="min-h-screen" >
