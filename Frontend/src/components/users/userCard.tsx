@@ -8,7 +8,7 @@ export function UserCard({ userId, pageTitle }: { userId: string, pageTitle: str
     if (!userById) return;
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center min-w-72">
             <h2 className="text-4xl text-slate-50 p-4">{pageTitle}</h2>
             <h3 className="text-3xl p-2">{userById.name}</h3>
             <div className="border border-white border-opacity-10 rounded-full w-40 h-40 flex flex-col justify-end items-center overflow-hidden">

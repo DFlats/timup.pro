@@ -78,7 +78,7 @@ partial class DatabaseContext
         var interests = project.Description.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
         var skills = project.Description.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
         var collaborators = project.Collaborators.Select(c => c.User.ClerkId).ToArray();
-        var invitedUsers = project.ProjectInvites.Select(p => p.User.ClerkId).ToArray();
+        var invitedUsers = project.ProjectInvites.Where(p => p.UserAccepted).Select(p => p.User.ClerkId).ToArray();
 
 
         int usersCount = Users
