@@ -41,7 +41,8 @@ export function ProjectPage() {
             <div className="text-neutral-content text-center">
                 <div className="max-w-screen">
                     <div className="flex justify-between mt-10 mb-16 gap-20">
-                        <div className="flex flex-col">
+
+                        <div className="flex flex-col w-full">
                             <div>
                                 <h1 className="text-5xl text-slate-50 text-left font-bold pt-4 pb-6">{projectById.title}</h1>
                                 <p className="max-w-3xl text-left">{projectById.description}</p>
