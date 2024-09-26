@@ -48,7 +48,7 @@ public partial class DatabaseContext
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
             .Include(p => p.Collaborators).ThenInclude(u => u.User)
-            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill) && p.Author.ClerkId != id && !p.Collaborators.Select(c => c.UserId).Contains(id) && !p.ProjectInvites.Select(i => i.User.ClerkId).Contains(id))
             .Skip(((int)page! - 1) * _pageSize)
             .Take(_pageSize)
             .ToList();

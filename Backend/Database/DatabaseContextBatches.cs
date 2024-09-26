@@ -46,12 +46,13 @@ partial class DatabaseContext
 
         var interests = user.Tags.Where(t => t.IsSkill == false).Select(t => t.TagValue).ToArray();
         var skills = user.Tags.Where(t => t.IsSkill == true).Select(t => t.TagValue).ToArray();
+        
 
         int projectsCount = Projects
             .Include(p => p.Author)
             .Include(p => p.Description)
             .ThenInclude(p => p.Tags)
-            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill))
+            .Where(p => p.Description.Tags.Any(t => skills.Contains(t.TagValue) && t.IsSkill || interests.Contains(t.TagValue) && !t.IsSkill) && p.Author.ClerkId != id && !p.Collaborators.Select(c => c.UserId).Contains(id) && !p.ProjectInvites.Select(i => i.User.ClerkId).Contains(id) )
             .Count();
 
         var projectsDbResponse = GetRecommendedProjectsByUserId(id, page);
