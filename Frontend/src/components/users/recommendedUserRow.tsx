@@ -11,7 +11,7 @@ interface Props {
 
 export function RecommendedUserRow({ user, onInvite }: Props) {
     const [isInvited, setIsInvited] = useState("Invite")
-    
+
     const inviteButtonProps = {
         onClick: () => {
             if (onInvite) {
@@ -44,7 +44,7 @@ export function RecommendedUserRow({ user, onInvite }: Props) {
                 </td>
                 <td>
                     <button {...inviteButtonProps}>
-                        {onInvite ? 'Invite' : 'Pending'}
+                        {isInvited === "Success" ? "Sent" : onInvite ? 'Invite' : 'Pending'}
                     </button>
                 </td>
                 <td>

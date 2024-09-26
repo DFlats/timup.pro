@@ -41,17 +41,19 @@ export function ProjectPage() {
         setProjectRequest("Success");
     }
 
+    console.log(clientUserIsCollaboratorOrAuthorOfProject(projectById))
+
     return (
         <><div
             className="min-h-screen" >
             <div className="bg-opacity-95"></div>
             <div className="text-neutral-content text-center">
                 <div className="max-w-screen">
-                    <div className="flex justify-between mt-10 mb-16 gap-20">
+                    <div className="flex justify-between mt-10 mb-16 gap-10">
 
                         <div className="flex flex-col w-full">
                             <div>
-                                <h1 className="text-5xl text-slate-50 text-left font-bold pt-4 pb-6">{projectById.title}</h1>
+                                <h1 className="max-w-3xl text-5xl text-slate-50 text-left font-bold pt-4 pb-6">{projectById.title}</h1>
                                 <p className="max-w-3xl text-left">{projectById.description}</p>
                             </div>
 
@@ -70,7 +72,7 @@ export function ProjectPage() {
                         <UserCard userId={projectById.authorId} pageTitle='Project Owner' />
                     </div>
 
-                    {clientUser && !clientUserIsCollaboratorOrAuthorOfProject(projectById) &&
+                    {!clientUserIsCollaboratorOrAuthorOfProject(projectById) && clientUser &&
                         <div className="flex flex-col items-center">
                             <div className="animate-bounce w-8 h-8">
                                 <div className="h-0 w-0 border-x-[16px] border-x-transparent border-t-[32px] border-slate-50"></div>

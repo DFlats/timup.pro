@@ -70,8 +70,8 @@ export function useClientUser() {
             throw new Error("clientUser is not defined")
         };
 
-        return clientUser.id == project.authorId ||
-            Object.keys(project.collaborators).includes(clientUser.id);
+        const collaborator = project.collaborators.map(collaborator => Object.keys(collaborator)[0]).includes(clientUser.id);
+        return clientUser.id === project.authorId || collaborator;
     }
 
     return {
