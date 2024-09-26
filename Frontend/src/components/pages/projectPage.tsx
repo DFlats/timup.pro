@@ -14,10 +14,10 @@ export function ProjectPage() {
     const Route = getRouteApi('/project/$id');
     const { id } = Route.useParams() as { id: string };
     const projectId = parseInt(id);
+    const { author, clientUserIsAuthor } = useProjectAuthor(projectId);
     const [projectRequest, setProjectRequest] = useState("Request");
 
     const { clientUser, clientUserIsCollaboratorOrAuthorOfProject } = useClientUser();
-    const { author } = useProjectAuthor(projectId);
     const { projectById } = useProjectById(projectId);
     const { joinProjectRequest } = useTransactionActions();
 
@@ -32,7 +32,7 @@ export function ProjectPage() {
         </NotFound>)
     }
 
-    if (!collaboratorsInProject || !author || !clientUser) return;
+    if (!collaboratorsInProject || !author) return;
 
     const countedProjectTags = countSuppliedProjectTags(author, projectById.tags);
 
@@ -40,8 +40,6 @@ export function ProjectPage() {
         joinProjectRequest(userId, projectId);
         setProjectRequest("Success");
     }
-
-    const userIsAuthor = author.id == clientUser.id;
 
     return (
         <><div
@@ -87,7 +85,7 @@ export function ProjectPage() {
 
                     <h2 className='text-4xl m-2 p-10'>Collaborators</h2>
                     <CollaboratorTable projectId={projectId} />
-                    {userIsAuthor &&
+                    {clientUserIsAuthor &&
                         <>
                             <h2 className='text-4xl m-2 p-10'>Suggested Collaborators</h2>
                             <RecommendedUserTable projectId={projectId} />
