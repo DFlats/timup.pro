@@ -24,7 +24,7 @@ export function ProjectInvites() {
                 <div className="badge badge-secondary">
                     {`+${clientProjectInvites.length}`}
                 </div>
-                <h2 className='text-3xl'>{` Project Invites`}</h2>
+                <h2 className='text-3xl'>{` Invite Requests`}</h2>
             </div>
             <div className="dropdown-content menu bg-base-100 rounded-box z-[1] w-[700px] p-2 shadow overflow-x-auto">
                 <table className="table bg-sky-950">
@@ -37,6 +37,19 @@ export function ProjectInvites() {
                                         className='btn w-96 btn-secondary'
                                         onClick={() => {
                                             navigate({ to: '/profile/$userId', params: { userId: invite.userId } });
+                                        }
+                                        }>
+                                        <p className='p-2'>{invite.userId}</p>
+                                    </button>
+                                </td>
+                                <td>
+                                    <p> wants to join </p>
+                                </td>
+                                <td>
+                                    <button
+                                        className='btn w-96 btn-secondary'
+                                        onClick={() => {
+                                            navigate({ to: '/project/$id', params: { id: invite.projectId.toString() } });
                                         }
                                         }>
                                         <p className='p-2'>{invite.projectTitle}</p>
