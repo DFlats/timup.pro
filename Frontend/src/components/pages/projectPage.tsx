@@ -32,7 +32,7 @@ export function ProjectPage() {
         </NotFound>)
     }
 
-    if (!collaboratorsInProject || !author) return;
+    if (!collaboratorsInProject || !author || !clientUser) return;
 
     const countedProjectTags = countSuppliedProjectTags(author, projectById.tags);
 
@@ -40,6 +40,8 @@ export function ProjectPage() {
         joinProjectRequest(userId, projectId);
         setProjectRequest("Success");
     }
+
+    const userIsAuthor = author.id == clientUser.id;
 
     return (
         <><div
@@ -78,16 +80,20 @@ export function ProjectPage() {
                             <button
                                 className={`btn w-96 text-slate-50 text-xl m-5 mb-10 ${projectRequest === "Success" ? "btn-success" : "btn-accent"}`}
                                 onClick={() => handleJoinProjectRequest(clientUser.id, projectId)}>
-                               {projectRequest === "Success" ? "Request Sent" : "Ask to Join Project"}
+                                {projectRequest === "Success" ? "Request Sent" : "Ask to Join Project"}
                             </button>
                         </div>
                     }
 
                     <h2 className='text-4xl m-2 p-10'>Collaborators</h2>
                     <CollaboratorTable projectId={projectId} />
+                    {userIsAuthor &&
+                        <>
+                            <h2 className='text-4xl m-2 p-10'>Suggested Collaborators</h2>
+                            <RecommendedUserTable projectId={projectId} />
+                        </>
+                    }
 
-                    <h2 className='text-4xl m-2 p-10'>Suggested Collaborators</h2>
-                    <RecommendedUserTable projectId={projectId} />
                 </div>
             </div>
         </div >

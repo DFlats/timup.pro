@@ -2,11 +2,13 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { endpoints } from "../../api";
 import { Tags, User } from "../../types";
 import { useState } from "react";
+import { useProjectAuthor } from "./useProjectAuthor";
 
 export function useCollaborators(projectId: number) {
     const collaboratorsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState<number>(1);
+    const { clientUserIsAuthor } = useProjectAuthor(projectId);
     const queryClient = useQueryClient();
     const queryKey = ['users', 'collaborators', 'forProjectId', projectId, 'page', currentPage];
 
@@ -82,7 +84,7 @@ export function useCollaborators(projectId: number) {
         collaboratorsInProject: query.data,
         collaboratorsPreviousPage: totalPages > 1 ? nextPage : undefined,
         collaboratorsNextPage: totalPages > 1 ? previousPage : undefined,
-        kickCollaborator,
+        kickCollaborator: clientUserIsAuthor ? kickCollaborator : undefined,
         countSuppliedProjectTags
     }
 }

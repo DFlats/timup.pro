@@ -19,31 +19,33 @@ export function useClientProjectInvites() {
             return (await Promise.all(
                 projectsAuthoredByClientUser.map(async (project) => {
                     const projectInvites = await endpoints.transactions.getProjectInvites(project.id);
-                    return projectInvites.map(projectInvite => ({
-                        projectId: project.id,
-                        projectTitle: project.title,
-                        userId: projectInvite.userId
-                    } as ProjectInvite))
+                    return await Promise.all(
+                        projectInvites.map(async (projectInvite) => ({
+                            projectId: project.id,
+                            projectTitle: project.title,
+                            userId: projectInvite.userId,
+                            userName: (await endpoints.users.getUserByUserId(projectInvite.userId)).name
+                        } as ProjectInvite)));
                 })
             )).flat();
-        },
-        enabled: !!projectsAuthoredByClientUser
+},
+enabled: !!projectsAuthoredByClientUser
     });
 
-    const acceptInviteRequest = async (invite: ProjectInvite) => {
-        await endpoints.transactions.joinProjectRequestAccept(invite.userId, invite.projectId);
-        queryClient.invalidateQueries({ queryKey });
-        queryClient.invalidateQueries({ queryKey: ["projects", "ownedByClientUser"] });
-    }
+const acceptInviteRequest = async (invite: ProjectInvite) => {
+    await endpoints.transactions.joinProjectRequestAccept(invite.userId, invite.projectId);
+    queryClient.invalidateQueries({ queryKey });
+    queryClient.invalidateQueries({ queryKey: ["projects", "ownedByClientUser"] });
+}
 
-    const denyInviteRequest = async (invite: ProjectInvite) => {
-        await endpoints.transactions.joinProjectRequestDeny(invite.userId, invite.projectId);
-        queryClient.invalidateQueries({ queryKey });
-    }
+const denyInviteRequest = async (invite: ProjectInvite) => {
+    await endpoints.transactions.joinProjectRequestDeny(invite.userId, invite.projectId);
+    queryClient.invalidateQueries({ queryKey });
+}
 
-    return {
-        clientProjectInvites: query.data,
-        acceptInviteRequest,
-        denyInviteRequest,
-    }
+return {
+    clientProjectInvites: query.data,
+    acceptInviteRequest,
+    denyInviteRequest,
+}
 }

@@ -5,7 +5,7 @@ import { User } from "../../types";
 
 interface Props {
     user: User,
-    onKick: (userId: string) => void
+    onKick?: (userId: string) => void
 }
 
 export function CollaboratorRow({ user, onKick }: Props) {
@@ -29,8 +29,11 @@ export function CollaboratorRow({ user, onKick }: Props) {
                 </td>
                 <td>
                     <button
-                        onClick={() => onKick(user.id)}
-                        className="btn btn-accent text-lg text-white pl-10 pr-10  w-32">
+                        onClick={() => {
+                            if (onKick) onKick(user.id);
+                        }}
+                        className="btn btn-accent text-lg text-white pl-10 pr-10  w-32"
+                        disabled={onKick ? false : true}>
                         Kick
                     </button>
                 </td>

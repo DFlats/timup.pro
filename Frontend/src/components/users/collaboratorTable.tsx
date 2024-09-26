@@ -15,6 +15,8 @@ export function CollaboratorTable({ projectId }: props) {
         kickCollaborator
     } = useCollaborators(projectId);
 
+    console.log(kickCollaborator);
+
     return (
         <div className="bg-[#010624] rounded-xl shadow-md shadow-gray-600 border border-white border-opacity-10 p-10 mb-16">
             <table className="table">
