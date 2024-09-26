@@ -5,6 +5,7 @@ import { CreateProjectModal } from "../projects";
 import { openCreateProjectModal } from "../../modalControllers";
 import { useClientUser } from "../../hooks/users";
 import { Logo, UserInvites } from "../../components/dashboard";
+import { ProjectInvites } from "./projectInvites";
 
 export function Dashboard() {
     const { clientUser } = useClientUser();
@@ -23,6 +24,7 @@ export function Dashboard() {
                 <Logo />
             </Link>
             <SignedIn>
+                <ProjectInvites />
                 <UserInvites />
                 {profileLink}
                 <button className='text-slate-50 text-3xl mr-8' onClick={openCreateProjectModal}>Create Project</button>
