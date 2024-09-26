@@ -11,5 +11,6 @@ export type ProjectPendingInviteRequest = {
 export type ProjectInvite = {
     projectId: number,
     projectTitle: string,
-    userId: string
+    userId: string,
+    userName: string
 }
