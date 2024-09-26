@@ -15,4 +15,5 @@ public enum DbErrorStatusCodes
     UserNotFoundInProject,
     UserAlreadyInvited,
     NoInviteFound,
+    NoRecommendedProjects,
 }
