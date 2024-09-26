@@ -37,7 +37,7 @@ public class ProjectsController(DatabaseContext db) : ControllerBase
 
         if(projectBatchDbResponse.ProjectBatchResponse.ProjectResponses.Count == 0)
         {
-            projectBatchDbResponse.ProjectBatchResponse = GetProjectBatch(null, null, page);
+            projectBatchDbResponse.ProjectBatchResponse = db.GetProjectBatch(page);
             projectBatchDbResponse.DbErrorStatusCode = DbErrorStatusCodes.NoRecommendedProjects;
         }
 
