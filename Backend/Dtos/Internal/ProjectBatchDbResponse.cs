@@ -1,12 +1,11 @@
 using Backend.Database;
-using Backend.Models;
 
 namespace Backend.Dtos.Internal;
 
 internal record ProjectBatchDbResponse()
 {
-    public DbErrorStatusCodes DbErrorStatusCode { get; init; }
-    public ProjectBatchResponse ProjectBatchResponse { get; init; } = new();
+    public DbErrorStatusCodes DbErrorStatusCode { get; set; }
+    public ProjectBatchResponse ProjectBatchResponse { get; set; } = new();
 
     public ProjectBatchDbResponse(DbErrorStatusCodes dbErrorStatusCode, ProjectBatchResponse? projectBatchResponse) : this()
     {
