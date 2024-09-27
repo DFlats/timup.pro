@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Backend.Database;
 
 const string applicationTitle = "TeamUp";
-const string version = "v1.0.14-preview6";
+const string version = "v1.1.0";
 
 var builder = WebApplication.CreateBuilder(args);
 
