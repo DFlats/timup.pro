@@ -1,6 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { ClerkProvider } from "@clerk/clerk-react";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Outlet } from "@tanstack/react-router";
 import { Header, FullWidthCentered } from "../layouts";
 import { shadesOfPurple } from '@clerk/themes'
@@ -26,7 +25,6 @@ export function RootPage() {
                 <Stars />
                 <Outlet />
             </FullWidthCentered>
-            <ReactQueryDevtools />
         </ClerkProvider>
     );
 }
