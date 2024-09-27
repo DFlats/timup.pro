@@ -26,10 +26,14 @@ export function Dashboard() {
             <SignedIn>
                 <ProjectInvites />
                 <UserInvites />
-                {profileLink}
+                <Link to="/" >
+                    <button className="text-slate-50 text-3xl mr-8">
+                        Projects Feed
+                    </button>
+                </Link>
                 <button className='text-slate-50 text-3xl mr-8' onClick={openCreateProjectModal}>Create Project</button>
                 <CreateProjectModal />
-
+                {profileLink}
                 <SignOutButton>
                     <button className='text-slate-50 text-3xl mr-8'>Sign Out</button>
                 </SignOutButton>

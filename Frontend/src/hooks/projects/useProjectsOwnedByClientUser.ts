@@ -15,6 +15,7 @@ export function useProjectsOwnedByClientUser() {
             if (!clientUser) return [];
             return (await endpoints.projects.getOwnedProjects(clientUser.id)).projects ?? [];
         },
+        refetchInterval: 3000,
         enabled: !!clientUser
     });
 

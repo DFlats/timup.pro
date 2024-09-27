@@ -13,6 +13,7 @@ export function useRecommendedProjectsForClientUser() {
 
             return await endpoints.projects.getRecommendedProjects(clientUser.id);
         },
+        refetchInterval: 1000,
         enabled: !!clientUser
     });
 

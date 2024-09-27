@@ -39,7 +39,8 @@ export function useCollaborators(projectId: number) {
             } as User));
 
             return collaborators;
-        }
+        },
+        refetchInterval: 3000
     });
 
     const nextPage = () => {

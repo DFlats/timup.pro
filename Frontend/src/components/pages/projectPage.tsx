@@ -72,9 +72,9 @@ export function ProjectPage() {
 
                     {clientUser && !clientUserIsCollaboratorOrAuthorOfProject(projectById) &&
                         <div className="flex flex-col items-center">
-                            <div className="animate-bounce w-8 h-8">
+                            {/* <div className="animate-bounce w-8 h-8">
                                 <div className="h-0 w-0 border-x-[16px] border-x-transparent border-t-[32px] border-slate-50"></div>
-                            </div>
+                            </div> */}
                             <button
                                 className={`btn w-96 text-slate-50 text-xl m-5 mb-10 ${projectRequest === "Success" ? "btn-success" : "btn-accent"}`}
                                 onClick={() => handleJoinProjectRequest(clientUser.id, projectId)}>

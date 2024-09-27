@@ -26,7 +26,8 @@ export function useRecommendedUsersForProject(projectId: number) {
             } as User));
 
             return batch;
-        }
+        },
+        refetchInterval: 3000
     });
 
     const nextPage = () => {

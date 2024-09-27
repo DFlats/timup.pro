@@ -24,6 +24,7 @@ export function useClientUserInvites() {
             const projects = await Promise.all(invites.map(async (invite) => await endpoints.projects.getProject(invite.projectId)));
             return projects.map(project => ({ title: project.title, id: project.id } as ProjectInvite));
         },
+        refetchInterval: 3000,
         enabled: !!clientUser
     });
 

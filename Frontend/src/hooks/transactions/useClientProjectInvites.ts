@@ -29,6 +29,7 @@ export function useClientProjectInvites() {
                 })
             )).flat();
 },
+refetchInterval: 3000,
 enabled: !!projectsAuthoredByClientUser
     });
 

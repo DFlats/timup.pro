@@ -10,6 +10,9 @@ public partial class DatabaseContext
     public static List<Project> _projects = [];
     public static List<Tag> _tags = [];
 
+    public static List<User> _usersPresentation = [];
+     public static List<Tag> _tagsPresentation = [];
+
     internal bool PopulateDatabase(int count = 100)
     {
 
@@ -22,6 +25,12 @@ public partial class DatabaseContext
 
         SeedCollaborators();
 
+        var (seededPresentationUsers, seededPresentationTags) =  GeneratePresentationData();
+
+        Users.AddRange(seededPresentationUsers);
+        Tags.AddRange(seededPresentationTags);
+        SaveChanges();
+
         return true;
     }
 
@@ -31,6 +40,62 @@ public partial class DatabaseContext
         SeedProjects(count);
 
         return (_projects, _users, _tags);
+    }
+
+    internal (List<User>, List<Tag>) GeneratePresentationData()
+    {
+        SeedPresentationUsers(8);
+
+        return (_usersPresentation, _tagsPresentation);
+    }
+
+    internal static void SeedPresentationUsers(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Random random = new();
+
+            var fakedTags = CreateFakePresentationTags(random);
+
+            var authorId = Guid.NewGuid().ToString();
+            var fakedUser = CreateFakeUser(authorId, fakedTags);
+
+            _usersPresentation.Add(fakedUser);
+        }
+    }
+
+    private static List<Tag> CreateFakePresentationTags(Random random)
+    {
+        int skillsAmount = 3;
+        int interestsAmount = 4;
+
+        List<Tag> fakedTags = [];
+
+        List<string> skills = ["Problem Solving", "OpenGL", "Writing"];
+        for (int j = 0; j < skillsAmount; j++)
+        {
+            int index = random.Next(skills.Count);
+            var tagFaker = new Faker<Tag>()
+                .RuleFor(t => t.TagValue, v => skills[index])
+                .RuleFor(t => t.IsSkill, v => true);
+
+            fakedTags.Add(tagFaker.Generate());
+            skills.RemoveAt(index);
+        }
+
+        List<string> interests = ["Mystery", "Real-Time Strategy", "Literature", "Mystery"];
+        for (int j = 0; j < interestsAmount; j++)
+        {
+            int index = random.Next(interests.Count);
+            var tagFake2r = new Faker<Tag>()
+                .RuleFor(t => t.TagValue, v => interests[index])
+                .RuleFor(t => t.IsSkill, v => false);
+
+            fakedTags.Add(tagFake2r.Generate());
+            interests.RemoveAt(index);
+        }
+
+        return fakedTags;
     }
 
     internal static void SeedUsers(int count)
@@ -111,7 +176,7 @@ public partial class DatabaseContext
 
         List<Tag> fakedTags = [];
 
-        List<string> skills = ["JavaScript", "Painting", "Dancing", "Rhetorics", "C#", "Juggling", "Visual Design", "Guitar", "Football", "Writing"];
+        List<string> skills = ["JavaScript", "Painting", "Dancing", "Rhetorics", "Juggling", "Visual Design", "Guitar", "Football"];
         for (int j = 0; j < skillsAmount; j++)
         {
             int index = random.Next(skills.Count);
@@ -123,7 +188,7 @@ public partial class DatabaseContext
             skills.RemoveAt(index);
         }
 
-        List<string> interests = ["Game Development", "Movies", "Literature", "Sports", "Poetry", "Gaming", "Exploration", "Science", "Cooking"];
+        List<string> interests = ["Movies", "Sports", "Poetry", "Gaming", "Exploration", "Science", "Cooking"];
         for (int j = 0; j < interestsAmount; j++)
         {
             int index = random.Next(interests.Count);
