@@ -22,7 +22,8 @@ builder.Services.AddOpenApiDocument(config =>
 
 var allowedOrigins = new[] {
     "http://timup.pro:5173",
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "https://timup.pro",
 };
 
 builder.Services.AddCors(options =>
