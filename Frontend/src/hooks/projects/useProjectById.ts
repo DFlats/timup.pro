@@ -11,7 +11,8 @@ export function useProjectById(projectId: number) {
         queryFn: async () => {
             if (!projectId) return;
             return await endpoints.projects.getProject(projectId);
-        }
+        },
+        refetchInterval: 3000
     });
 
     const patchProject = async (projectPatch: ProjectPatch) => {
